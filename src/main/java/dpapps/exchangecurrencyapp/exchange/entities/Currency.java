@@ -53,6 +53,7 @@ public class Currency {
         return getCurrencyIsoName();
     }
 
+    public Currency() {}
     public Currency(Long currencyId, String currencyIsoName, String full_name) {
         this.currencyId = currencyId;
         this.currencyIsoName = currencyIsoName;
