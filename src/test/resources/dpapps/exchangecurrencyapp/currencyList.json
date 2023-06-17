@@ -1,0 +1,5 @@
+[
+  {"id": 1, "isoName": "EUR", "fullName": "Euro"},
+  {"id": 2, "isoName": "USD", "fullName": "United States dollar"},
+  {"id": 3, "isoName": "JPY", "fullName": "Japanese yen"}
+]

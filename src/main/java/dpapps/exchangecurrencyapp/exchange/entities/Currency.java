@@ -53,9 +53,10 @@ public class Currency {
     }
 
     public Currency() {}
-    public Currency(Integer id, String currencyIsoName, String full_name) {
+
+    public Currency(Integer id, String isoName, String fullName) {
         this.id = id;
-        this.isoName = currencyIsoName;
-        this.fullName = full_name;
+        this.isoName = isoName;
+        this.fullName = fullName;
     }
 }
