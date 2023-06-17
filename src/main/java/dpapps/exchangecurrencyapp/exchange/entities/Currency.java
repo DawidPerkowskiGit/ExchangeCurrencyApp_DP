@@ -1,4 +1,4 @@
-package com.example.exchangecurrencyapp.exchange.entities;
+package dpapps.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
 
@@ -53,6 +53,9 @@ public class Currency {
         return getCurrencyIsoName();
     }
 
-
-
+    public Currency(Long currencyId, String currencyIsoName, String full_name) {
+        this.currencyId = currencyId;
+        this.currencyIsoName = currencyIsoName;
+        this.full_name = full_name;
+    }
 }

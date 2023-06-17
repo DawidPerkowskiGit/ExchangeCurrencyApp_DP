@@ -1,4 +1,4 @@
-package com.example.exchangecurrencyapp.exchange.entities;
+package dpapps.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
 
@@ -17,9 +17,6 @@ public class Location {
 
     private String locationName;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<LocationCurrencyPair> location_currency;
-
     public Long getLocationId() {
         return locationId;
     }
@@ -34,13 +31,5 @@ public class Location {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
-    }
-
-    public List<LocationCurrencyPair> getLocation_currency() {
-        return location_currency;
-    }
-
-    public void setLocation_currency(List<LocationCurrencyPair> location_currency) {
-        this.location_currency = location_currency;
     }
 }

@@ -1,5 +1,4 @@
-package com.example.exchangecurrencyapp.exchange.entities;
-import com.example.exchangecurrencyapp.exchange.entities.Currency;
+package dpapps.exchangecurrencyapp.exchange.entities;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -56,4 +55,6 @@ public class Exchange {
     public String toString() {
         return getCurrency().getCurrencyIsoName() + ", " + getExchangeDate().toString()+", " + getValue();
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.exchangecurrencyapp;
+package dpapps.exchangecurrencyapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

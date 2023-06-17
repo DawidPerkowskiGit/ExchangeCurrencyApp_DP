@@ -1,6 +1,6 @@
-package com.example.exchangecurrencyapp.exchange.repositories;
+package dpapps.exchangecurrencyapp.exchange.repositories;
 
-import com.example.exchangecurrencyapp.exchange.entities.Exchange;
+import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

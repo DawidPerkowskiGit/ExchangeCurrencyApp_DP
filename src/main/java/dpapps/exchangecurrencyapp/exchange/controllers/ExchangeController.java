@@ -1,7 +1,7 @@
-package com.example.exchangecurrencyapp.exchange.controllers;
+package dpapps.exchangecurrencyapp.exchange.controllers;
 
-import com.example.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
-import com.example.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
+import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
+import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
