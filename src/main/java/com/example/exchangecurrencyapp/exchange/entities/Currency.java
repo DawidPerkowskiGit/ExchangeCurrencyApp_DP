@@ -19,9 +19,6 @@ public class Currency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long currencyId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Exchange> exchanges;
-
     @Column(length=3)
     private String currencyIsoName;
 
@@ -33,14 +30,6 @@ public class Currency {
 
     public void setCurrencyId(Long currencyId) {
         this.currencyId = currencyId;
-    }
-
-    public List<Exchange> getExchanges() {
-        return exchanges;
-    }
-
-    public void setExchanges(List<Exchange> exchanges) {
-        this.exchanges = exchanges;
     }
 
     public String getCurrencyIsoName() {
