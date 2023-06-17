@@ -2,8 +2,6 @@ package dpapps.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 /**
  * Model of Location.
  *
@@ -13,23 +11,24 @@ import java.util.List;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long locationId;
+    private Integer id;
 
-    private String locationName;
+    @Column(length = 50)
+    private String name;
 
-    public Long getLocationId() {
-        return locationId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public String getName() {
+        return name;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

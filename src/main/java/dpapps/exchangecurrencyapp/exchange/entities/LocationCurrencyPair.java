@@ -9,35 +9,35 @@ import jakarta.persistence.*;
 public class LocationCurrencyPair {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long locationCurrencyPairId;
+    private Integer id;
 
     @ManyToOne
-    private Location locationId;
+    private Location location;
 
     @ManyToOne
-    private Currency currencyId;
+    private Currency currency;
 
-    public Long getLocationCurrencyPairId() {
-        return locationCurrencyPairId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLocationCurrencyPairId(Long locationCurrencyPairId) {
-        this.locationCurrencyPairId = locationCurrencyPairId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Location getLocationId() {
-        return locationId;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLocationId(Location locationId) {
-        this.locationId = locationId;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
-    public Currency getCurrencyId() {
-        return currencyId;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public void setCurrencyId(Currency currencyId) {
-        this.currencyId = currencyId;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

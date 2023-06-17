@@ -10,10 +10,10 @@ public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
 
     Currency save(Currency currency);
 
-    boolean existsByCurrencyIsoName(String name);
-    boolean existsByCurrencyId(Long id);
+    boolean existsByIsoName(String name);
+    boolean existsById(Integer id);
 
-    Currency findCurrencyByCurrencyIsoName(String name);
+    Currency findCurrencyByIsoName(String name);
 
 
 

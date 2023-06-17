@@ -10,21 +10,22 @@ import java.time.LocalDate;
 public class Exchange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long exchangeId;
+    private Integer id;
 
     private double value;
 
     @ManyToOne
     private Currency currency;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name="exchange_date")
     private LocalDate exchangeDate;
 
-    public Long getExchangeId() {
-        return exchangeId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setExchangeId(Long exchangeId) {
-        this.exchangeId = exchangeId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public double getValue() {
@@ -53,7 +54,7 @@ public class Exchange {
 
     @Override
     public String toString() {
-        return getCurrency().getCurrencyIsoName() + ", " + getExchangeDate().toString()+", " + getValue();
+        return getCurrency().getIsoName() + ", " + getExchangeDate().toString()+", " + getValue();
     }
 
 

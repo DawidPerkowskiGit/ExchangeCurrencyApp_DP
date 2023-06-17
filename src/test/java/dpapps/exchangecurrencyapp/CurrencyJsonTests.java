@@ -25,9 +25,9 @@ public class CurrencyJsonTests {
     @BeforeEach
     void setUp() {
         currencies = Arrays.array(
-                new Currency(1L, "EUR", "Euro"),
-                new Currency(2L, "USD", "United States dollar"),
-                new Currency(3L, "JPY", "Japanese yen")
+                new Currency(1, "EUR", "Euro"),
+                new Currency(2, "USD", "United States dollar"),
+                new Currency(3, "JPY", "Japanese yen")
         );
     }
 

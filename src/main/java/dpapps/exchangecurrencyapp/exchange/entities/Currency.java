@@ -2,8 +2,6 @@ package dpapps.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 /**
  * Entity model of Currency.
  *
@@ -17,46 +15,47 @@ import java.util.List;
 public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long currencyId;
+    private Integer id;
 
-    @Column(length=3)
-    private String currencyIsoName;
+    @Column(length=3, name="iso_name")
+    private String isoName;
 
-    private String full_name;
+    @Column(length = 30, name="full_name")
+    private String fullName;
 
-    public Long getCurrencyId() {
-        return currencyId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCurrencyId(Long currencyId) {
-        this.currencyId = currencyId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getCurrencyIsoName() {
-        return currencyIsoName;
+    public String getIsoName() {
+        return isoName;
     }
 
-    public void setCurrencyIsoName(String currencyIsoName) {
-        this.currencyIsoName = currencyIsoName;
+    public void setIsoName(String isoName) {
+        this.isoName = isoName;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     @Override
     public String toString() {
-        return getCurrencyIsoName();
+        return getIsoName();
     }
 
     public Currency() {}
-    public Currency(Long currencyId, String currencyIsoName, String full_name) {
-        this.currencyId = currencyId;
-        this.currencyIsoName = currencyIsoName;
-        this.full_name = full_name;
+    public Currency(Integer id, String currencyIsoName, String full_name) {
+        this.id = id;
+        this.isoName = currencyIsoName;
+        this.fullName = full_name;
     }
 }
