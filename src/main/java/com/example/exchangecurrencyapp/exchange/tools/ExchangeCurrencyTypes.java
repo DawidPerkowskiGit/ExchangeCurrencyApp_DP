@@ -1,4 +1,4 @@
-package com.example.exchangecurrencyapp.exchange;
+package com.example.exchangecurrencyapp.exchange.tools;
 
 public enum ExchangeCurrencyTypes {
             EUR,

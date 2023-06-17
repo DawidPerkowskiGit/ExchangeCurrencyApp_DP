@@ -1,4 +1,5 @@
-package com.example.exchangecurrencyapp.exchange;
+package com.example.exchangecurrencyapp.exchange.entities;
+import com.example.exchangecurrencyapp.exchange.entities.Currency;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

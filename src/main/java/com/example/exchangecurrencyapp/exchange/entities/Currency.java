@@ -1,10 +1,17 @@
-package com.example.exchangecurrencyapp.exchange;
+package com.example.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
 
 import java.util.List;
 
-
+/**
+ * Entity model of Currency.
+ *
+ * Describes its ISO Code name, full name.
+ *
+ * Relates to currency exchanges and locations where currencies are used
+ *
+ */
 @Entity
 @Table(name = "currency")
 public class Currency {
@@ -56,5 +63,7 @@ public class Currency {
     public String toString() {
         return getCurrencyIsoName();
     }
+
+
 
 }
