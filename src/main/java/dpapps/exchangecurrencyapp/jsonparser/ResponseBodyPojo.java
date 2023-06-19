@@ -9,7 +9,10 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class ExchangeCurrencyPojo {
+/**
+ * The class represents data structure of exchangeratesapi.io response body.
+ */
+public class ResponseBodyPojo {
 
     private boolean success;
 
@@ -25,7 +28,7 @@ public class ExchangeCurrencyPojo {
 
     private Map<String, Double> rates;
 
-    public boolean isSuccess() {
+    public boolean getSuccess() {
         return success;
     }
 

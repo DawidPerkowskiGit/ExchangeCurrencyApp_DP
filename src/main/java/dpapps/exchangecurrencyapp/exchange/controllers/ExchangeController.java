@@ -1,16 +1,10 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.jsonparser.DailyExchangeImporter;
-import dpapps.exchangecurrencyapp.jsonparser.ExchangeCurrencyPojo;
-import dpapps.exchangecurrencyapp.jsonparser.ExchangeRatesJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class ExchangeController {

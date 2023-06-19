@@ -2,20 +2,19 @@ package dpapps.exchangecurrencyapp.jsonparser;
 
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @Service
-public class DailyExchangeImporter {
+public class ResponseBodyRetriever {
 
     /**
-     * Retrieve the latest currency exchange rates from
+     * Retrieve the latest currency exchange rates from endpoint URL, stored in environment variable.
      */
 
-    public String retireveApiResponse() {
+    public String retrieveApiResponse() {
 
         String apiUrl = "";
 
@@ -24,6 +23,7 @@ public class DailyExchangeImporter {
         }
         catch (Exception e) {
             System.out.printf("Could not retrieve environment variable API_IMPORT_CREDS_URL. Exception: " + e);
+            return "";
         }
 
         String apiResponseBody = "";
@@ -40,6 +40,7 @@ public class DailyExchangeImporter {
         }
         catch (Exception e) {
             System.out.printf("Could not process API request. Exception " + e);
+            return "";
         }
 
         return apiResponseBody;

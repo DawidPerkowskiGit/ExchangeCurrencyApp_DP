@@ -1,6 +1,10 @@
 package dpapps.exchangecurrencyapp.jsonparser;
 
-public enum ExchangeCurrencyTypes {
+/**
+ * The class all the currency types available in this application.
+ * When more currency types were to be imported, they are first compared with entries of this enum.
+ */
+public enum AvailableCurrencyTypes {
             EUR,
             USD ,
             JPY ,
