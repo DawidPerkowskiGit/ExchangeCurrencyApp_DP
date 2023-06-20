@@ -30,16 +30,37 @@ public class MockCurrencyRepo implements CurrencyRepository {
 
     @Override
     public <S extends Currency> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity: entities
+             ) {
+            this.save(entity);
+        }
+        return entities;
     }
 
     @Override
     public Optional<Currency> findById(Integer integer) {
+
+        Optional<Currency> retVal;
+
+        for (Currency currency: listOfCurrencies
+             ) {
+            if (currency.getId()==integer) {
+                retVal = Optional.ofNullable(currency);
+                return retVal;
+            }
+        }
+
         return Optional.empty();
     }
 
     @Override
     public boolean existsById(Integer id) {
+        for (Currency currency: listOfCurrencies
+             ) {
+            if (currency.getId()==id) {
+                return true;
+            }
+        }
         return false;
     }
 

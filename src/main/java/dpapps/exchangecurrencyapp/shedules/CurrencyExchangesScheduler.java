@@ -17,6 +17,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This component is responsible for performing extracting exchange rates from API endpoint.
@@ -49,18 +50,18 @@ public class CurrencyExchangesScheduler {
             }
 
             ResponseBodyJsonParser responseBodyJsonParser = new ResponseBodyJsonParser();
-            ResponseBodyPojo responseBodyPojo = responseBodyJsonParser.jsonDeserialization(apiResponseBody);
-            if (responseBodyPojo==null) {
+            Optional<ResponseBodyPojo> responseBodyPojo = responseBodyJsonParser.jsonDeserialization(apiResponseBody);
+            if (responseBodyPojo.get().doAllNullableFieldsContainData() == false) {
                 System.out.println("Returned response body is null");
                 return "Returned response body is null";
             }
-            if (responseBodyPojo.getSuccess()==false) {
+            if (responseBodyPojo.get().getSuccess()==false) {
                 System.out.println("Could not get response body");
                 return "Could not get response body";
             }
 
             ResponsePojoDatabaseInsert responsePojoDatabaseInsert = new ResponsePojoDatabaseInsert(this.exchangeRepository, this.currencyRepository);
-            List<Exchange> exchanges = responsePojoDatabaseInsert.convertPojoToExchangeList(responseBodyPojo);
+            List<Exchange> exchanges = responsePojoDatabaseInsert.convertPojoToExchangeList(responseBodyPojo.get());
             if (exchanges.isEmpty()) {
                 System.out.println("Exchange list is empty");
                 return "Exchange list is empty";

@@ -30,8 +30,8 @@ public class ResponsePojoDatabaseInsert {
     public List<Exchange> convertPojoToExchangeList(ResponseBodyPojo responseBodyPojo) {
         List<Exchange> exchanges = new ArrayList<>();
         try {
-            if (responseBodyPojo.getDate()==null) {
-                System.out.println("Date is null");
+            if (responseBodyPojo.doAllNullableFieldsContainData() == false) {
+                System.out.println("Exchange date does not contain information");
                 return exchanges;
             }
         }

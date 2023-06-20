@@ -67,4 +67,17 @@ public class ResponseBodyPojo {
     public void setRates(Map<String, Double> rates) {
         this.rates = rates;
     }
+
+    public boolean doAllNullableFieldsContainData() {
+        if (getRates() == null) {
+            return false;
+        }
+        if (getDate() == null) {
+            return false;
+        }
+        if (getBase() == null) {
+            return false;
+        }
+        return true;
+    }
 }

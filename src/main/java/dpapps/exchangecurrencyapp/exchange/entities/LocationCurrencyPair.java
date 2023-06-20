@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
+import org.springframework.lang.NonNull;
 
 /**
  * Model of currencies and locations where they are used.
@@ -11,9 +12,11 @@ public class LocationCurrencyPair {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NonNull
     @ManyToOne
     private Location location;
 
+    @NonNull
     @ManyToOne
     private Currency currency;
 

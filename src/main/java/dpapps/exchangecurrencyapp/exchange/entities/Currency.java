@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
+import org.springframework.lang.NonNull;
 
 /**
  * Entity model of Currency.
@@ -17,9 +18,11 @@ public class Currency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NonNull
     @Column(length=3, name="iso_name")
     private String isoName;
 
+    @NonNull
     @Column(length = 30, name="full_name")
     private String fullName;
 

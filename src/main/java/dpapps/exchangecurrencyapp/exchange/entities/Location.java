@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.entities;
 
 import jakarta.persistence.*;
+import org.springframework.lang.NonNull;
 
 /**
  * Model of Location.
@@ -13,6 +14,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NonNull
     @Column(length = 50)
     private String name;
 

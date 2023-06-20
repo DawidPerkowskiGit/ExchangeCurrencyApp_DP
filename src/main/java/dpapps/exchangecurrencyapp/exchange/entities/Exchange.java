@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.entities;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
 
@@ -12,10 +13,14 @@ public class Exchange {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NonNull
     private double value;
 
+    @NonNull
     @ManyToOne
     private Currency currency;
+
+    @NonNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name="exchange_date")
     private LocalDate exchangeDate;
@@ -65,5 +70,18 @@ public class Exchange {
     }
 
     public Exchange() {
+    }
+
+    public boolean doNonIdFieldsContainData() {
+        if (getCurrency() == null) {
+            return false;
+        }
+        if (getValue() == 0.0d) {
+            return false;
+        }
+        if (getExchangeDate() == null) {
+            return false;
+        }
+        return true;
     }
 }

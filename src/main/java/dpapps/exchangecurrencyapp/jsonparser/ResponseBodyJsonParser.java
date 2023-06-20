@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ResponseBodyJsonParser {
@@ -21,7 +22,7 @@ public class ResponseBodyJsonParser {
 
 
 
-    public ResponseBodyPojo parseJsonFromFile(String filePath) {
+    public Optional<ResponseBodyPojo> parseJsonFromFile(String filePath) {
 
         ResponseBodyPojo responseBodyPojo = new ResponseBodyPojo();
         String jsonInString = "";
@@ -31,26 +32,12 @@ public class ResponseBodyJsonParser {
         }
         catch (Exception e) {
             System.out.println("Could not load file. Exception "+e);
-            return null;
+            return Optional.empty();
         }
-
         return jsonDeserialization(jsonInString);
     }
 
-
-/*    public ResponseBodyPojo parseJsonFromApi() {
-
-        ResponseBodyPojo responseBodyPojo;
-
-        String retrieveApiResponse = new ResponseBodyRetriever().retrieveApiResponse();
-        if (retrieveApiResponse.equals("")) {
-            return null;
-        }
-
-        return jsonDeserialization(retrieveApiResponse);
-    }*/
-
-    public ResponseBodyPojo jsonDeserialization(String jsonInString) {
+    public Optional<ResponseBodyPojo> jsonDeserialization(String jsonInString) {
         ResponseBodyPojo responseBodyPojo;
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -62,9 +49,9 @@ public class ResponseBodyJsonParser {
         }
         catch (Exception e) {
             System.out.println("Could not parse JSON body. Exception: " + e);
-            return null;
+            return Optional.empty();
         }
-        return responseBodyPojo;
+        return Optional.ofNullable(responseBodyPojo);
     }
 
 
