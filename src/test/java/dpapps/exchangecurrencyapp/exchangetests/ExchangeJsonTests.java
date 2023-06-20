@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp;
+package dpapps.exchangecurrencyapp.exchangetests;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;

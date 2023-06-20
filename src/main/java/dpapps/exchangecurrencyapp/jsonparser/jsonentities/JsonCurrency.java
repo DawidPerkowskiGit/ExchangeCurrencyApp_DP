@@ -40,4 +40,8 @@ public class JsonCurrency {
         setFullName(currency.getFullName());
         return this;
     }
+
+    public JsonCurrency(Currency currency) {
+        convertCurrencyToJsonCurrency(currency);
+    }
 }

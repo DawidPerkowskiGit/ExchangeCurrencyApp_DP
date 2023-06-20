@@ -34,13 +34,15 @@ public class CurrencyJsonTests {
 
     @BeforeEach
     void setUp() {
-        jsonCurrencyList.add(new JsonCurrency("EUR", "Euro"));
-        jsonCurrencyList.add(new JsonCurrency("USD", "United States dollar"));
-        jsonCurrencyList.add(new JsonCurrency("JPY", "Japanese yen"));
+
 
         currencyList.add(new Currency(1, "EUR", "Euro"));
         currencyList.add(new Currency(2, "USD", "United States dollar"));
         currencyList.add(new Currency(3, "JPY", "Japanese yen"));
+
+        jsonCurrencyList.add(new JsonCurrency(currencyList.get(0)));
+        jsonCurrencyList.add(new JsonCurrency(currencyList.get(1)));
+        jsonCurrencyList.add(new JsonCurrency(currencyList.get(2)));
     }
 
     @Test
