@@ -1,5 +1,7 @@
 package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
 
+import dpapps.exchangecurrencyapp.exchange.entities.Currency;
+
 public class JsonCurrency {
     private String isoName;
 
@@ -24,5 +26,18 @@ public class JsonCurrency {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public Currency convertJsonCurrencyToCurrency() {
+        Currency currency = new Currency() {};
+        currency.setIsoName(getIsoName());
+        currency.setFullName(getFullName());
+        return currency;
+    }
+
+    public JsonCurrency convertCurrencyToJsonCurrency(Currency currency) {
+        setIsoName(currency.getIsoName());
+        setFullName(currency.getFullName());
+        return this;
     }
 }
