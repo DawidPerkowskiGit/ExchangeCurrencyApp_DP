@@ -67,13 +67,4 @@ public class ResponseBodyPojo {
     public void setRates(Map<String, Double> rates) {
         this.rates = rates;
     }
-
-    public int[] convertStringDateToInts(String date) {
-        String[] strings = date.split("-");
-        int arr[] = new int[strings.length];
-        for (int iterator = 0; iterator < strings.length; iterator++) {
-            arr[iterator] = Integer.valueOf(strings[iterator]);
-        }
-        return arr;
-    }
 }

@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser;
+package dpapps.exchangecurrencyapp.exchange.tools;
 
 /**
  * The class all the currency types available in this application.

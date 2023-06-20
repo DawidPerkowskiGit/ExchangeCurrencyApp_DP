@@ -57,5 +57,13 @@ public class Exchange {
         return getCurrency().getIsoName() + ", " + getExchangeDate().toString()+", " + getValue();
     }
 
+    public Exchange(Integer id, double value, Currency currency, LocalDate exchangeDate) {
+        this.id = id;
+        this.value = value;
+        this.currency = currency;
+        this.exchangeDate = exchangeDate;
+    }
 
+    public Exchange() {
+    }
 }

@@ -9,7 +9,7 @@ This is project of exchange currency application.
 
 ## Technologies
 
-Java 17, Spring 3.1.0, PostgreSQL 15, Maven, Docker, GitHub, Render.
+Java 17, Spring 3.1.0, PostgreSQL 15, Maven, Docker, GitHub, Render, JUnit, Jackson.
 
 ## More detailed information about project
 
