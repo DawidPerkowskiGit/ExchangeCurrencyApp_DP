@@ -17,8 +17,4 @@ public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
 
     Currency findCurrencyByIsoName(String name);
 
-    List<Currency> saveList(List<Currency> list);
-
-
-
 }

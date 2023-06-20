@@ -5,6 +5,7 @@ import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonExchange;
+import dpapps.exchangecurrencyapp.mockrepo.MockCurrencyRepo;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @JsonTest
 public class ExchangeJsonTests {
 
-    CurrencyRepository currencyRepository;
+    MockCurrencyRepo currencyRepository = new MockCurrencyRepo();
 
     @Autowired
     private JacksonTester<JsonExchange> json;
@@ -46,9 +47,9 @@ public class ExchangeJsonTests {
         exchanges.add(new Exchange(7, 37.408 ,  currencies.get(1), ConversionLocalDateString.convertStringToLocalDate("2023-06-10")));
         exchanges.add(new Exchange(8, 1.6061 ,  currencies.get(2), ConversionLocalDateString.convertStringToLocalDate("2023-06-12")));
 
-        jsonExchanges.add(new JsonExchange().convertBaseToJson(exchanges.get(0)));
-        jsonExchanges.add(new JsonExchange().convertBaseToJson(exchanges.get(1)));
-        jsonExchanges.add(new JsonExchange().convertBaseToJson(exchanges.get(2)));
+        jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(0)));
+        jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(1)));
+        jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(2)));
     }
 
     @Test
