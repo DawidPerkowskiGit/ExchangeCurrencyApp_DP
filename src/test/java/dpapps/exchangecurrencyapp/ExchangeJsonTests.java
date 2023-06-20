@@ -29,7 +29,7 @@ public class ExchangeJsonTests {
     private JacksonTester<JsonExchange> json;
 
     @Autowired
-    private JacksonTester<Exchange[]> jsonList;
+    private JacksonTester<List<JsonExchange>> jsonList;
 
     private List<Exchange> exchanges = new ArrayList<>();
 
@@ -60,36 +60,36 @@ public class ExchangeJsonTests {
         assertThat(json.write(jsonExchange)).extractingJsonPathValue("@.value").isEqualTo(7.6541);
         assertThat(json.write(jsonExchange)).hasJsonPathValue("@.currency");
         assertThat(json.write(jsonExchange)).extractingJsonPathValue("@.currency").isEqualTo("EUR");
-        assertThat(json.write(jsonExchange)).hasJsonPathValue("@.exchange_date");
-        assertThat(json.write(jsonExchange)).extractingJsonPathValue("@.exchange_date").isEqualTo("2023-06-08");
+        assertThat(json.write(jsonExchange)).hasJsonPathValue("@.exchangeDate");
+        assertThat(json.write(jsonExchange)).extractingJsonPathValue("@.exchangeDate").isEqualTo("2023-06-08");
     }
-//    @Test
-//    public void currencyDeserializationTest() throws IOException {
-//        String expected = """
-//                {
-//                  "id": 1,
-//                  "isoName": "EUR",
-//                  "fullName": "Euro"
-//                }
-//                """;
-//        Currency currency = new Currency(1, "EUR", "Euro");
-//        assertThat(json.write(currency)).isEqualToJson(expected);
-//    }
-//
-//    @Test
-//    void currencyListSerializationTest() throws IOException {
-//        assertThat(jsonList.write(exchanges)).isStrictlyEqualToJson("currencyList.json");
-//    }
-//
-//    @Test
-//    void currencyListDeserializationTest() throws IOException {
-//        String expected = """
-//                [
-//                  {"id": 1, "isoName": "EUR", "fullName": "Euro"},
-//                  {"id": 2, "isoName": "USD", "fullName": "United States dollar"},
-//                  {"id": 3, "isoName": "JPY", "fullName": "Japanese yen"}
-//                ]
-//                """;
-//        assertThat(jsonList.write(exchanges)).isEqualToJson(expected);
-//    }
+    @Test
+    public void exchnageDeserializationTest() throws IOException {
+        String expected = """
+                {
+                  "exchangeDate": "2023-06-08",
+                  "value": 7.6541,
+                  "currency": "EUR"
+                }
+                """;
+        JsonExchange jsonExchange = new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(0));
+        assertThat(json.write(jsonExchange)).isEqualToJson(expected);
+    }
+
+    @Test
+    void exchangeListSerializationTest() throws IOException {
+        assertThat(jsonList.write(jsonExchanges)).isStrictlyEqualToJson("exchangeList.json");
+    }
+
+    @Test
+    void exchangeListDeserializationTest() throws IOException {
+        String expected = """
+                [
+                  {"exchangeDate": "2023-06-08", "value": 7.6541, "currency": "EUR"},
+                  {"exchangeDate": "2023-06-10", "value": 37.408, "currency": "USD"},
+                  {"exchangeDate": "2023-06-12", "value": 1.6061, "currency": "JPY"}
+                ]
+                """;
+        assertThat(jsonList.write(jsonExchanges)).isEqualToJson(expected);
+    }
 }

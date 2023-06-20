@@ -31,7 +31,7 @@ public class CurrencyExchangesScheduler {
         this.currencyRepository = currencyRepository;
     }
 
-    @Scheduled(fixedRate = 14400000, initialDelay = 14400000)
+    @Scheduled(fixedRate = 14400000, initialDelay = 3600000)
     public String performCurrencyExchangeImport() {
         System.out.println("Starting automatic currency exchange import");
 
