@@ -11,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -70,5 +75,28 @@ public class CurrencyExchangesScheduler {
         System.out.println("Exchange rates imported successfully");
 
         return "Exchange rates imported successfully";
+    }
+
+    /**
+     * Every 10 minutes send simple request
+     */
+    @Scheduled(fixedRate = 600000)
+    public String keepTheAppRunning(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://exchangecurrencyapp-dp-render.onrender.com/currencies"))
+                    .build();
+
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+        }
+        catch (Exception e) {
+            System.out.println("Failed to perform scheduled task. Exception: "+ e);
+        }
+        System.out.println("Successfully kept the app from un-allocating resources. Time: " + localDateTime.toString());
+        return "The app is running";
     }
 }
