@@ -39,21 +39,25 @@ public class CurrencyExchangesScheduler {
             ResponseBodyRetriever responseBodyRetriever = new ResponseBodyRetriever();
             String apiResponseBody = responseBodyRetriever.retrieveApiResponse();
             if (apiResponseBody.equals("")) {
+                System.out.println("Failed to import response body");
                 return "Failed to import response body";
             }
 
             ResponseBodyJsonParser responseBodyJsonParser = new ResponseBodyJsonParser();
             ResponseBodyPojo responseBodyPojo = responseBodyJsonParser.jsonDeserialization(apiResponseBody);
             if (responseBodyPojo==null) {
+                System.out.println("Returned response body is null");
                 return "Returned response body is null";
             }
             if (responseBodyPojo.getSuccess()==false) {
+                System.out.println("Could not get response body");
                 return "Could not get response body";
             }
 
             ResponsePojoDatabaseInsert responsePojoDatabaseInsert = new ResponsePojoDatabaseInsert(this.exchangeRepository, this.currencyRepository);
             List<Exchange> exchanges = responsePojoDatabaseInsert.convertPojoToExchangeList(responseBodyPojo);
             if (exchanges.isEmpty()) {
+                System.out.println("Exchange list is empty");
                 return "Exchange list is empty";
             }
 
