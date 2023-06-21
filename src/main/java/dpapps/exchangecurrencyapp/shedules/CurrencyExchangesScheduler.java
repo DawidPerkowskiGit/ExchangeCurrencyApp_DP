@@ -3,10 +3,10 @@ package dpapps.exchangecurrencyapp.shedules;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.jsonparser.ResponseBodyPojo;
-import dpapps.exchangecurrencyapp.jsonparser.ResponseBodyJsonParser;
-import dpapps.exchangecurrencyapp.jsonparser.ResponseBodyRetriever;
-import dpapps.exchangecurrencyapp.jsonparser.ResponsePojoDatabaseInsert;
+import dpapps.exchangecurrencyapp.jsonparser.requestexchanges.RequestBodyObject;
+import dpapps.exchangecurrencyapp.jsonparser.requestexchanges.RequestBodyJsonParser;
+import dpapps.exchangecurrencyapp.jsonparser.requestexchanges.RequestBodyRetriever;
+import dpapps.exchangecurrencyapp.jsonparser.requestexchanges.RequestPojoDatabaseInsert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -42,15 +42,15 @@ public class CurrencyExchangesScheduler {
         System.out.println("Starting automatic currency exchange import");
 
         try {
-            ResponseBodyRetriever responseBodyRetriever = new ResponseBodyRetriever();
-            String apiResponseBody = responseBodyRetriever.retrieveApiResponse();
+            RequestBodyRetriever requestBodyRetriever = new RequestBodyRetriever();
+            String apiResponseBody = requestBodyRetriever.retrieveApiResponse();
             if (apiResponseBody.equals("")) {
                 System.out.println("Failed to import response body");
                 return "Failed to import response body";
             }
 
-            ResponseBodyJsonParser responseBodyJsonParser = new ResponseBodyJsonParser();
-            Optional<ResponseBodyPojo> responseBodyPojo = responseBodyJsonParser.jsonDeserialization(apiResponseBody);
+            RequestBodyJsonParser requestBodyJsonParser = new RequestBodyJsonParser();
+            Optional<RequestBodyObject> responseBodyPojo = requestBodyJsonParser.jsonDeserialization(apiResponseBody);
             if (responseBodyPojo.get().doAllNullableFieldsContainData() == false) {
                 System.out.println("Returned response body is null");
                 return "Returned response body is null";
@@ -60,7 +60,7 @@ public class CurrencyExchangesScheduler {
                 return "Could not get response body";
             }
 
-            ResponsePojoDatabaseInsert responsePojoDatabaseInsert = new ResponsePojoDatabaseInsert(this.exchangeRepository, this.currencyRepository);
+            RequestPojoDatabaseInsert responsePojoDatabaseInsert = new RequestPojoDatabaseInsert(this.exchangeRepository, this.currencyRepository);
             List<Exchange> exchanges = responsePojoDatabaseInsert.convertPojoToExchangeList(responseBodyPojo.get());
             if (exchanges.isEmpty()) {
                 System.out.println("Exchange list is empty");

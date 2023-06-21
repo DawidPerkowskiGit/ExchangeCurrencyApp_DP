@@ -1,30 +1,25 @@
-package dpapps.exchangecurrencyapp.jsonparser;
+package dpapps.exchangecurrencyapp.jsonparser.requestexchanges;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dpapps.exchangecurrencyapp.exchange.entities.Currency;
-import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
-import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
-import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
+/**
+ * This module is responsible for deserialization of response body.
+ */
 @Service
-public class ResponseBodyJsonParser {
+public class RequestBodyJsonParser {
 
     private final boolean DEBUG = true;
 
 
 
-    public Optional<ResponseBodyPojo> parseJsonFromFile(String filePath) {
+    public Optional<RequestBodyObject> parseJsonFromFile(String filePath) {
 
-        ResponseBodyPojo responseBodyPojo = new ResponseBodyPojo();
+        RequestBodyObject requestBodyObject = new RequestBodyObject();
         String jsonInString = "";
 
         try {
@@ -37,13 +32,13 @@ public class ResponseBodyJsonParser {
         return jsonDeserialization(jsonInString);
     }
 
-    public Optional<ResponseBodyPojo> jsonDeserialization(String jsonInString) {
-        ResponseBodyPojo responseBodyPojo;
+    public Optional<RequestBodyObject> jsonDeserialization(String jsonInString) {
+        RequestBodyObject requestBodyObject;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            responseBodyPojo = mapper.readValue(jsonInString, ResponseBodyPojo.class);
+            requestBodyObject = mapper.readValue(jsonInString, RequestBodyObject.class);
             if (DEBUG) {
-                String pojoToString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseBodyPojo);
+                String pojoToString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyObject);
                 System.out.println(pojoToString);
             }
         }
@@ -51,7 +46,7 @@ public class ResponseBodyJsonParser {
             System.out.println("Could not parse JSON body. Exception: " + e);
             return Optional.empty();
         }
-        return Optional.ofNullable(responseBodyPojo);
+        return Optional.ofNullable(requestBodyObject);
     }
 
 

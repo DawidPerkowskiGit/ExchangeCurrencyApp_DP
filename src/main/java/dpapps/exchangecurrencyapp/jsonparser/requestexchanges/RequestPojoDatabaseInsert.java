@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser;
+package dpapps.exchangecurrencyapp.jsonparser.requestexchanges;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
@@ -11,26 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is responsible for extracting data from ResponseBodyPojo object and inserting it to the database.
+ * This module is responsible for extracting data from ResponseBodyPojo object and inserting it to the database.
  */
 
 @Service
-public class ResponsePojoDatabaseInsert {
+public class RequestPojoDatabaseInsert {
 
     private final ExchangeRepository exchangeRepository;
 
     private final CurrencyRepository currencyRepository;
 
     @Autowired
-    public ResponsePojoDatabaseInsert(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository) {
+    public RequestPojoDatabaseInsert(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository) {
         this.exchangeRepository = exchangeRepository;
         this.currencyRepository = currencyRepository;
     }
 
-    public List<Exchange> convertPojoToExchangeList(ResponseBodyPojo responseBodyPojo) {
+    public List<Exchange> convertPojoToExchangeList(RequestBodyObject requestBodyObject) {
         List<Exchange> exchanges = new ArrayList<>();
         try {
-            if (responseBodyPojo.doAllNullableFieldsContainData() == false) {
+            if (requestBodyObject.doAllNullableFieldsContainData() == false) {
                 System.out.println("Exchange date does not contain information");
                 return exchanges;
             }
@@ -41,8 +41,8 @@ public class ResponsePojoDatabaseInsert {
 
 
         try {
-            if (exchangeRepository.existsByExchangeDate(responseBodyPojo.getDate())) {
-                System.out.println("Exchange rates from " + responseBodyPojo.getDate().toString() + " are already in database");
+            if (exchangeRepository.existsByExchangeDate(requestBodyObject.getDate())) {
+                System.out.println("Exchange rates from " + requestBodyObject.getDate().toString() + " are already in database");
                 return exchanges;
             }
         }
@@ -54,11 +54,11 @@ public class ResponsePojoDatabaseInsert {
         try {
             for (AvailableCurrencyTypes currencyType: AvailableCurrencyTypes.values()
             ) {
-                if (responseBodyPojo.getRates().containsKey(currencyType.toString())) {
+                if (requestBodyObject.getRates().containsKey(currencyType.toString())) {
                     Exchange exchange = new Exchange();
                     exchange.setCurrency(currencyRepository.findCurrencyByIsoName(currencyType.toString()));
-                    exchange.setExchangeDate(responseBodyPojo.getDate());
-                    exchange.setValue(responseBodyPojo.getRates().get(currencyType.toString()));
+                    exchange.setExchangeDate(requestBodyObject.getDate());
+                    exchange.setValue(requestBodyObject.getRates().get(currencyType.toString()));
                     exchanges.add(exchange);
                 }
             }

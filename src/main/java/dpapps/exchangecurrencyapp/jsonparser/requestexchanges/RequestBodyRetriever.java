@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser;
+package dpapps.exchangecurrencyapp.jsonparser.requestexchanges;
 
 import org.springframework.stereotype.Service;
 
@@ -8,10 +8,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @Service
-public class ResponseBodyRetriever {
+public class RequestBodyRetriever {
 
     /**
-     * Retrieve the latest currency exchange rates from endpoint URL, stored in environment variable.
+     * This module is responsible for sending API request to exchangeratesapi.io and extracting server's response body.
      */
 
     public String retrieveApiResponse() {

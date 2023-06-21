@@ -13,15 +13,12 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     List<Exchange> listOfExchanges = new ArrayList<>();
 
-//    @Override
-//    public void save(Exchange exchange) {
-//        listOfExchanges.add(exchange);
-//    }
+
 
 
     @Override
-    public boolean existsByExchangeDate(LocalDate date) {
-        return false;
+    public List<Exchange> findAllByExchangeDate(LocalDate date) {
+        return null;
     }
 
     @Override
@@ -83,5 +80,15 @@ public class MockExchangeRepository implements ExchangeRepository {
     @Override
     public void deleteAll() {
 
+    }
+
+    @Override
+    public boolean existsByExchangeDate(LocalDate date) {
+        return false;
+    }
+
+    @Override
+    public LocalDate returnValidLatestExchangeData() {
+        return null;
     }
 }
