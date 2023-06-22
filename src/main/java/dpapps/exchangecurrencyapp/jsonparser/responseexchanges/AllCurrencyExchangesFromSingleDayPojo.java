@@ -9,8 +9,8 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class ResponseBodyObject {
-    private String success;
+public class AllCurrencyExchangesFromSingleDayPojo {
+    private boolean success = false;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -18,13 +18,15 @@ public class ResponseBodyObject {
             (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 
+    private String base;
+
     private Map<String, Double> rates;
 
-    public String getSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(String success) {
+    public void setSuccess(boolean success) {
         this.success = success;
     }
 
@@ -44,12 +46,21 @@ public class ResponseBodyObject {
         this.rates = rates;
     }
 
-    public ResponseBodyObject(String success, LocalDate date, Map<String, Double> rates) {
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base;
+    }
+
+    public AllCurrencyExchangesFromSingleDayPojo(boolean success, LocalDate date, Map<String, Double> rates, String base) {
         this.success = success;
         this.date = date;
         this.rates = rates;
+        this.base = base;
     }
 
-    public ResponseBodyObject() {
+    public AllCurrencyExchangesFromSingleDayPojo() {
     }
 }

@@ -15,12 +15,6 @@ public class MockExchangeRepository implements ExchangeRepository {
 
 
 
-
-    @Override
-    public List<Exchange> findAllByExchangeDate(LocalDate date) {
-        return null;
-    }
-
     @Override
     public <S extends Exchange> S save(S entity) {
         listOfExchanges.add(entity);
@@ -89,6 +83,16 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public LocalDate returnValidLatestExchangeData() {
+        return null;
+    }
+
+    @Override
+    public List<Exchange> findAllByExchangeDateOrderByCurrencyDesc(LocalDate date) {
+        return null;
+    }
+
+    @Override
+    public List<Exchange> findAllByExchangeDateAndCurrencyOrderByExchangeDate(LocalDate date, String currency) {
         return null;
     }
 }

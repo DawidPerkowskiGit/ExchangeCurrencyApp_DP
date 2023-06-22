@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.datetests;
 
-import dpapps.exchangecurrencyapp.configuration.DateVariables;
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +23,8 @@ public class DateTests {
 
     @BeforeEach
     public void setUp() {
-        beforeLeft    = DateVariables.EXCHNAGE_DATE_OLDEST.minusDays(1);
-        left          = DateVariables.EXCHNAGE_DATE_OLDEST;
+        beforeLeft    = AppVariables.EXCHANGE_DATE_OLDEST.minusDays(1);
+        left          = AppVariables.EXCHANGE_DATE_OLDEST;
         middle        = LocalDate.of(2010, 10, 10);
         right         = LocalDate.now();
         afterRight    = LocalDate.now().plusDays(1);

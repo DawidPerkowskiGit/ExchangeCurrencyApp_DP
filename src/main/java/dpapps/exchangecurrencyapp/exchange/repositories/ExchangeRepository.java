@@ -12,12 +12,14 @@ import java.util.List;
 public interface ExchangeRepository extends CrudRepository<Exchange, Integer> {
     boolean existsByExchangeDate(LocalDate date);
 
-//    @Query("SELECT c FROM Category c WHERE c.categoryName = ?1")
-//    Category findByCategoryName(String name);
     @Query("SELECT MAX(exchangeDate) FROM Exchange")
     LocalDate returnValidLatestExchangeData();
 
-    List<Exchange> findAllByExchangeDate(LocalDate date);
+    @Query("SELECT e FROM Exchange e WHERE e.exchangeDate = ?1 ORDER BY e.currency.id")
+    List<Exchange> findAllByExchangeDateOrderByCurrencyDesc(LocalDate date);
+
+    @Query("SELECT e FROM Exchange e INNER JOIN Currency c ON e.currency = c WHERE e.exchangeDate = ?1 AND c.isoName = ?2 ORDER BY e.currency.id")
+    List<Exchange> findAllByExchangeDateAndCurrencyOrderByExchangeDate(LocalDate date, String currency);
 
 
 }

@@ -46,5 +46,5 @@ public enum AvailableCurrencyTypes {
             PHP ,
             SGD ,
             THB ,
-            ZAR 
+            ZAR
 }

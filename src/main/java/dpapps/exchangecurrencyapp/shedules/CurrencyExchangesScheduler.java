@@ -81,7 +81,7 @@ public class CurrencyExchangesScheduler {
     /**
      * Every 10 minutes send simple request
      */
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedRate = 600000, initialDelay = 600000)
     public String keepTheAppRunning(){
         LocalDateTime localDateTime = LocalDateTime.now();
 

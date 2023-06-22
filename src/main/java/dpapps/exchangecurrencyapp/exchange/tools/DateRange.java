@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.tools;
 
-import dpapps.exchangecurrencyapp.configuration.DateVariables;
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 
 import java.time.LocalDate;
 
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class DateRange {
 
     public static boolean isDateInValidRange(LocalDate date) {
-        if (date.isBefore(DateVariables.EXCHNAGE_DATE_OLDEST)) {
+        if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
         if (date.isAfter(LocalDate.now())) {
@@ -28,10 +28,10 @@ public class DateRange {
             left = temp;
         }
 
-        if (left.isBefore(DateVariables.EXCHNAGE_DATE_OLDEST)) {
+        if (left.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
-        if (right.isBefore(DateVariables.EXCHNAGE_DATE_OLDEST)) {
+        if (right.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
         if (left.isAfter(LocalDate.now())) {
@@ -45,8 +45,8 @@ public class DateRange {
     }
 
     public static LocalDate returnValidRange(LocalDate date) {
-        if (date.isBefore(DateVariables.EXCHNAGE_DATE_OLDEST)) {
-            return DateVariables.EXCHNAGE_DATE_OLDEST;
+        if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
+            return AppVariables.EXCHANGE_DATE_OLDEST;
         }
         if (date.isAfter(LocalDate.now())) {
             return LocalDate.now();
@@ -62,11 +62,11 @@ public class DateRange {
             left = temp;
         }
 
-        if (left.isBefore(DateVariables.EXCHNAGE_DATE_OLDEST)) {
-            left = DateVariables.EXCHNAGE_DATE_OLDEST;
+        if (left.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
+            left = AppVariables.EXCHANGE_DATE_OLDEST;
         }
-        if (right.isBefore(DateVariables.EXCHNAGE_DATE_OLDEST)) {
-            right = DateVariables.EXCHNAGE_DATE_OLDEST;
+        if (right.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
+            right = AppVariables.EXCHANGE_DATE_OLDEST;
         }
         if (left.isAfter(LocalDate.now())) {
             left = LocalDate.now();
