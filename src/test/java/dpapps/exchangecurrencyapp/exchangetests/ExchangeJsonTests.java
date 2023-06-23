@@ -2,16 +2,13 @@ package dpapps.exchangecurrencyapp.exchangetests;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
-import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonExchange;
 import dpapps.exchangecurrencyapp.mockrepo.MockCurrencyRepo;
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.json.JacksonTester;
 
 import java.io.IOException;
@@ -64,7 +61,7 @@ public class ExchangeJsonTests {
         assertThat(json.write(jsonExchange)).extractingJsonPathValue("@.exchangeDate").isEqualTo("2023-06-08");
     }
     @Test
-    public void exchnageDeserializationTest() throws IOException {
+    public void exchangeDeserializationTest() throws IOException {
         String expected = """
                 {
                   "exchangeDate": "2023-06-08",

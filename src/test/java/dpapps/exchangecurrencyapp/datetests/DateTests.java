@@ -1,9 +1,15 @@
 package dpapps.exchangecurrencyapp.datetests;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.exchange.controllers.ExchangeController;
+import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
+import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
+import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
+import dpapps.exchangecurrencyapp.mockrepo.MockExchangeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -20,6 +26,8 @@ public class DateTests {
      LocalDate right        ;
      LocalDate afterRight   ;
 
+     MockExchangeRepository exchangeRepository = new MockExchangeRepository();
+
 
     @BeforeEach
     public void setUp() {
@@ -28,6 +36,24 @@ public class DateTests {
         middle        = LocalDate.of(2010, 10, 10);
         right         = LocalDate.now();
         afterRight    = LocalDate.now().plusDays(1);
+    }
+
+    @BeforeEach
+    public void setUpRepository() {
+        LocalDate max = LocalDate.now();
+        LocalDate current = AppVariables.EXCHANGE_DATE_OLDEST;
+
+        while (current.isBefore(max) || current.isEqual(max)) {
+            if (current.getDayOfWeek().toString().equals("SATURDAY") || current.getDayOfWeek().toString().equals("SUNDAY")) {
+                //dont add weekend days
+            }
+            else {
+                Exchange exchange = new Exchange();
+                exchange.setExchangeDate(current);
+                exchangeRepository.save(exchange);
+            }
+            current = current.plusDays(1);
+        }
     }
 
 
@@ -202,10 +228,43 @@ public class DateTests {
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
     }
 
+    @Test
+    public void shouldReturnDatesExistingInDb() {
+        LocalDate date1 = LocalDate.of(2023,06,11);
+        LocalDate resultDate1 = LocalDate.of(2023,06,9);
+
+        assertThat(resultDate1.isEqual(returnExchangeDateThatExistsInDb(date1))).isTrue();
+
+
+        LocalDate date2 = LocalDate.of(2023,06,4);
+        LocalDate resultDate2 = LocalDate.of(2023,06,2);
+
+        assertThat(resultDate2.isEqual(returnExchangeDateThatExistsInDb(date2))).isTrue();
+
+
+        assertThat(AppVariables.EXCHANGE_DATE_OLDEST.isEqual(returnExchangeDateThatExistsInDb(AppVariables.EXCHANGE_DATE_OLDEST).minusDays(1)));
+        assertThat(AppVariables.EXCHANGE_DATE_OLDEST.isEqual(returnExchangeDateThatExistsInDb(AppVariables.EXCHANGE_DATE_OLDEST)));
+        assertThat(AppVariables.EXCHANGE_DATE_OLDEST.plusDays(1).isEqual(returnExchangeDateThatExistsInDb(AppVariables.EXCHANGE_DATE_OLDEST).plusDays(1)));
+
+    }
+
     public boolean compareTwoPairsOfDates(LocalDate[] pair1, LocalDate[] pair2) {
         if (pair1[0].isEqual(pair2[0]) || pair1[1].isEqual(pair2[1])) {
             return true;
         }
         return false;
+    }
+
+    public LocalDate returnExchangeDateThatExistsInDb(LocalDate date) {
+
+        while (DateRange.isDateInValidRange(date)) {
+            if (exchangeRepository.existsByExchangeDate(date) == false) {
+                date = date.minusDays(1);
+            }
+            else {
+                return date;
+            }
+        }
+        return AppVariables.EXCHANGE_DATE_OLDEST;
     }
 }

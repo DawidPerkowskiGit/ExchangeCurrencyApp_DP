@@ -21,13 +21,9 @@ public class DateRange {
     }
 
     public static boolean isDateInValidRange(LocalDate left, LocalDate right) {
-        LocalDate temp;
         if (right.isBefore(left)) {
-            temp = right;
-            right = left;
-            left = temp;
+            return false;
         }
-
         if (left.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
         }

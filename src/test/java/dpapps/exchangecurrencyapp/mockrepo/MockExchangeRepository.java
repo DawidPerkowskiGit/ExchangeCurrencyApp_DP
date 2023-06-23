@@ -78,6 +78,13 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public boolean existsByExchangeDate(LocalDate date) {
+
+        for (Exchange entry: listOfExchanges
+             ) {
+            if (entry.getExchangeDate().isEqual(date)) {
+                return true;
+            }
+        }
         return false;
     }
 
