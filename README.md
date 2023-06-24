@@ -6,7 +6,7 @@
 * [Other projects based on this application](#other-projects-based-on-this-application)
 * [Todo](#todo)
 ## General info
-Project of exchange rates web service. Provides REST API endpoint which provides chosen exchange rates. Every push to this repository triggers Render's build and deploy process which uses Docker containers to deploy final applciation.
+Project of exchange rates web service. Provides REST API endpoint which returns chosen exchange rates. Every push to this repository triggers Render's build and deploy process which uses Docker containers to deploy final applciation.
 
 ## Technologies
 
