@@ -1,16 +1,36 @@
 # Content of Project
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [More detailed information about modules](#more-detailed-information-about-modules)
-
+* [More detailed information about application](#more-detailed-information-about-application)
+* [Application view](#application-view)
+* [Other projects based on this application](#other-projects-based-on-this-application)
+* [Todo](#todo)
 ## General info
-
-This is project of exchange currency application. 
+Project of exchange rates web service. Provides REST API endpoint which provides chosen exchange rates. Every push to this repository triggers Render's build and deploy process which uses Docker containers to deploy final applciation.
 
 ## Technologies
 
-Java 17, Spring 3.1.0, PostgreSQL 15, Maven, Docker, GitHub, Render, JUnit, Jackson.
+Java 17, Spring 3.1.0, PostgreSQL 15, Maven, Docker, GitHub, JUnit, Render.
 
-## More detailed information about project
+## More detailed information about application
 
-Every push action to the main repository triggers Render's deploying process. The service uses docker to build and deploy Spring application. All sensitive data like database connection credential are stored in local environment variables and Render's web service secrets.
+The application uses PostgreSQL to store data of over 30 different currency types and their exchange rates, first entry is from 1999-01-04. Every four hours application performs automatic REST API request to exchangeratesapi.io in search of new exchange rates. If received exchanges are new, the data is inserted to the database. 
+
+URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
+
+The use can access those exchange rates by sending request to /api/exchange endpoint.
+Available optional parameters:
+ - currency - exchange rates of chosen currency type
+ - baseCurrency - changing the base currency(default is EUR)
+ - startDate - return exchanges starting from the chosen date
+ - finishDate - return exchanges finishing at the chosen date
+
+Not providing values to these parameters will result in receiving latest exchange date from all the currencies, when EUR is the base.
+## Application view
+
+![img.png](img.png)
+
+## Todo
+
+- Authorization and authentication
+- UI graphic interface - another application developed with Angular. Sends REST API requests to this app and displays exchange ratios graphs and statistics.
