@@ -18,8 +18,8 @@ The application uses PostgreSQL to store data of over 30 different currency type
 
 URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
 
-The use can access those exchange rates by sending request to /api/exchange endpoint.
-Available optional parameters:
+The user can access those rates by sending request to /api/exchange endpoint.
+Available optional URL parameters:
  - currency - exchange rates of chosen currency type
  - baseCurrency - changing the base currency(default is EUR)
  - startDate - return exchanges starting from the chosen date
