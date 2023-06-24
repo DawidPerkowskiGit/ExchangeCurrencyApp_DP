@@ -2,7 +2,6 @@ package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
-import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
@@ -59,10 +58,26 @@ public class ResponseApiController {
     }*/
 
     @GetMapping("/exchange")
-    public String getLatestForCurrency(@RequestParam String currency,
-                                       @RequestParam String startDate,
-                                       @RequestParam String finishDate,
-                                       @RequestParam String baseCurrency) {
+    public String getEchangeRates(@RequestParam(required = false) String currency,
+                                  @RequestParam(required = false) String startDate,
+                                  @RequestParam(required = false) String finishDate,
+                                  @RequestParam(required = false) String baseCurrency) {
+
+        /**
+         * Nullable fields check
+         */
+        if (startDate == null) {
+            startDate = "";
+        }
+        if (finishDate == null) {
+            finishDate = "";
+        }
+        if (currency == null) {
+            currency = "";
+        }
+        if (baseCurrency == null) {
+            baseCurrency = "";
+        }
 
         /**
          * Convert String Date to LocalDate
@@ -75,7 +90,7 @@ public class ResponseApiController {
          * Check if parameters are empty
          */
 
-        if (beginDate.isEqual(onesDate) || endDate.isEqual(onesDate)) {
+        if (beginDate.isEqual(onesDate) && endDate.isEqual(onesDate)) {
             beginDate = endDate = LocalDate.now();
         }
         if (beginDate.isEqual(onesDate)) {
@@ -208,7 +223,7 @@ public class ResponseApiController {
                 pojo.setBase(baseCurrency);
             }
 
-            
+
             /**
              * Get exchange rates from db
              */
