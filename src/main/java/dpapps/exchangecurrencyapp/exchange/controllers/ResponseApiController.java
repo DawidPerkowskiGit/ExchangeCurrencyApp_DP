@@ -2,6 +2,7 @@ package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
@@ -10,12 +11,10 @@ import dpapps.exchangecurrencyapp.exchange.repositories.LocationRepository;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
-import dpapps.exchangecurrencyapp.jsonparser.responseexchanges.AllCurrencyExchangesFromSingleDayPojo;
-import org.hibernate.grammars.hql.HqlParser;
+import dpapps.exchangecurrencyapp.jsonparser.responseexchanges.CurrencyExchangesFromSingleDayPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -59,10 +58,11 @@ public class ResponseApiController {
         return returnedJson;
     }*/
 
-    @GetMapping("/latest")
+    @GetMapping("/exchange")
     public String getLatestForCurrency(@RequestParam String currency,
                                        @RequestParam String startDate,
-                                       @RequestParam String finishDate) {
+                                       @RequestParam String finishDate,
+                                       @RequestParam String baseCurrency) {
 
         /**
          * Convert String Date to LocalDate
@@ -86,7 +86,7 @@ public class ResponseApiController {
 
 
         /**
-         * Check if dates are not in valid range, if they are not, return correct date range.
+         * Check if dates are in valid range, if they are not, return correct date range.
          */
 
         if (DateRange.isDateInValidRange(beginDate, endDate) == false) {
@@ -96,17 +96,17 @@ public class ResponseApiController {
         }
 
 
-        Optional<AllCurrencyExchangesFromSingleDayPojo> pojo = Optional.empty();
+        Optional<CurrencyExchangesFromSingleDayPojo> pojo = Optional.empty();
         String returnedJson = "";
-        List<AllCurrencyExchangesFromSingleDayPojo> pojoList = new ArrayList<>();
+        List<CurrencyExchangesFromSingleDayPojo> pojoList = new ArrayList<>();
 
         /**
-         * Check if requested exchange rates are form a single day, if true - return exchanges form the day.
+         * Check if requested exchange rates are form a single day, if they, are return exchanges form the day.
          * If the exchange rates are from multiple days, return list of exchanges.
          */
 
         if (beginDate.isEqual(endDate)) {
-            pojo = getExchangesFromSingleDay(beginDate, currency);
+            pojo = getExchangesFromSingleDay(beginDate, currency, baseCurrency);
             if (pojo.isEmpty()) {
                 return "Failed to return exchange rates";
             }
@@ -118,41 +118,52 @@ public class ResponseApiController {
             }
         }
         else {
-            pojoList = getExchangesFromMultipleDays(beginDate, endDate, currency);
+            pojoList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
             returnedJson = buildJsonFromPojo(pojoList);
         }
 
         return returnedJson;
     }
 
-    public Optional<AllCurrencyExchangesFromSingleDayPojo> getExchangesFromSingleDay(LocalDate inputDate,
-                                                                                     String currency) {
+    public List<CurrencyExchangesFromSingleDayPojo> getExchangesFromMultipleDays(LocalDate beginDate,
+                                                                                 LocalDate endDate,
+                                                                                 String currency,
+                                                                                 String baseCurrency) {
 
+        List<CurrencyExchangesFromSingleDayPojo> exchangeList = new ArrayList<>();
 
-        AllCurrencyExchangesFromSingleDayPojo pojo = new AllCurrencyExchangesFromSingleDayPojo();
-        pojo.setBase(AppVariables.CURRENCY_BASE);
-
-        /**
-         * Base currency checks
-         */
-        if (currency.equals(AppVariables.CURRENCY_BASE)) {
-            pojo.setSuccess(false);
-            return Optional.ofNullable(pojo);
+        LocalDate currentDate = beginDate;
+        while (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) {
+            CurrencyExchangesFromSingleDayPojo singleDayExchanges = getExchangesFromSingleDay(currentDate, currency, baseCurrency).get();
+            if (singleDayExchanges.isSuccess()) {
+                exchangeList.add(singleDayExchanges);
+            }
+            currentDate = currentDate.plusDays(1);
         }
+
+        return exchangeList;
+
+    }
+
+    public Optional<CurrencyExchangesFromSingleDayPojo> getExchangesFromSingleDay(LocalDate inputDate,
+                                                                                  String currency,
+                                                                                  String baseCurrency) {
+
+
+        CurrencyExchangesFromSingleDayPojo pojo = new CurrencyExchangesFromSingleDayPojo();
 
         LocalDate exchangeDate = inputDate;
-
-        /**
-         * Exchange date checks
-         */
-        try {
-            if (DateRange.isDateInValidRange(inputDate)==false) {
-                exchangeDate = DateRange.returnValidRange(inputDate);
-            }
-        }
-        catch (Exception e) {
-            System.out.println("Could not find valid exchange rate date in the database. Exception: "+e);
-        }
+//        /**
+//         * Exchange date checks
+//         */
+//        try {
+//            if (DateRange.isDateInValidRange(inputDate)==false) {
+//                exchangeDate = DateRange.returnValidRange(inputDate);
+//            }
+//        }
+//        catch (Exception e) {
+//            System.out.println("Could not find valid exchange rate date in the database. Exception: "+e);
+//        }
 
         if (exchangeRepository.existsByExchangeDate(exchangeDate) == false) {
             pojo.setSuccess(false);
@@ -165,8 +176,9 @@ public class ResponseApiController {
         try {
             List<Exchange> latestExchangesList;
 
+
             /**
-             * Currency checks
+             * Wanted currency checks
              */
             if (currency.equals("")) {
                 latestExchangesList = exchangeRepository.findAllByExchangeDateOrderByCurrencyDesc(exchangeDate);
@@ -179,14 +191,48 @@ public class ResponseApiController {
                 return Optional.ofNullable(pojo);
             }
 
+
+
+            /**
+             * Base currency checks
+             */
+            if (baseCurrency.equals("")) {
+                pojo.setBase(AppVariables.CURRENCY_BASE);
+            }
+            else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
+                pojo.setSuccess(false);
+                System.out.println("Could not find base currency in the database");
+                return Optional.ofNullable(pojo);
+            }
+            else {
+                pojo.setBase(baseCurrency);
+            }
+
+            
             /**
              * Get exchange rates from db
              */
             Map<String, Double> rates = new HashMap<>();
-            for (Exchange entry: latestExchangesList
-            ) {
-                rates.put(entry.getCurrency().getIsoName(), entry.getValue());
+            if (pojo.getBase().equals(AppVariables.CURRENCY_BASE)) {
+                for (Exchange entry: latestExchangesList
+                ) {
+                    rates.put(entry.getCurrency().getIsoName(), entry.getValue());
+                }
             }
+            else {
+                if (exchangeRepository.existsByExchangeDateAndCurrency_IsoName(exchangeDate, baseCurrency)) {
+                    double newRatio = calculateNewRatio(exchangeDate, baseCurrency);
+                    for (Exchange entry: latestExchangesList
+                    ) {
+                        rates.put(entry.getCurrency().getIsoName(), entry.getValue()*newRatio);
+                    }
+                }
+                else {
+                    pojo.setSuccess(false);
+                }
+
+            }
+
             pojo.setDate(exchangeDate);
             pojo.setRates(rates);
             pojo.setSuccess(true);
@@ -198,26 +244,14 @@ public class ResponseApiController {
         return Optional.ofNullable(pojo);
     }
 
-    public List<AllCurrencyExchangesFromSingleDayPojo> getExchangesFromMultipleDays(LocalDate beginDate,
-                                                                                              LocalDate endDate,
-                                                                                              String currency) {
-
-        List<AllCurrencyExchangesFromSingleDayPojo> exchangeList = new ArrayList<>();
-
-        LocalDate currentDate = beginDate;
-        while (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) {
-            AllCurrencyExchangesFromSingleDayPojo singleDayExchanges = getExchangesFromSingleDay(currentDate, currency).get();
-            if (singleDayExchanges.isSuccess()) {
-                exchangeList.add(singleDayExchanges);
-            }
-            currentDate = currentDate.plusDays(1);
-        }
-
-        return exchangeList;
-
+    public double calculateNewRatio(LocalDate date, String currency) {
+        Exchange newBaseCurrency = exchangeRepository.findByExchangeDateAndCurrency_IsoName(date, currency);
+        return 1/newBaseCurrency.getValue();
     }
 
-    public String buildJsonFromPojo(AllCurrencyExchangesFromSingleDayPojo pojo) {
+
+
+    public String buildJsonFromPojo(CurrencyExchangesFromSingleDayPojo pojo) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String exchangesToJson = "";
@@ -231,7 +265,7 @@ public class ResponseApiController {
         return exchangesToJson;
     }
 
-    public String buildJsonFromPojo(List<AllCurrencyExchangesFromSingleDayPojo> pojoList) {
+    public String buildJsonFromPojo(List<CurrencyExchangesFromSingleDayPojo> pojoList) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String exchangesToJson = "";

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class AllCurrencyExchangesFromSingleDayPojo {
+public class CurrencyExchangesFromSingleDayPojo {
     private boolean success = false;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -54,13 +54,13 @@ public class AllCurrencyExchangesFromSingleDayPojo {
         this.base = base;
     }
 
-    public AllCurrencyExchangesFromSingleDayPojo(boolean success, LocalDate date, Map<String, Double> rates, String base) {
+    public CurrencyExchangesFromSingleDayPojo(boolean success, LocalDate date, Map<String, Double> rates, String base) {
         this.success = success;
         this.date = date;
         this.rates = rates;
         this.base = base;
     }
 
-    public AllCurrencyExchangesFromSingleDayPojo() {
+    public CurrencyExchangesFromSingleDayPojo() {
     }
 }
