@@ -30,6 +30,11 @@ public class ApplicationController {
         return "homePage";
     }
 
+    @GetMapping("")
+    public String homeMain2() {
+        return "homePage";
+    }
+
     @GetMapping("/health")
     public ResponseEntity<Void> helthCheack() {
         return ResponseEntity.ok().build();

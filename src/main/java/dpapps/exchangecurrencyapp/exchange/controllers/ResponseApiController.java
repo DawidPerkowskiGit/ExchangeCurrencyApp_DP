@@ -39,24 +39,6 @@ public class ResponseApiController {
         this.locationCurrencyPairRepository = locationCurrencyPairRepository;
     }
 
-/*    @GetMapping("/latest")
-    public String getLatestExchange() {
-
-        Optional<AllCurrencyExchangesFromSingleDayPojo> pojo = getExchangesFromSingleDay(LocalDate.now(), "");
-
-        if (pojo.isEmpty()) {
-            return "Failed to return exchange rates";
-        }
-
-        String returnedJson = buildJsonFromPojo(pojo.get());
-
-        if (returnedJson.equals("")) {
-            return "Json body is empty";
-        }
-
-        return returnedJson;
-    }*/
-
     @GetMapping("/exchange")
     public String getEchangeRates(@RequestParam(required = false) String currency,
                                   @RequestParam(required = false) String startDate,

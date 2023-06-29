@@ -24,23 +24,5 @@ public class ExchangeController {
         return currencyRepository.findAll().toString();
     }
 
-/*    @GetMapping("/parse")
-    public void parseFile() {
-        ExchangeRatesJsonParser exchangeRatesJsonParser = new ExchangeRatesJsonParser(this.exchangeRepository, this.currencyRepository);
-        ExchangeCurrencyPojo exchangeCurrencyPojo = new ExchangeCurrencyPojo();
-        String filePath = "src/main/resources/exchangeRatesApiResponse.json";
-        exchangeCurrencyPojo = exchangeRatesJsonParser.parseJsonFromFile(filePath);
-        //exchangeRatesJsonParser.parseJson();
-        List<Exchange> exchangeList = exchangeRatesJsonParser.convertExchangeCurrencyPojoToExchangeList(exchangeCurrencyPojo);
-        exchangeRatesJsonParser.saveExchangeListToExchangeRepo(exchangeList);
-    }
-
-    @GetMapping("/api")
-    public void apiresposne() {
-        DailyExchangeImporter dailyExchangeImporter = new DailyExchangeImporter();
-        dailyExchangeImporter.retireveApiResponse();
-    }*/
-
-    //public HttpRequest
 
 }
