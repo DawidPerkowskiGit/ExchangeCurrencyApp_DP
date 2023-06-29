@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ApiUserRepository extends CrudRepository<ApiUser, Integer> {
 
     Optional<ApiUser> findByUserName(String username);
+
+    boolean existsByUserName(String username);
 }

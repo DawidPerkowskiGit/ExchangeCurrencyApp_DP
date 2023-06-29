@@ -2,6 +2,7 @@
 package dpapps.exchangecurrencyapp.configuration;
 
 import dpapps.exchangecurrencyapp.exchange.repositories.ApiUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,10 +12,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -23,11 +27,29 @@ import javax.sql.DataSource;
 @Configuration
 public class SecurityConfig{
 
-    @Autowired
-    private DataSource dataSource;
+/*    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests()
+                .requestMatchers("")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthfilter, UsernamePasswordAuthenticationFilter)
+
+
+        return http.build();
+    }*/
+
     private final ApiUserRepository apiUserRepository;
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -35,8 +57,10 @@ public class SecurityConfig{
     }
 
     @Autowired
-    public SecurityConfig(ApiUserRepository apiUserRepository) {
+    public SecurityConfig(ApiUserRepository apiUserRepository,
+                          UserDetailsService userDetailsService) {
         this.apiUserRepository = apiUserRepository;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -45,12 +69,13 @@ public class SecurityConfig{
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .requestMatchers("/register**").permitAll()
+                                .requestMatchers("/process_register**").permitAll()
 //                                .requestMatchers("/currencies**").permitAll()
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .usernameParameter("user_name")
+                                .usernameParameter("userName")
                                 .passwordParameter("password")
                                 .permitAll()
                 ).logout(
@@ -61,128 +86,17 @@ public class SecurityConfig{
         return http.build();
     }
 
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+//        return configuration.getAuthenticationManager();
+//    }
+
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().passwordEncoder(passwordEncoder())
-                .dataSource(dataSource)
-                .usersByUsernameQuery("select user_name, password from api_user where user_name = ?");
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
-/*
-    @Bean
-    public SecurityFilterChain currencyFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/currencies**")
-                        .authenticated());
-        return httpSecurity.build();
-    }
-
-    @Bean
-    public SecurityFilterChain registerFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register**")
-                        .permitAll());
-        return httpSecurity.build();
-    }
-
-    @Bean
-    public SecurityFilterChain loginFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .formLogin((formLogin) ->
-                        formLogin
-                                .usernameParameter("user_name")
-                                .passwordParameter("password")
-                                .loginPage("/login")
-                );
-        return httpSecurity.build();
-    }
-
-    @Bean
-    public SecurityFilterChain logoutFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .logout((logout) -> logout
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true));
-        return httpSecurity.build();
-    }*/
-/*    @Bean
-    public SecurityFilterChain loginFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeRequests()
-                        .requestMatchers("/currencies**")
-                                .permitAll().anyRequest().authenticated();
-        httpSecurity
-                .authorizeRequests()
-                        .requestMatchers("/register**")
-                                .permitAll().anyRequest().authenticated();
-        httpSecurity
-                .formLogin((formLogin) ->
-                        formLogin
-                                .usernameParameter("user_name")
-                                .passwordParameter("password")
-                                .loginPage("/login")
-                );
-        httpSecurity
-                .logout((logout) -> logout
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .permitAll());
-        return httpSecurity.build();
-    }*/
-
-/*    @Bean
-    public SecurityFilterChain loginFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeRequests()
-                .requestMatchers("/currencies**")
-                .permitAll().anyRequest().authenticated()
-                .and()
-                .authorizeRequests()
-                .requestMatchers("/register**")
-                .permitAll().anyRequest().authenticated()
-                .and()
-                .formLogin((formLogin) ->
-                        formLogin
-                                .usernameParameter("user_name")
-                                .passwordParameter("password")
-                                .loginPage("/login"))
-                .logout((logout) -> logout
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .permitAll());
-        return httpSecurity.build();
-    }*/
-
-/*    @Bean
-    public UserDetailsService userDetailsService() {
-        return new CustomUserDetailsService(this.apiUserRepository);
-    }*/
-
-
-
-/*
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-
-        return authProvider;
-    }
-*/
-
-
-/*    @Bean
-    public UserDetailsService userDetailsService() {
-        return new MyDatabaseUserDetailsService(); // (1)
-    }*/
-
 
 }
 

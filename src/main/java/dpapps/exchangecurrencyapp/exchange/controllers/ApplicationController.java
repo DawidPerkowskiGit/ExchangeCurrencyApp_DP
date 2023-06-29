@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import dpapps.exchangecurrencyapp.exchange.entities.ApiUser;
+import dpapps.exchangecurrencyapp.exchange.entities.Role;
 import dpapps.exchangecurrencyapp.exchange.repositories.ApiUserRepository;
 import dpapps.exchangecurrencyapp.security.ApiUserService;
 import dpapps.exchangecurrencyapp.security.ApiUserServiceImplementation;
@@ -55,11 +56,15 @@ public class ApplicationController {
     public String processRegistration(ApiUser apiUser) {
 
 //        ApiUser user = new ApiUser();
+        if (apiUserRepository.existsByUserName(apiUser.getUsername())) {
+            return "register?error";
+        }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(apiUser.getPassword());
         apiUser.setPassword(encodedPassword);
         apiUser.setUserName(apiUser.getUserName());
+        apiUser.setRole(Role.USER);
 
         ApiUserServiceImplementation apiUserServiceImplementation = new ApiUserServiceImplementation(this.apiUserRepository);
         apiUserServiceImplementation.addUser(apiUser);
