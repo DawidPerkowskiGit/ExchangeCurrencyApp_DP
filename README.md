@@ -5,7 +5,7 @@
 * [Application view](#application-view)
 * [Todo](#todo)
 ## General info
-A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process. Additionally, the application performs an API request every four hours to update and save new currency data to the database.
+A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process.
 
 ## Technologies
 
