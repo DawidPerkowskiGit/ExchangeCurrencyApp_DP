@@ -3,10 +3,9 @@
 * [Technologies](#technologies)
 * [More detailed information about application](#more-detailed-information-about-application)
 * [Application view](#application-view)
-* [Other projects based on this application](#other-projects-based-on-this-application)
 * [Todo](#todo)
 ## General info
-Project of exchange rates web service. •	Provides REST API endpoints which on response return chosen exchange rates in JSON format. Every push to the repository triggers Render's CI/CD process. Uses Docker containers to deploy final application.
+A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process.
 
 ## Technologies
 
@@ -27,7 +26,7 @@ Available optional URL parameters:
  - startDate - return exchanges starting from the chosen date
  - finishDate - return exchanges finishing at the chosen date
 
-Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and EUR is the base.
+Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and Euro as the base.
 ## Application view
 
 Application UI is on TODO list.
