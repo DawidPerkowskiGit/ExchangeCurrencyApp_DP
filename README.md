@@ -20,7 +20,7 @@ All sensitive data like database connection credentials are stored in local mach
 
 URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
 
-The user can access those rates by sending request to /api/exchange endpoint.
+The apiUser can access those rates by sending request to /api/exchange endpoint.
 Available optional URL parameters:
  - currency - exchange rates of chosen currency type
  - baseCurrency - changing the base currency(default is EUR)

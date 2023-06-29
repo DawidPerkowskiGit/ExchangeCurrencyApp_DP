@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+</head>
+<body>
+    <main role="main" class="d-flex align-items-center text-center" style="height: 85vh;">
+        <div class="bg-white rounded box container p-4" style="width: 400px;">
+            <div>
+                <form name="login" th:action="@{/login}" method="post">
+                    <div>
+                        <h1>Logowanie</h1>
+                    </div>
+                    <div class="m-4 text-right font-weight-bold">
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Login:</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" id="user_name" name="user_name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3">Hasło:</label>
+                            <div class="col-8">
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                        </div>
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            Niepoprawny login lub hasło.
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Zaloguj</button>
+                            <a href="/index.html" style="display:inline-block; line-height: 38px; padding: 5px; font-size: 16px; text-decoration: none;" th:href="@{/}">Wróć</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

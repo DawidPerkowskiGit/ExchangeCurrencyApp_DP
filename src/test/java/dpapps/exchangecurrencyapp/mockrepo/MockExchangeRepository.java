@@ -1,11 +1,11 @@
 package dpapps.exchangecurrencyapp.mockrepo;
 
+import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,5 +101,20 @@ public class MockExchangeRepository implements ExchangeRepository {
     @Override
     public List<Exchange> findAllByExchangeDateAndCurrencyOrderByExchangeDate(LocalDate date, String currency) {
         return null;
+    }
+
+    @Override
+    public Exchange findByExchangeDateAndAndCurrency(LocalDate date, Currency currency) {
+        return null;
+    }
+
+    @Override
+    public Exchange findByExchangeDateAndCurrency_IsoName(LocalDate date, String currency) {
+        return null;
+    }
+
+    @Override
+    public boolean existsByExchangeDateAndCurrency_IsoName(LocalDate date, String iso_name) {
+        return false;
     }
 }
