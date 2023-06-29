@@ -26,7 +26,7 @@ Available optional URL parameters:
  - startDate - return exchanges starting from the chosen date
  - finishDate - return exchanges finishing at the chosen date
 
-Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and EUR is the base.
+Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and Euro as the base.
 ## Application view
 
 Application UI is on TODO list.
