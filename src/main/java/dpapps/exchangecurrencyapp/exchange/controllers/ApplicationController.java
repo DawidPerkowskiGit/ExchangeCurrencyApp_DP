@@ -1,33 +1,33 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
-import dpapps.exchangecurrencyapp.exchange.entities.ApiUser;
-import dpapps.exchangecurrencyapp.exchange.entities.Role;
-import dpapps.exchangecurrencyapp.exchange.repositories.ApiUserRepository;
-import dpapps.exchangecurrencyapp.security.ApiUserService;
-import dpapps.exchangecurrencyapp.security.ApiUserServiceImplementation;
+import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.security.UserDto;
+import dpapps.exchangecurrencyapp.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import jakarta.validation.Valid;
+
+import java.util.List;
 
 @Controller
 public class ApplicationController {
 
-    private final ApiUserRepository apiUserRepository;
+    private final UserService userService;
 
     @Autowired
-    public ApplicationController(ApiUserRepository apiUserRepository) {
-        this.apiUserRepository = apiUserRepository;
+    public ApplicationController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/")
-    public String home() {
-        return "index";
+    public String homeMain() {
+        return "homePage";
     }
 
     @GetMapping("/health")
@@ -35,40 +35,54 @@ public class ApplicationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/login")
-        public String login() {
-            return "login";
-        }
+    // handler method to handle home page request
+    @GetMapping("/index")
+    public String home(){
+        return "index";
+    }
 
-    @ResponseBody
+    // handler method to handle user registration form request
     @GetMapping("/register")
-    public ModelAndView showRegisterForm(Model model) {
-
-        model.addAttribute("user", new ApiUser());
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("register_form.html");
-
-        return modelAndView;
+    public String showRegistrationForm(Model model){
+        // create model object to store form data
+        UserDto user = new UserDto();
+        model.addAttribute("user", user);
+        return "register";
     }
 
-    @PostMapping("/process_register")
-    public String processRegistration(ApiUser apiUser) {
+    // handler method to handle user registration form submit request
+    @PostMapping("/register/save")
+    public String registration(@Valid @ModelAttribute("user") UserDto userDto,
+                               BindingResult result,
+                               Model model){
+        User existingUser = userService.findUserByEmail(userDto.getEmail());
 
-//        ApiUser user = new ApiUser();
-        if (apiUserRepository.existsByUserName(apiUser.getUsername())) {
-            return "register?error";
+        if(existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()){
+            result.rejectValue("email", null,
+                    "There is already an account registered with the same email");
         }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode(apiUser.getPassword());
-        apiUser.setPassword(encodedPassword);
-        apiUser.setUserName(apiUser.getUserName());
-        apiUser.setRole(Role.USER);
+        if(result.hasErrors()){
+            model.addAttribute("user", userDto);
+            return "/register";
+        }
 
-        ApiUserServiceImplementation apiUserServiceImplementation = new ApiUserServiceImplementation(this.apiUserRepository);
-        apiUserServiceImplementation.addUser(apiUser);
-
-        return "register_success";
+        userService.saveUser(userDto);
+        return "redirect:/register?success";
     }
+
+    // handler method to handle list of users
+    @GetMapping("/users")
+    public String users(Model model){
+        List<UserDto> users = userService.findAllUsers();
+        model.addAttribute("users", users);
+        return "users";
+    }
+
+    // handler method to handle login request
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
 }
