@@ -2,8 +2,10 @@ package dpapps.exchangecurrencyapp.security;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Role;
 import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.RoleRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
+import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,20 +21,23 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
 
+    private ApiKeyRepository apiKeyRepository;
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           ApiKeyRepository apiKeyRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.apiKeyRepository = apiKeyRepository;
     }
 
     @Override
     public void saveUser(UserDto userDto) {
         User user = new User();
-        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
-        user.setEmail(userDto.getEmail());
+        user.setLogin(userDto.getLogin());
         // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
@@ -41,12 +46,16 @@ public class UserServiceImpl implements UserService {
             role = checkRoleExist();
         }
         user.setRoles(Arrays.asList(role));
+
         userRepository.save(user);
+
+        ApiKeyManager apiKeyManager = new ApiKeyManager(apiKeyRepository ,user);
+        String output = apiKeyManager.generateNewKey();
     }
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByLogin(email);
     }
 
     @Override
@@ -59,16 +68,16 @@ public class UserServiceImpl implements UserService {
 
     private UserDto mapToUserDto(User user){
         UserDto userDto = new UserDto();
-        String[] str = user.getName().split(" ");
-        userDto.setFirstName(str[0]);
-        userDto.setLastName(str[1]);
-        userDto.setEmail(user.getEmail());
+        userDto.setLogin(user.getLogin());
         return userDto;
     }
 
     private Role checkRoleExist(){
         Role role = new Role();
-        role.setName("ROLE_USER");
-        return roleRepository.save(role);
+        role.setName("ROLE_ADMIN");
+        roleRepository.save(role);
+        Role role1 = new Role();
+        role1.setName("ROLE_USER");
+        return roleRepository.save(role1);
     }
 }

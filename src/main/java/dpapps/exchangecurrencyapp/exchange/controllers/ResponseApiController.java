@@ -2,16 +2,19 @@ package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.exchange.entities.ApiKey;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
-import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
-import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.exchange.repositories.LocationCurrencyPairRepository;
-import dpapps.exchangecurrencyapp.exchange.repositories.LocationRepository;
+import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.exchange.repositories.*;
+import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
 import dpapps.exchangecurrencyapp.jsonparser.responseexchanges.CurrencyExchangesFromSingleDayPojo;
+import dpapps.exchangecurrencyapp.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -27,23 +30,54 @@ public class ResponseApiController {
     LocationRepository locationRepository;
 
     LocationCurrencyPairRepository locationCurrencyPairRepository;
+    private final ApiKeyRepository apiKeyRepository;
+
+    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
     public ResponseApiController(CurrencyRepository currencyRepository,
                                  ExchangeRepository exchangeRepository,
                                  LocationRepository locationRepository,
-                                 LocationCurrencyPairRepository locationCurrencyPairRepository) {
+                                 LocationCurrencyPairRepository locationCurrencyPairRepository,
+                                 ApiKeyRepository apiKeyRepository,
+                                 UserService userService,
+                                 UserRepository userRepository) {
         this.currencyRepository = currencyRepository;
         this.exchangeRepository = exchangeRepository;
         this.locationRepository = locationRepository;
         this.locationCurrencyPairRepository = locationCurrencyPairRepository;
+        this.apiKeyRepository = apiKeyRepository;
+        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/exchange")
-    public String getEchangeRates(@RequestParam(required = false) String currency,
-                                  @RequestParam(required = false) String startDate,
-                                  @RequestParam(required = false) String finishDate,
-                                  @RequestParam(required = false) String baseCurrency) {
+    public String getExchangeRates(@RequestParam(required = false) String currency,
+                                   @RequestParam(required = false) String startDate,
+                                   @RequestParam(required = false) String finishDate,
+                                   @RequestParam(required = false) String baseCurrency,
+                                   @RequestParam(required = false) String apiKey) {
+
+        System.out.println("entered exchange");
+
+        if (apiKey == null) {
+            return "You didnt provide api key";
+        }
+
+        if (apiKeyRepository.existsByValue(apiKey) == false) {
+            return "Api key is invalid";
+        }
+        ApiKey apiKeyObject = apiKeyRepository.findByValue(apiKey);
+
+/*        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());*/
+        User user = apiKeyObject.getUser();
+        ApiKeyManager apiKeyManager = new ApiKeyManager(user, apiKeyRepository);
+        if (apiKeyManager.canUseTheApiKey(apiKeyObject) == false) {
+            return "Cannot perform API request";
+        }
+
 
         /**
          * Nullable fields check
@@ -118,7 +152,10 @@ public class ResponseApiController {
             pojoList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
             returnedJson = buildJsonFromPojo(pojoList);
         }
-
+//        int numberOfUsages = userRepository.howManyUsages(user.getId()) + 1;
+//        userRepository.increaseNumberOfUsages(user.getId(), numberOfUsages);
+        user.setCurrentRequestsCount(user.getCurrentRequestsCount() + 1);
+        userRepository.save(user);
         return returnedJson;
     }
 
@@ -237,7 +274,6 @@ public class ResponseApiController {
         catch (Exception e) {
             System.out.println("Could not acquire latest exchange data: Exception: "+ e);
         }
-
         return Optional.ofNullable(pojo);
     }
 

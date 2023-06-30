@@ -1,10 +1,14 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
+import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import dpapps.exchangecurrencyapp.security.UserDto;
 import dpapps.exchangecurrencyapp.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +24,14 @@ public class ApplicationController {
 
     private final UserService userService;
 
+    private final ApiKeyRepository apiKeyRepository;
+
+
     @Autowired
-    public ApplicationController(UserService userService) {
+    public ApplicationController(UserService userService,
+                                 ApiKeyRepository apiKeyRepository) {
         this.userService = userService;
+        this.apiKeyRepository = apiKeyRepository;
     }
 
     @GetMapping("/")
@@ -60,17 +69,18 @@ public class ApplicationController {
     public String registration(@Valid @ModelAttribute("user") UserDto userDto,
                                BindingResult result,
                                Model model){
-        User existingUser = userService.findUserByEmail(userDto.getEmail());
+        User existingUser = userService.findUserByEmail(userDto.getLogin());
 
-        if(existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()){
-            result.rejectValue("email", null,
-                    "There is already an account registered with the same email");
+        if(existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()){
+            result.rejectValue("login", null,
+                    "There is already an account registered with the same login");
         }
 
         if(result.hasErrors()){
             model.addAttribute("user", userDto);
             return "/register";
         }
+
 
         userService.saveUser(userDto);
         return "redirect:/register?success";
@@ -88,6 +98,16 @@ public class ApplicationController {
     @GetMapping("/login")
     public String login(){
         return "login";
+    }
+
+    @GetMapping("/generate")
+    public String generate() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        ApiKeyManager apiKeyManager = new ApiKeyManager(apiKeyRepository ,user);
+        String output = apiKeyManager.generateNewKey();
+        System.out.println(output);
+        return "index";
     }
 
 }

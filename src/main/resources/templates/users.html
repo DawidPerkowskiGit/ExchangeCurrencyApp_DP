@@ -42,7 +42,7 @@
     <tr th:each = "user : ${users}">
       <td th:text = "${user.firstName}"></td>
       <td th:text = "${user.lastName}"></td>
-      <td th:text = "${user.email}"></td>
+      <td th:text = "${user.getLogin}"></td>
     </tr>
     </tbody>
   </table>
