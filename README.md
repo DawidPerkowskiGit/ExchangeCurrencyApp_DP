@@ -13,13 +13,16 @@ Java 17, Spring 3.1.0, Spring Boot, PostgreSQL 15, Maven, Docker, GitHub, JUnit,
 
 ## More detailed information about application
 
-The application and its database PostgreSQL is hosted on Render.com. Database stores over 30 different currency types and their exchange rates, first entry is from 1999-01-04. Every four hours application performs automatic REST API request to exchangeratesapi.io in search of new exchange rates. If received exchanges are new, the data is inserted to the database. 
+The application and its database PostgreSQL is hosted on Render.com. Database stores over 30 different currency types and their exchange rates, first entry is from 1999-01-04. Every four hours application performs automatic REST API request to exchangeratesapi.io in search of new exchange rates. If received exchanges are new, the data is inserted to the database. Users have to create account and use their API key to retrieve data.
 
 All sensitive data like database connection credentials are stored in local machine's environment variables for development and Render's web service secrets for deployment.
 
 URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
 
 The apiUser can access those rates by sending request to /api/exchange endpoint.
+Required URL parameter:
+ - apiKey - required key to perform API request
+
 Available optional URL parameters:
  - currency - exchange rates of chosen currency type
  - baseCurrency - changing the base currency(default is EUR)
