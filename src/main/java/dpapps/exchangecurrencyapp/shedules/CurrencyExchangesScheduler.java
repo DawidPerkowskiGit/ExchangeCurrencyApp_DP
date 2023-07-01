@@ -106,7 +106,7 @@ public class CurrencyExchangesScheduler {
         return "The app is running";
     }
 
-    @Scheduled(cron = "0 1 0 0 * ?", zone = "Europe/Paris")
+    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Paris")
     public String apiUsagesReset() {
         List<User> userList = userRepository.findAll();
         for (User user: userList
