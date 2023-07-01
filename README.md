@@ -32,6 +32,9 @@ Not providing values to these parameters will result in receiving the latest exc
 Application UI is on TODO list.
 ![img.png](img.png)
 
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
+
+
 ## Todo
 
 - Authorization and authentication
