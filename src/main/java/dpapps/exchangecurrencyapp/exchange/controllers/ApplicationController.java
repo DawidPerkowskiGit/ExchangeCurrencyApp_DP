@@ -1,7 +1,9 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import dpapps.exchangecurrencyapp.exchange.entities.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
+import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import dpapps.exchangecurrencyapp.security.UserDto;
 import dpapps.exchangecurrencyapp.security.UserService;
@@ -25,13 +27,16 @@ public class ApplicationController {
     private final UserService userService;
 
     private final ApiKeyRepository apiKeyRepository;
+    private final UserRepository userRepository;
 
 
     @Autowired
     public ApplicationController(UserService userService,
-                                 ApiKeyRepository apiKeyRepository) {
+                                 ApiKeyRepository apiKeyRepository,
+                                 UserRepository userRepository) {
         this.userService = userService;
         this.apiKeyRepository = apiKeyRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/")
@@ -83,13 +88,13 @@ public class ApplicationController {
 
 
         userService.saveUser(userDto);
-        return "redirect:/register?success";
+        return "redirect:/index";
     }
 
     // handler method to handle list of users
     @GetMapping("/users")
     public String users(Model model){
-        List<UserDto> users = userService.findAllUsers();
+        List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "users";
     }
@@ -102,12 +107,27 @@ public class ApplicationController {
 
     @GetMapping("/generate")
     public String generate() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
+        User user = getCurrentUser();
         ApiKeyManager apiKeyManager = new ApiKeyManager(apiKeyRepository ,user);
         String output = apiKeyManager.generateNewKey();
         System.out.println(output);
-        return "index";
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        User user = getCurrentUser();
+        ApiKeyManager apiKeyManager = new ApiKeyManager(this.apiKeyRepository, user);
+        model.addAttribute("user", apiKeyManager);
+        String apiRequestsString = "" + user.getCurrentRequestsCount() +"/"+ AppVariables.GLOBAL_LIMIT_OF_DAILY_USAGES;
+        model.addAttribute("apiRequestString", apiRequestsString);
+        return "profile";
+    }
+
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        return user;
     }
 
 }

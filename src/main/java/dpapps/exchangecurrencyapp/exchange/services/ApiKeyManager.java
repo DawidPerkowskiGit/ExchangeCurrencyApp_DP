@@ -12,6 +12,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -76,6 +78,16 @@ public class ApiKeyManager {
             return "Could not generate new API key. Exception: "+e;
         }
         return "Generated new API key: " + apiKey.getValue();
+    }
+
+    public ApiKey returnActiveKey() {
+        for (ApiKey key: user.getApiKeys()
+             ) {
+            if (key.isActive()) {
+                return key;
+            }
+        }
+        return new ApiKey();
     }
 
     public void addApiKey(ApiKey apiKey) {

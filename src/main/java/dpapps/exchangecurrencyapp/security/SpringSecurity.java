@@ -38,6 +38,7 @@ public class SpringSecurity {
                                 .requestMatchers("/index").permitAll()
                                 .requestMatchers("/users").hasRole("ADMIN")
                                 .requestMatchers("/currencies").authenticated()
+                                .requestMatchers("/profile").authenticated()
                                 .requestMatchers("/api/exchange**").permitAll()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("").permitAll()
@@ -47,7 +48,8 @@ public class SpringSecurity {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/users")
+                                .successForwardUrl("/index")
+                                .defaultSuccessUrl("/index")
                                 .permitAll()
                 ).logout(
                         logout -> logout

@@ -1,8 +1,10 @@
 package dpapps.exchangecurrencyapp.shedules;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
+import dpapps.exchangecurrencyapp.exchange.entities.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
+import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import dpapps.exchangecurrencyapp.jsonparser.requestexchanges.RequestBodyObject;
 import dpapps.exchangecurrencyapp.jsonparser.requestexchanges.RequestBodyJsonParser;
 import dpapps.exchangecurrencyapp.jsonparser.requestexchanges.RequestBodyRetriever;
@@ -30,11 +32,14 @@ public class CurrencyExchangesScheduler {
     private final ExchangeRepository exchangeRepository;
 
     private final CurrencyRepository currencyRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CurrencyExchangesScheduler(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository) {
+    public CurrencyExchangesScheduler(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository,
+                                      UserRepository userRepository) {
         this.exchangeRepository = exchangeRepository;
         this.currencyRepository = currencyRepository;
+        this.userRepository = userRepository;
     }
 
     @Scheduled(fixedRate = 14400000, initialDelay = 3600000)
@@ -99,5 +104,16 @@ public class CurrencyExchangesScheduler {
         }
         System.out.println("Successfully kept the app from un-allocating resources. Time: " + localDateTime.toString());
         return "The app is running";
+    }
+
+    @Scheduled(cron = "0 1 0 0 * ?", zone = "Europe/Paris")
+    public String apiUsagesReset() {
+        List<User> userList = userRepository.findAll();
+        for (User user: userList
+             ) {
+            user.setCurrentRequestsCount(0);
+        }
+        System.out.println("Successfully reseted number of Api uses for every user. Time: " + LocalDateTime.now().toString());
+        return "Successfully reseted number of Api uses for every user. Time: " + LocalDateTime.now().toString();
     }
 }
