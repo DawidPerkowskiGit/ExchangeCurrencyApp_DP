@@ -40,5 +40,4 @@ Application UI is on TODO list.
 
 ## Todo
 
-- Authorization and authentication
 - UI graphic interface - another application developed with Angular. Sends REST API requests to this application, receives data and displays exchange ratios graphs and statistics.
