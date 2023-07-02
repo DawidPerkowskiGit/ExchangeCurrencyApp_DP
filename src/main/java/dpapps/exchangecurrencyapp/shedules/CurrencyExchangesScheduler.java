@@ -111,6 +111,7 @@ public class CurrencyExchangesScheduler {
         for (User user: userList
              ) {
             user.setCurrentRequestsCount(0);
+            userRepository.save(user);
         }
         System.out.println("Successfully reseted number of Api uses for every user. Time: " + LocalDateTime.now().toString());
         LocalDateTime.now();
