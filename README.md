@@ -9,7 +9,7 @@ A currency exchange application developed with a CI/CD workflow, providing REST 
 
 ## Technologies
 
-Java 17, Spring 3.1.0, Spring Boot, PostgreSQL 15, Maven, Docker, GitHub, JUnit, Render, Jackson.
+Java 17, Spring 3.1.0, Spring Boot, Spring Web, Spring Data, Spring Security, PostgreSQL 15, Maven, Docker, Git, JUnit, Render, Jackson, Thymeleaf.
 
 ## More detailed information about application
 
