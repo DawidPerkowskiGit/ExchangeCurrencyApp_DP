@@ -7,4 +7,6 @@ public class AppVariables {
     public final static String CURRENCY_BASE = "EUR";
 
     public final static int GLOBAL_LIMIT_OF_DAILY_USAGES = 5;
+
+    public final static String VALID_API_KEY_MESSAGE = "Api key is valid";
 }

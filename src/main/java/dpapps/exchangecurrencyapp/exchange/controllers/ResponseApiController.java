@@ -12,10 +12,10 @@ import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
 import dpapps.exchangecurrencyapp.jsonparser.responseexchanges.CurrencyExchangesFromSingleDayPojo;
 import dpapps.exchangecurrencyapp.security.UserService;
+import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import dpapps.exchangecurrencyapp.shedules.CurrencyExchangesScheduler;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -52,6 +52,38 @@ public class ResponseApiController {
         this.userRepository = userRepository;
     }
 
+    @GetMapping("/forceRequestUrl")
+    public String forceRequestUrl(@RequestParam(required = false) String apiKey,
+                                  @RequestParam(required = false) String requestUrl) {
+
+        String apiKeyParsingResult = checkApiKey(apiKey);
+        if ( ! apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
+            return apiKeyParsingResult;
+        }
+
+        if (requestUrl == null) {
+            return "request Url is null";
+        }
+
+        ScheduleJobs scheduleJobs = new ScheduleJobs();
+
+        return scheduleJobs.performDailyDatabaseImport(requestUrl, this.currencyRepository, this.exchangeRepository);
+
+
+    }
+
+    private String checkApiKey(String apiKey) {
+        if (apiKey == null) {
+            return "You didnt provide api key";
+        }
+
+        if (apiKeyRepository.existsByValue(apiKey) == false) {
+            return "Api key is invalid";
+        }
+
+        return AppVariables.VALID_API_KEY_MESSAGE;
+    }
+
     @GetMapping("/exchange")
     public String getExchangeRates(@RequestParam(required = false) String currency,
                                    @RequestParam(required = false) String startDate,
@@ -61,13 +93,11 @@ public class ResponseApiController {
 
         System.out.println("entered exchange");
 
-        if (apiKey == null) {
-            return "You didnt provide api key";
+        String apiKeyParsingResult = checkApiKey(apiKey);
+        if ( ! apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
+            return apiKeyParsingResult;
         }
 
-        if (apiKeyRepository.existsByValue(apiKey) == false) {
-            return "Api key is invalid";
-        }
         ApiKey apiKeyObject = apiKeyRepository.findByValue(apiKey);
 
 /*        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -100,7 +130,7 @@ public class ResponseApiController {
          */
         LocalDate beginDate = ConversionLocalDateString.convertStringToLocalDate(startDate);
         LocalDate endDate = ConversionLocalDateString.convertStringToLocalDate(finishDate);
-        LocalDate onesDate = LocalDate.of(1,1,1);
+        LocalDate onesDate = LocalDate.of(1, 1, 1);
 
         /**
          * Check if parameters are empty
@@ -110,9 +140,9 @@ public class ResponseApiController {
             beginDate = endDate = LocalDate.now();
         }
         if (beginDate.isEqual(onesDate)) {
-            beginDate=endDate;
+            beginDate = endDate;
         } else if (endDate.isEqual(onesDate)) {
-            endDate=beginDate;
+            endDate = beginDate;
         }
 
 
@@ -147,8 +177,7 @@ public class ResponseApiController {
             if (returnedJson.equals("")) {
                 return "Json body is empty";
             }
-        }
-        else {
+        } else {
             pojoList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
             returnedJson = buildJsonFromPojo(pojoList);
         }
@@ -216,15 +245,12 @@ public class ResponseApiController {
              */
             if (currency.equals("")) {
                 latestExchangesList = exchangeRepository.findAllByExchangeDateOrderByCurrencyDesc(exchangeDate);
-            }
-            else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)){
+            } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)) {
                 latestExchangesList = exchangeRepository.findAllByExchangeDateAndCurrencyOrderByExchangeDate(exchangeDate, currency);
-            }
-            else {
+            } else {
                 pojo.setSuccess(false);
                 return Optional.ofNullable(pojo);
             }
-
 
 
             /**
@@ -232,13 +258,11 @@ public class ResponseApiController {
              */
             if (baseCurrency.equals("")) {
                 pojo.setBase(AppVariables.CURRENCY_BASE);
-            }
-            else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
+            } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
                 pojo.setSuccess(false);
                 System.out.println("Could not find base currency in the database");
                 return Optional.ofNullable(pojo);
-            }
-            else {
+            } else {
                 pojo.setBase(baseCurrency);
             }
 
@@ -248,20 +272,18 @@ public class ResponseApiController {
              */
             Map<String, Double> rates = new HashMap<>();
             if (pojo.getBase().equals(AppVariables.CURRENCY_BASE)) {
-                for (Exchange entry: latestExchangesList
+                for (Exchange entry : latestExchangesList
                 ) {
                     rates.put(entry.getCurrency().getIsoName(), entry.getValue());
                 }
-            }
-            else {
+            } else {
                 if (exchangeRepository.existsByExchangeDateAndCurrency_IsoName(exchangeDate, baseCurrency)) {
                     double newRatio = calculateNewRatio(exchangeDate, baseCurrency);
-                    for (Exchange entry: latestExchangesList
+                    for (Exchange entry : latestExchangesList
                     ) {
-                        rates.put(entry.getCurrency().getIsoName(), entry.getValue()*newRatio);
+                        rates.put(entry.getCurrency().getIsoName(), entry.getValue() * newRatio);
                     }
-                }
-                else {
+                } else {
                     pojo.setSuccess(false);
                 }
 
@@ -270,18 +292,16 @@ public class ResponseApiController {
             pojo.setDate(exchangeDate);
             pojo.setRates(rates);
             pojo.setSuccess(true);
-        }
-        catch (Exception e) {
-            System.out.println("Could not acquire latest exchange data: Exception: "+ e);
+        } catch (Exception e) {
+            System.out.println("Could not acquire latest exchange data: Exception: " + e);
         }
         return Optional.ofNullable(pojo);
     }
 
     public double calculateNewRatio(LocalDate date, String currency) {
         Exchange newBaseCurrency = exchangeRepository.findByExchangeDateAndCurrency_IsoName(date, currency);
-        return 1/newBaseCurrency.getValue();
+        return 1 / newBaseCurrency.getValue();
     }
-
 
 
     public String buildJsonFromPojo(CurrencyExchangesFromSingleDayPojo pojo) {
@@ -290,9 +310,8 @@ public class ResponseApiController {
         String exchangesToJson = "";
         try {
             exchangesToJson = objectMapper.writeValueAsString(pojo);
-        }
-        catch (Exception e) {
-            System.out.println("Could not map object to JSON. Exception: "+ e);
+        } catch (Exception e) {
+            System.out.println("Could not map object to JSON. Exception: " + e);
         }
 
         return exchangesToJson;
@@ -304,9 +323,8 @@ public class ResponseApiController {
         String exchangesToJson = "";
         try {
             exchangesToJson = objectMapper.writeValueAsString(pojoList);
-        }
-        catch (Exception e) {
-            System.out.println("Could not map object to JSON. Exception: "+ e);
+        } catch (Exception e) {
+            System.out.println("Could not map object to JSON. Exception: " + e);
         }
 
         return exchangesToJson;
@@ -317,8 +335,7 @@ public class ResponseApiController {
         while (DateRange.isDateInValidRange(date)) {
             if (exchangeRepository.existsByExchangeDate(date) == false) {
                 date = date.minusDays(1);
-            }
-            else {
+            } else {
                 return date;
             }
         }

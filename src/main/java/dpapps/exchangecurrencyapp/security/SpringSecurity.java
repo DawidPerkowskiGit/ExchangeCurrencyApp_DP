@@ -43,6 +43,7 @@ public class SpringSecurity {
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("").permitAll()
                                 .requestMatchers("/generate").authenticated()
+                                .requestMatchers("/api/forceRequestUrl").permitAll()
 
                 ).formLogin(
                         form -> form

@@ -46,41 +46,14 @@ public class CurrencyExchangesScheduler {
     public String performCurrencyExchangeImport() {
         System.out.println("Starting automatic currency exchange import");
 
-        try {
-            RequestBodyRetriever requestBodyRetriever = new RequestBodyRetriever();
-            String apiResponseBody = requestBodyRetriever.retrieveApiResponse();
-            if (apiResponseBody.equals("")) {
-                System.out.println("Failed to import response body");
-                return "Failed to import response body";
-            }
+        return performCurrencyExchangeImport("");
+    }
 
-            RequestBodyJsonParser requestBodyJsonParser = new RequestBodyJsonParser();
-            Optional<RequestBodyObject> responseBodyPojo = requestBodyJsonParser.jsonDeserialization(apiResponseBody);
-            if (responseBodyPojo.get().doAllNullableFieldsContainData() == false) {
-                System.out.println("Returned response body is null");
-                return "Returned response body is null";
-            }
-            if (responseBodyPojo.get().getSuccess()==false) {
-                System.out.println("Could not get response body");
-                return "Could not get response body";
-            }
 
-            RequestPojoDatabaseInsert responsePojoDatabaseInsert = new RequestPojoDatabaseInsert(this.exchangeRepository, this.currencyRepository);
-            List<Exchange> exchanges = responsePojoDatabaseInsert.convertPojoToExchangeList(responseBodyPojo.get());
-            if (exchanges.isEmpty()) {
-                System.out.println("Exchange list is empty");
-                return "Exchange list is empty";
-            }
+    public String performCurrencyExchangeImport(String url) {
+        ScheduleJobs scheduleJobs = new ScheduleJobs();
 
-            responsePojoDatabaseInsert.insertExchangesToDatabase(exchanges);
-        }
-        catch (Exception e) {
-            System.out.println("Could not perform scheduled exchange rates import");
-        }
-
-        System.out.println("Exchange rates imported successfully");
-
-        return "Exchange rates imported successfully";
+       return scheduleJobs.performDailyDatabaseImport(url, this.currencyRepository, this.exchangeRepository);
     }
 
     /**

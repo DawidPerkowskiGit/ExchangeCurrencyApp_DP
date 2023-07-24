@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * The class represents data structure of exchangeratesapi.io JSON response body.
@@ -25,6 +26,8 @@ public class RequestBodyObject {
     @JsonFormat
             (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
+
+    private Boolean historical;
 
     private Map<String, Double> rates;
 
@@ -79,5 +82,13 @@ public class RequestBodyObject {
             return false;
         }
         return true;
+    }
+
+    public Boolean getHistorical() {
+        return historical;
+    }
+
+    public void setHistorical(Boolean historical) {
+        this.historical = historical;
     }
 }

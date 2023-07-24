@@ -13,18 +13,25 @@ public class RequestBodyRetriever {
     /**
      * This module is responsible for sending API request to exchangeratesapi.io and extracting server's response body.
      */
-
     public String retrieveApiResponse() {
+        return retrieveApiResponse("");
+    }
 
-        String apiUrl = "";
 
-        try {
-            apiUrl = System.getenv("API_IMPORT_CREDS_URL");
+    public String retrieveApiResponse(String url) {
+
+        String apiUrl = url;
+
+        if (apiUrl.equals("")) {
+            try {
+                apiUrl = System.getenv("API_IMPORT_CREDS_URL");
+            }
+            catch (Exception e) {
+                System.out.printf("Could not retrieve environment variable API_IMPORT_CREDS_URL. Exception: " + e);
+                return "";
+            }
         }
-        catch (Exception e) {
-            System.out.printf("Could not retrieve environment variable API_IMPORT_CREDS_URL. Exception: " + e);
-            return "";
-        }
+
 
         String apiResponseBody = "";
 
