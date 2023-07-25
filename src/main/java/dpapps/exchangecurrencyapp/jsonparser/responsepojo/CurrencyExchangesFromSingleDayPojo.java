@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.responseexchanges;
+package dpapps.exchangecurrencyapp.jsonparser.responsepojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class CurrencyExchangesFromSingleDayPojo {
+public class CurrencyExchangesFromSingleDayPojo extends ResponsePojo{
     private boolean success = false;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)

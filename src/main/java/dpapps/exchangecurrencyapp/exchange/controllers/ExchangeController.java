@@ -19,10 +19,6 @@ public class ExchangeController {
         this.currencyRepository = currencyRepository;
     }
 
-    @GetMapping("/currencies")
-    public String getCurrencies() {
-        return currencyRepository.findAll().toString();
-    }
 
 
 }

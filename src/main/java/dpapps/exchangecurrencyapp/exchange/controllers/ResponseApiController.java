@@ -3,6 +3,7 @@ package dpapps.exchangecurrencyapp.exchange.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import dpapps.exchangecurrencyapp.exchange.entities.ApiKey;
+import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.entities.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.*;
@@ -10,12 +11,13 @@ import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
-import dpapps.exchangecurrencyapp.jsonparser.responseexchanges.CurrencyExchangesFromSingleDayPojo;
+import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrenciesListPojo;
+import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyExchangesFromSingleDayPojo;
+import dpapps.exchangecurrencyapp.jsonparser.responsepojo.ResponsePojo;
 import dpapps.exchangecurrencyapp.security.UserService;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import dpapps.exchangecurrencyapp.shedules.CurrencyExchangesScheduler;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -51,6 +53,17 @@ public class ResponseApiController {
         this.userService = userService;
         this.userRepository = userRepository;
     }
+
+    @GetMapping("/currencies")
+    public String getCurrencies() {
+        CurrenciesListPojo currencyListPojo = new CurrenciesListPojo();
+        Iterable<Currency> currencyList = currencyRepository.findAll();
+        currencyListPojo.convertCurrencyListToJsonCurrency(currencyList);
+
+        return buildJsonFromPojo(currencyListPojo);
+//        return currencyRepository.findAll().toString();
+    }
+
 
     @GetMapping("/forceRequestUrl")
     public String forceRequestUrl(@RequestParam(required = false) String apiKey,
@@ -330,6 +343,18 @@ public class ResponseApiController {
         return exchangesToJson;
     }
 
+    public String buildJsonFromPojo(CurrenciesListPojo pojoList) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String exchangesToJson = "";
+        try {
+            exchangesToJson = objectMapper.writeValueAsString(pojoList);
+        } catch (Exception e) {
+            System.out.println("Could not map object to JSON. Exception: " + e);
+        }
+
+        return exchangesToJson;
+    }
     public LocalDate returnExchangeDateThatExistsInDb(LocalDate date) {
 
         while (DateRange.isDateInValidRange(date)) {
