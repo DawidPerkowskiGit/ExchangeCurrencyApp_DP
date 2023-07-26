@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.*;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class ResponseApiController {
