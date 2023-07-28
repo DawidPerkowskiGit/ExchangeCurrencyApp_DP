@@ -55,11 +55,11 @@ public class CurrencyExchangesScheduler {
 
        return scheduleJobs.performDailyDatabaseImport(url, this.currencyRepository, this.exchangeRepository);
     }
-
-    /**
+/**
      * Every 10 minutes send simple request
-     */
-/*    @Scheduled(fixedRate = 600000, initialDelay = 600000)
+     **/
+
+ @Scheduled(fixedRate = 600000, initialDelay = 600000)
     public void keepTheAppRunning(){
         LocalDateTime localDateTime = LocalDateTime.now();
 
@@ -76,7 +76,7 @@ public class CurrencyExchangesScheduler {
             System.out.println("Failed to perform scheduled task. Exception: "+ e);
         }
         System.out.println("Successfully kept the app from un-allocating resources. Time: " + localDateTime.toString());
-    }*/
+    }
 
     @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Paris")
     public void apiUsagesReset() {
