@@ -57,6 +57,7 @@ public class ResponseApiController {
 
     @GetMapping("/currencies")
     public String getCurrencies() {
+        System.out.println("api/currencies called");
         CurrenciesListPojo currencyListPojo = new CurrenciesListPojo();
         Iterable<Currency> currencyList = currencyRepository.findAll();
         currencyListPojo.convertCurrencyListToJsonCurrency(currencyList);
@@ -103,9 +104,14 @@ public class ResponseApiController {
                                    @RequestParam(required = false) String startDate,
                                    @RequestParam(required = false) String finishDate,
                                    @RequestParam(required = false) String baseCurrency,
-                                   @RequestParam(required = false) String apiKey) {
+                                   @RequestParam(required = false) String apiKey,
+                                   @RequestHeader Map<String, String> headers) {
 
         System.out.println("entered exchange");
+
+        headers.forEach((key, value) -> {
+            System.out.printf("Header '%s' = %s%n", key, value);
+        });
 
         String apiKeyParsingResult = checkApiKey(apiKey);
         if ( ! apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
