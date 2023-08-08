@@ -113,20 +113,40 @@ public class ResponseApiController {
             System.out.printf("Header '%s' = %s%n", key, value);
         });
 
-        String apiKeyParsingResult = checkApiKey(apiKey);
-        if ( ! apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
-            return apiKeyParsingResult;
+        boolean vipClientRequest = false;
+
+        if (headers.containsKey("origin")) {
+            if (headers.get("origin").equals("https://dp-exchange-currency-app-ng.onrender.com")) {
+                vipClientRequest = true;
+                System.out.println("Exchange request by VIP client");
+            }
         }
 
-        ApiKey apiKeyObject = apiKeyRepository.findByValue(apiKey);
 
-/*        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());*/
-        User user = apiKeyObject.getUser();
-        ApiKeyManager apiKeyManager = new ApiKeyManager(user, apiKeyRepository);
-        if (apiKeyManager.canUseTheApiKey(apiKeyObject) == false) {
-            return "Cannot perform API request";
+
+        String apiKeyParsingResult = "";
+        ApiKey apiKeyObject;
+        User user = null;
+
+        /**
+         * Api Key checks
+         */
+
+        if (vipClientRequest == false) {
+            apiKeyParsingResult = checkApiKey(apiKey);
+            if ( ! apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
+                return apiKeyParsingResult;
+            }
+
+            apiKeyObject = apiKeyRepository.findByValue(apiKey);
+
+            user = apiKeyObject.getUser();
+            ApiKeyManager apiKeyManager = new ApiKeyManager(user, apiKeyRepository);
+            if (apiKeyManager.canUseTheApiKey(apiKeyObject) == false) {
+                return "Cannot perform API request";
+            }
         }
+
 
 
         /**
@@ -203,8 +223,11 @@ public class ResponseApiController {
         }
 //        int numberOfUsages = userRepository.howManyUsages(user.getId()) + 1;
 //        userRepository.increaseNumberOfUsages(user.getId(), numberOfUsages);
-        user.setCurrentRequestsCount(user.getCurrentRequestsCount() + 1);
-        userRepository.save(user);
+        if (vipClientRequest == false) {
+            user.setCurrentRequestsCount(user.getCurrentRequestsCount() + 1);
+            userRepository.save(user);
+        }
+
         return returnedJson;
     }
 
