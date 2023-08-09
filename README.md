@@ -32,12 +32,8 @@ Available optional URL parameters:
 Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and Euro as the base.
 ## Application view
 
-Application UI is on TODO list.
+I created separate application that communicates using REST API and displays requested eschage rates data. Link to the repository: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG
+
 ![img.png](img.png)
 
 ![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
-
-
-## Todo
-
-- UI graphic interface - another application developed with Angular. Sends REST API requests to this application, receives data and displays exchange ratios graphs and statistics.
