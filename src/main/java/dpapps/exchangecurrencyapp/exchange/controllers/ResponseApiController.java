@@ -116,9 +116,9 @@ public class ResponseApiController {
         boolean vipClientRequest = false;
 
         if (headers.containsKey("origin")) {
-            if (headers.get("origin").equals("https://dp-exchange-currency-app-ng.onrender.com")) {
+            if (headers.get("origin").equals(AppVariables.FRONTEND_APP_URL)) {
                 vipClientRequest = true;
-                System.out.println("Exchange request by VIP client");
+                System.out.println("Api request by Frontend app client");
             }
         }
 
