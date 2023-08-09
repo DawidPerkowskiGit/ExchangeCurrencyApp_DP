@@ -2,6 +2,7 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [More detailed information about application](#more-detailed-information-about-application)
+* [Available endpoints](#available-endpoints)
 * [Application view](#application-view)
 ## General info
 A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process. Hosted on Render's free plan.
@@ -20,7 +21,40 @@ All sensitive data like database connection credentials are stored in local mach
 
 URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
 
-The apiUser can access those rates by sending request to /api/exchange endpoint.
+## Available endpoints   
+
+### /api/currencies
+
+The user can access this endpoint without provding api key. Returns list of available currencies in JSON format, for example:
+```
+{
+    "currencies": {
+        "0": "EUR",
+        "1": "USD",
+        (...)
+        "40": "PLN",
+        "41": "ISK"
+    }
+}
+```
+
+### /api/exchange
+
+The user can access this enpoint only when providing an api key. Returns exchange rates list in JSON format, for example:
+```
+{
+    "success": true,
+    "date": "2023-08-09",
+    "base": "EUR",
+    "rates": {
+        "CHF": 0.959352,
+        "HRK": 7.378717,
+         (...)
+        "NZD": 1.807165,
+        "BRL": 5.377004
+    }
+}
+```
 Required URL parameter:
  - apiKey - required key to perform API request
 
