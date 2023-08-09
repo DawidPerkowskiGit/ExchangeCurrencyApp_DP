@@ -4,7 +4,9 @@
 * [More detailed information about application](#more-detailed-information-about-application)
 * [Application view](#application-view)
 ## General info
-A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process. Hosted on Render's free plan which results in app's instance spun down after 15 minutes of inactivity. 
+A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process. Hosted on Render's free plan.
+
+I created frontend application developed in Angular, which displays requested data.  https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG
 
 ## Technologies
 
@@ -31,8 +33,13 @@ Available optional URL parameters:
 Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and Euro as the base.
 ## Application view
 
-I created separate application that communicates using REST API and displays requested eschage rates data. Link to the repository: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG
+
+Result of requesting latest exchange rates data using Postman.
 
 ![img.png](img.png)
+
+
+
+Api key section available to logged in users.
 
 ![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
