@@ -67,6 +67,8 @@ Available optional URL parameters:
 Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and Euro as the base.
 ## Application view
 
+Frontend application which displays REST API data: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG.
+
 
 Result of requesting latest exchange rates data using Postman.
 
