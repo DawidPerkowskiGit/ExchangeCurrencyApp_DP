@@ -59,7 +59,7 @@ public class ResponseApiController {
     public String getCurrencies() {
         System.out.println("api/currencies called");
         CurrenciesListPojo currencyListPojo = new CurrenciesListPojo();
-        Iterable<Currency> currencyList = currencyRepository.findAll();
+        Iterable<Currency> currencyList = currencyRepository.getAll();
         currencyListPojo.convertCurrencyListToJsonCurrency(currencyList);
 
         return buildJsonFromPojo(currencyListPojo);

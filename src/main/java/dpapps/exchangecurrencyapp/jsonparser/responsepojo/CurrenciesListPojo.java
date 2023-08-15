@@ -13,16 +13,30 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+//public class CurrenciesListPojo extends ResponsePojo{
+//    Map<Integer, String> currencies = new HashMap<>();
+//
+//    public CurrenciesListPojo convertCurrencyListToJsonCurrency(Iterable<Currency> currencyList) {
+//
+//        int i = 0;
+//        for (Currency currency: currencyList
+//             ) {
+//            currencies.put(i, currency.getIsoName());
+//            i++;
+//        }
+//
+//        return this;
+//    }
+//}
+
 public class CurrenciesListPojo extends ResponsePojo{
-    Map<Integer, String> currencies = new HashMap<>();
+    Map<String, String> currencies = new HashMap<>();
 
     public CurrenciesListPojo convertCurrencyListToJsonCurrency(Iterable<Currency> currencyList) {
 
-        int i = 0;
         for (Currency currency: currencyList
-             ) {
-            currencies.put(i, currency.getIsoName());
-            i++;
+        ) {
+            currencies.put(currency.getIsoName(), currency.getFullName());
         }
 
         return this;

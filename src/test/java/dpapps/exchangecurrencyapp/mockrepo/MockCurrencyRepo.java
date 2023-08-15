@@ -114,4 +114,9 @@ public class MockCurrencyRepo implements CurrencyRepository {
         }
         return null;
     }
+
+    @Override
+    public List<Currency> getAll() {
+        return null;
+    }
 }

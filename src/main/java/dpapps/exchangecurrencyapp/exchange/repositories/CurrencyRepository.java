@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.repositories;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,8 @@ public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
     boolean existsById(Integer id);
 
     Currency findCurrencyByIsoName(String name);
+
+    @Query("SELECT c FROM Currency c order by c.isoName")
+    List<Currency> getAll();
 
 }
