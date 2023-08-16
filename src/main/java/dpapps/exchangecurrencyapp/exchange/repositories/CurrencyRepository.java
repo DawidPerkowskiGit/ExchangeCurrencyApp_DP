@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.repositories;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
+import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyNamesLocationObject;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -20,5 +21,8 @@ public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
 
     @Query("SELECT c FROM Currency c order by c.isoName")
     List<Currency> getAll();
+
+    @Query("SELECT c.isoName, c.fullName, l.name FROM Currency c, Location l, LocationCurrencyPair lcp WHERE lcp.currency = c AND lcp.location = l")
+    List<CurrencyNamesLocationObject> getCurrenciesAndLocations();
 
 }

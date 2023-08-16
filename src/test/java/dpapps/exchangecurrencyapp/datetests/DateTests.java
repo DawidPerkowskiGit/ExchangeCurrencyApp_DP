@@ -1,15 +1,11 @@
 package dpapps.exchangecurrencyapp.datetests;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
-import dpapps.exchangecurrencyapp.exchange.controllers.ExchangeController;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
-import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
-import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
 import dpapps.exchangecurrencyapp.mockrepo.MockExchangeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 

@@ -45,13 +45,13 @@ public class User
     private int currentRequestsCount = 0;
 
     public void increaseNumberOfUsages() {
-        if (currentRequestsCount < AppVariables.GLOBAL_LIMIT_OF_DAILY_USAGES) {
+        if (currentRequestsCount < AppVariables.DAILY_LIMIT_OF_DAILY_USAGES) {
             currentRequestsCount++;
         }
     }
 
     public boolean isRequestLimitIsReached() {
-        if (currentRequestsCount == AppVariables.GLOBAL_LIMIT_OF_DAILY_USAGES) {
+        if (currentRequestsCount == AppVariables.DAILY_LIMIT_OF_DAILY_USAGES) {
             return true;
         }
         return false;

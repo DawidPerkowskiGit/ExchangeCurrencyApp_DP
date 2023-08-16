@@ -11,10 +11,9 @@ import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
+import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyNamesLocationObject;
 import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrenciesListPojo;
 import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyExchangesFromSingleDayPojo;
-import dpapps.exchangecurrencyapp.jsonparser.responsepojo.ResponsePojo;
-import dpapps.exchangecurrencyapp.security.UserService;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Controller containing all REST API endpoints
+ */
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api")
@@ -35,7 +37,6 @@ public class ResponseApiController {
     LocationCurrencyPairRepository locationCurrencyPairRepository;
     private final ApiKeyRepository apiKeyRepository;
 
-    private final UserService userService;
     private final UserRepository userRepository;
 
     @Autowired
@@ -44,14 +45,12 @@ public class ResponseApiController {
                                  LocationRepository locationRepository,
                                  LocationCurrencyPairRepository locationCurrencyPairRepository,
                                  ApiKeyRepository apiKeyRepository,
-                                 UserService userService,
                                  UserRepository userRepository) {
         this.currencyRepository = currencyRepository;
         this.exchangeRepository = exchangeRepository;
         this.locationRepository = locationRepository;
         this.locationCurrencyPairRepository = locationCurrencyPairRepository;
         this.apiKeyRepository = apiKeyRepository;
-        this.userService = userService;
         this.userRepository = userRepository;
     }
 
@@ -64,6 +63,14 @@ public class ResponseApiController {
 
         return buildJsonFromPojo(currencyListPojo);
 //        return currencyRepository.findAll().toString();
+    }
+
+    @GetMapping("/currandloc")
+    public String getCurrenciesAndLocations() {
+        System.out.println("api/currandloc called");
+        Iterable<CurrencyNamesLocationObject> pojo = currencyRepository.getCurrenciesAndLocations();
+        Map<String, String> oneCurrencyMultiplelocationsMap = new HashMap<>();
+        return "";
     }
 
 

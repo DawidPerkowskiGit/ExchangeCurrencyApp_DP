@@ -21,11 +21,13 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+/**
+ * Controller for non REST API endpoints
+ */
 @Controller
 public class ApplicationController {
 
     private final UserService userService;
-
     private final ApiKeyRepository apiKeyRepository;
     private final UserRepository userRepository;
 
@@ -50,17 +52,20 @@ public class ApplicationController {
     }
 
     @GetMapping("/health")
-    public ResponseEntity<Void> helthCheack() {
+    public ResponseEntity<Void> healthCheck() {
         return ResponseEntity.ok().build();
     }
 
-    // handler method to handle home page request
     @GetMapping("/index")
     public String home(){
         return "index";
     }
 
-    // handler method to handle user registration form request
+    /**
+     * Register user endpoint
+     * @param model User registration fields model
+     * @return register view
+     */
     @GetMapping("/register")
     public String showRegistrationForm(Model model){
         // create model object to store form data
@@ -69,7 +74,14 @@ public class ApplicationController {
         return "register";
     }
 
-    // handler method to handle user registration form submit request
+    /**
+     * Register user and save its info to database
+     * @param userDto   User data transfer object
+     * @param result    Attribute that enables checking if login already exists
+     * @param model     Registration data model
+     * @return  "/register" view if registration did not result in success
+     *          "/index" view if registration was a success
+     */
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto,
                                BindingResult result,
@@ -91,7 +103,11 @@ public class ApplicationController {
         return "redirect:/index";
     }
 
-    // handler method to handle list of users
+    /**
+     * Admin only view that displays list of users
+     * @param model View model
+     * @return Users view
+     */
     @GetMapping("/users")
     public String users(Model model){
         List<User> users = userRepository.findAll();
@@ -99,12 +115,19 @@ public class ApplicationController {
         return "users";
     }
 
-    // handler method to handle login request
+    /**
+     * Handler method for logging in
+     * @return Login view
+     */
     @GetMapping("/login")
     public String login(){
         return "login";
     }
 
+    /**
+     * Method that generates new API key
+     * @return User profile view
+     */
     @GetMapping("/generate")
     public String generate() {
         User user = getCurrentUser();
@@ -114,16 +137,25 @@ public class ApplicationController {
         return "redirect:/profile";
     }
 
+    /**
+     * Users profile view
+     * @param model Model whoch includes user and API key data
+     * @return Profile view
+     */
     @GetMapping("/profile")
     public String profile(Model model) {
         User user = getCurrentUser();
         ApiKeyManager apiKeyManager = new ApiKeyManager(this.apiKeyRepository, user);
         model.addAttribute("user", apiKeyManager);
-        String apiRequestsString = "" + user.getCurrentRequestsCount() +"/"+ AppVariables.GLOBAL_LIMIT_OF_DAILY_USAGES;
+        String apiRequestsString = "" + user.getCurrentRequestsCount() +"/"+ AppVariables.DAILY_LIMIT_OF_DAILY_USAGES;
         model.addAttribute("apiRequestString", apiRequestsString);
         return "profile";
     }
 
+    /**
+     * Method which returns currently authenticated user
+     * @return Authenticated user
+     */
     public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());

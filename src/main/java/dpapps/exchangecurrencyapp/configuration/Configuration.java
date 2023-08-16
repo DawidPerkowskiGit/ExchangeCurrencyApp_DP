@@ -9,13 +9,8 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @org.springframework.context.annotation.Configuration
 @EnableScheduling
 @RequiredArgsConstructor
+/**
+ * Applications configuration. Scheduling is enabled
+ */
 public class Configuration {
-//    @Bean
-//    public SpringTemplateEngine templateEngine() {
-//        SpringTemplateEngine engine = new SpringTemplateEngine();
-//        engine.setTemplateResolver(templateResolver());
-//        engine.addDialect(new SpringSecurityDialect());
-//        return engine;
-//    }
-
 }
