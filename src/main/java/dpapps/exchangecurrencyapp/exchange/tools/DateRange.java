@@ -6,10 +6,17 @@ import java.time.LocalDate;
 
 /**
  * This module is responsible for providing valid range of exchange dates stored in the database.
+ * Valid is between first and last entry in the database
  */
 
 public class DateRange {
 
+    /**
+     * Method checks if requested date is in valid range.
+     *
+     * @param date Requested date
+     * @return Boolean result
+     */
     public static boolean isDateInValidRange(LocalDate date) {
         if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
@@ -19,6 +26,14 @@ public class DateRange {
         }
         return true;
     }
+
+    /**
+     * Method checks if both dates are in valid range
+     *
+     * @param left  Oldest date
+     * @param right Newest date
+     * @return Boolean result
+     */
 
     public static boolean isDateInValidRange(LocalDate left, LocalDate right) {
         if (right.isBefore(left)) {
@@ -40,6 +55,13 @@ public class DateRange {
         return true;
     }
 
+    /**
+     * Method which puts date in valid range.
+     *
+     * @param date Date to validate
+     * @return Date in valid range
+     */
+
     public static LocalDate returnValidRange(LocalDate date) {
         if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return AppVariables.EXCHANGE_DATE_OLDEST;
@@ -49,6 +71,14 @@ public class DateRange {
         }
         return date;
     }
+
+    /**
+     * Returns date scope in valid range
+     *
+     * @param left  Older date
+     * @param right Newer date
+     * @return Scope of dates in valid range
+     */
 
     public static LocalDate[] returnValidRange(LocalDate left, LocalDate right) {
         LocalDate temp;

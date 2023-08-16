@@ -2,6 +2,9 @@ package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 
+/**
+ * Object used to represent Currency data as JSON
+ */
 public class JsonCurrency {
     private String isoName;
 
@@ -28,13 +31,12 @@ public class JsonCurrency {
         this.fullName = fullName;
     }
 
-    public Currency convertJsonCurrencyToCurrency() {
-        Currency currency = new Currency() {};
-        currency.setIsoName(getIsoName());
-        currency.setFullName(getFullName());
-        return currency;
-    }
-
+    /**
+     * Converts Currency to JsonCurrency
+     *
+     * @param currency
+     * @return
+     */
     public JsonCurrency convertCurrencyToJsonCurrency(Currency currency) {
         setIsoName(currency.getIsoName());
         setFullName(currency.getFullName());

@@ -1,6 +1,5 @@
 package dpapps.exchangecurrencyapp.mockrepo;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 
@@ -89,22 +88,12 @@ public class MockExchangeRepository implements ExchangeRepository {
     }
 
     @Override
-    public LocalDate returnValidLatestExchangeData() {
-        return null;
-    }
-
-    @Override
     public List<Exchange> findAllByExchangeDateOrderByCurrencyDesc(LocalDate date) {
         return null;
     }
 
     @Override
     public List<Exchange> findAllByExchangeDateAndCurrencyOrderByExchangeDate(LocalDate date, String currency) {
-        return null;
-    }
-
-    @Override
-    public Exchange findByExchangeDateAndAndCurrency(LocalDate date, Currency currency) {
         return null;
     }
 

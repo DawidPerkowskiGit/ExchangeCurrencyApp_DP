@@ -6,6 +6,9 @@ import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Converts Exchange to JSON conversion ready object
+ */
 @Service
 public class JsonExchange {
 
@@ -46,6 +49,12 @@ public class JsonExchange {
         this.exchangeDate = exchangeDate;
     }
 
+    /**
+     * Converts Exchange object to JSON conversion ready object
+     *
+     * @param exchange Exchange object
+     * @return JSON conversion ready Object
+     */
     public JsonExchange convertBaseToJson(Exchange exchange) {
         setCurrency(exchange.getCurrency().toString());
         setValue(exchange.getValue());
@@ -53,11 +62,4 @@ public class JsonExchange {
         return this;
     }
 
-    public Exchange convertJsonToBase() {
-        Exchange exchange = new Exchange();
-        exchange.setValue(getValue());
-        exchange.setExchangeDate(ConversionLocalDateString.convertStringToLocalDate(getExchangeDate()));
-        exchange.setCurrency(currencyRepository.findCurrencyByIsoName(getCurrency()));
-        return exchange;
-    }
 }

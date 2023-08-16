@@ -1,11 +1,14 @@
 package dpapps.exchangecurrencyapp.exchange.entities;
+
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
 
-
+/**
+ * Entity model of Exchange rates
+ */
 @Entity
 @Table(name = "exchange")
 public class Exchange {
@@ -13,7 +16,6 @@ public class Exchange {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NonNull
     private double value;
 
     @NonNull
@@ -22,7 +24,7 @@ public class Exchange {
 
     @NonNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name="exchange_date")
+    @Column(name = "exchange_date")
     private LocalDate exchangeDate;
 
     public Integer getId() {
@@ -41,6 +43,7 @@ public class Exchange {
         this.value = value;
     }
 
+    @NonNull
     public Currency getCurrency() {
         return currency;
     }
@@ -49,6 +52,7 @@ public class Exchange {
         this.currency = currency;
     }
 
+    @NonNull
     public LocalDate getExchangeDate() {
         return exchangeDate;
     }
@@ -59,7 +63,7 @@ public class Exchange {
 
     @Override
     public String toString() {
-        return getCurrency().getIsoName() + ", " + getExchangeDate().toString()+", " + getValue();
+        return getCurrency().getIsoName() + ", " + getExchangeDate().toString() + ", " + getValue();
     }
 
     public Exchange(Integer id, double value, Currency currency, LocalDate exchangeDate) {

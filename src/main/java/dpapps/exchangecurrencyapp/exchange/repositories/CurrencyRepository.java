@@ -4,18 +4,21 @@ import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyNamesLocationObject;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+/**
+ * Repository for Currencies
+ */
 @Repository
 public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
 
-    Currency save(Currency currency);
+    @NonNull
+    Currency save(@NonNull Currency currency);
 
-    boolean existsByIsoName(String name);
-    boolean existsById(Integer id);
+    boolean existsById(@NonNull Integer id);
 
     Currency findCurrencyByIsoName(String name);
 

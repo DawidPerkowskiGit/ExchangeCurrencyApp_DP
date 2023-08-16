@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Entity model of user roles
+ */
 @Setter
 @Getter
 @NoArgsConstructor

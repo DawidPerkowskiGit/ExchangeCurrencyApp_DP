@@ -5,7 +5,7 @@ import org.springframework.lang.NonNull;
 
 /**
  * Model of Location.
- *
+ * <p>
  * Describes countries, lands, islands or other territories where currencies are used.
  */
 @Entity

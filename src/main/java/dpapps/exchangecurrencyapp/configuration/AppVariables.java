@@ -9,7 +9,7 @@ public class AppVariables {
     /**
      * Oldest exchange rates entry in the database
      */
-    public final static LocalDate EXCHANGE_DATE_OLDEST = LocalDate.of(1999, 01, 04);
+    public final static LocalDate EXCHANGE_DATE_OLDEST = LocalDate.of(1999, 1, 4);
 
     /**
      * Default currency used as base for returning exchange rates

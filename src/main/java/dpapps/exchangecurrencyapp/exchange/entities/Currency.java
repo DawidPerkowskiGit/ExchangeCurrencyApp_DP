@@ -5,11 +5,10 @@ import org.springframework.lang.NonNull;
 
 /**
  * Entity model of Currency.
- *
+ * <p>
  * Describes its ISO Code name, full name.
- *
+ * <p>
  * Relates to currency exchanges and locations where currencies are used
- *
  */
 @Entity
 @Table(name = "currency")
@@ -19,11 +18,11 @@ public class Currency {
     private Integer id;
 
     @NonNull
-    @Column(length=3, name="iso_name")
+    @Column(length = 3, name = "iso_name")
     private String isoName;
 
     @NonNull
-    @Column(length = 30, name="full_name")
+    @Column(length = 30, name = "full_name")
     private String fullName;
 
     public Integer getId() {
@@ -55,7 +54,8 @@ public class Currency {
         return getIsoName();
     }
 
-    public Currency() {}
+    public Currency() {
+    }
 
     public Currency(Integer id, String isoName, String fullName) {
         this.id = id;

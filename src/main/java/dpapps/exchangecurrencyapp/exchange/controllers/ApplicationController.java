@@ -57,17 +57,18 @@ public class ApplicationController {
     }
 
     @GetMapping("/index")
-    public String home(){
+    public String home() {
         return "index";
     }
 
     /**
      * Register user endpoint
+     *
      * @param model User registration fields model
      * @return register view
      */
     @GetMapping("/register")
-    public String showRegistrationForm(Model model){
+    public String showRegistrationForm(Model model) {
         // create model object to store form data
         UserDto user = new UserDto();
         model.addAttribute("user", user);
@@ -76,24 +77,25 @@ public class ApplicationController {
 
     /**
      * Register user and save its info to database
-     * @param userDto   User data transfer object
-     * @param result    Attribute that enables checking if login already exists
-     * @param model     Registration data model
-     * @return  "/register" view if registration did not result in success
-     *          "/index" view if registration was a success
+     *
+     * @param userDto User data transfer object
+     * @param result  Attribute that enables checking if login already exists
+     * @param model   Registration data model
+     * @return "/register" view if registration did not result in success
+     * "/index" view if registration was a success
      */
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto,
                                BindingResult result,
-                               Model model){
+                               Model model) {
         User existingUser = userService.findUserByEmail(userDto.getLogin());
 
-        if(existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()){
+        if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
             result.rejectValue("login", null,
                     "There is already an account registered with the same login");
         }
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             return "/register";
         }
@@ -105,11 +107,12 @@ public class ApplicationController {
 
     /**
      * Admin only view that displays list of users
+     *
      * @param model View model
      * @return Users view
      */
     @GetMapping("/users")
-    public String users(Model model){
+    public String users(Model model) {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "users";
@@ -117,21 +120,23 @@ public class ApplicationController {
 
     /**
      * Handler method for logging in
+     *
      * @return Login view
      */
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login";
     }
 
     /**
      * Method that generates new API key
+     *
      * @return User profile view
      */
     @GetMapping("/generate")
     public String generate() {
         User user = getCurrentUser();
-        ApiKeyManager apiKeyManager = new ApiKeyManager(apiKeyRepository ,user);
+        ApiKeyManager apiKeyManager = new ApiKeyManager(apiKeyRepository, user);
         String output = apiKeyManager.generateNewKey();
         System.out.println(output);
         return "redirect:/profile";
@@ -139,6 +144,7 @@ public class ApplicationController {
 
     /**
      * Users profile view
+     *
      * @param model Model whoch includes user and API key data
      * @return Profile view
      */
@@ -147,13 +153,14 @@ public class ApplicationController {
         User user = getCurrentUser();
         ApiKeyManager apiKeyManager = new ApiKeyManager(this.apiKeyRepository, user);
         model.addAttribute("user", apiKeyManager);
-        String apiRequestsString = "" + user.getCurrentRequestsCount() +"/"+ AppVariables.DAILY_LIMIT_OF_DAILY_USAGES;
+        String apiRequestsString = "" + user.getCurrentRequestsCount() + "/" + AppVariables.DAILY_LIMIT_OF_DAILY_USAGES;
         model.addAttribute("apiRequestString", apiRequestsString);
         return "profile";
     }
 
     /**
      * Method which returns currently authenticated user
+     *
      * @return Authenticated user
      */
     public User getCurrentUser() {

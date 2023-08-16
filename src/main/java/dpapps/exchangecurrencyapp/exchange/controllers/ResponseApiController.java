@@ -54,6 +54,12 @@ public class ResponseApiController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Currencies List
+     *
+     * @return Currencies List in JSON format
+     */
+
     @GetMapping("/currencies")
     public String getCurrencies() {
         System.out.println("api/currencies called");
@@ -62,8 +68,13 @@ public class ResponseApiController {
         currencyListPojo.convertCurrencyListToJsonCurrency(currencyList);
 
         return buildJsonFromPojo(currencyListPojo);
-//        return currencyRepository.findAll().toString();
     }
+
+    /**
+     * Currencies and Countries where they can be used
+     *
+     * @return Currencies list with all the countries they can be used in returned in JSON format
+     */
 
     @GetMapping("/currandloc")
     public String getCurrenciesAndLocations() {
@@ -73,13 +84,19 @@ public class ResponseApiController {
         return "";
     }
 
-
+    /**
+     * Admin only accessible endpoint which performs requested URL requested. It was used to perform currency exchanges import.
+     *
+     * @param apiKey     REST APi key
+     * @param requestUrl Requested URL
+     * @return status result of currency import request from the scheduler
+     */
     @GetMapping("/forceRequestUrl")
     public String forceRequestUrl(@RequestParam(required = false) String apiKey,
                                   @RequestParam(required = false) String requestUrl) {
 
         String apiKeyParsingResult = checkApiKey(apiKey);
-        if ( ! apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
+        if (!apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
             return apiKeyParsingResult;
         }
 
@@ -94,6 +111,12 @@ public class ResponseApiController {
 
     }
 
+    /**
+     * Method that checks if API key is valid
+     *
+     * @param apiKey API key
+     * @return result of API key check
+     */
     private String checkApiKey(String apiKey) {
         if (apiKey == null) {
             return "You didnt provide api key";
@@ -105,6 +128,18 @@ public class ResponseApiController {
 
         return AppVariables.VALID_API_KEY_MESSAGE;
     }
+
+    /**
+     * Exchange rated endpoints
+     *
+     * @param currency     Optional http attribute - Requested currency
+     * @param startDate    Optional http attribute - start date for exchange rated from multiple days
+     * @param finishDate   Optional http attribute - finish date for exchange rated from multiple days
+     * @param baseCurrency Optional http attribute - http attribute Base currency
+     * @param apiKey       Required http attribute - User's API key
+     * @param headers      List of http headers
+     * @return Exchange rates in JSON format
+     */
 
     @GetMapping("/exchange")
     public String getExchangeRates(@RequestParam(required = false) String currency,
@@ -130,7 +165,6 @@ public class ResponseApiController {
         }
 
 
-
         String apiKeyParsingResult = "";
         ApiKey apiKeyObject;
         User user = null;
@@ -141,7 +175,7 @@ public class ResponseApiController {
 
         if (vipClientRequest == false) {
             apiKeyParsingResult = checkApiKey(apiKey);
-            if ( ! apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
+            if (!apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
                 return apiKeyParsingResult;
             }
 
@@ -153,7 +187,6 @@ public class ResponseApiController {
                 return "Cannot perform API request";
             }
         }
-
 
 
         /**
@@ -238,6 +271,15 @@ public class ResponseApiController {
         return returnedJson;
     }
 
+    /**
+     * Method which returns exchange rates from multiple days. It is called when accessing "../exchange" endpoint
+     *
+     * @param beginDate    Exchange rates starting from date
+     * @param endDate      Exchange rates ending in date
+     * @param currency     Requested currency
+     * @param baseCurrency Base currency
+     * @return List of exchange rates
+     */
     public List<CurrencyExchangesFromSingleDayPojo> getExchangesFromMultipleDays(LocalDate beginDate,
                                                                                  LocalDate endDate,
                                                                                  String currency,
@@ -258,6 +300,14 @@ public class ResponseApiController {
 
     }
 
+    /**
+     * Exchange rates from single day. It is called at least once when returning exchange rates from multiple days
+     *
+     * @param inputDate    Exchange rates date
+     * @param currency     Requested currency
+     * @param baseCurrency Base currency
+     * @return Object containing exchange rated from single day
+     */
     public Optional<CurrencyExchangesFromSingleDayPojo> getExchangesFromSingleDay(LocalDate inputDate,
                                                                                   String currency,
                                                                                   String baseCurrency) {
@@ -348,12 +398,26 @@ public class ResponseApiController {
         return Optional.ofNullable(pojo);
     }
 
+    /**
+     * Method which returns exchange rate based on non-default currency
+     *
+     * @param date     Exchange rates date
+     * @param currency Currency used as base
+     * @return Exchange rate based on requested currency
+     */
+
     public double calculateNewRatio(LocalDate date, String currency) {
         Exchange newBaseCurrency = exchangeRepository.findByExchangeDateAndCurrency_IsoName(date, currency);
         return 1 / newBaseCurrency.getValue();
     }
 
 
+    /**
+     * Returns exchange rates from single day in JSON format
+     *
+     * @param pojo Java object containing exchange rates
+     * @return Exchange rates from single day in JSON format
+     */
     public String buildJsonFromPojo(CurrencyExchangesFromSingleDayPojo pojo) {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -367,6 +431,12 @@ public class ResponseApiController {
         return exchangesToJson;
     }
 
+    /**
+     * Returns exchange list in JSON format
+     *
+     * @param pojoList Java object containing exchange rates
+     * @return Exchange list in JSON format
+     */
     public String buildJsonFromPojo(List<CurrencyExchangesFromSingleDayPojo> pojoList) {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -380,6 +450,13 @@ public class ResponseApiController {
         return exchangesToJson;
     }
 
+    /**
+     * Returns currencies list in JSON format
+     *
+     * @param pojoList Java object containing currency list
+     * @return Currency list in JSON format
+     */
+
     public String buildJsonFromPojo(CurrenciesListPojo pojoList) {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -391,17 +468,6 @@ public class ResponseApiController {
         }
 
         return exchangesToJson;
-    }
-    public LocalDate returnExchangeDateThatExistsInDb(LocalDate date) {
-
-        while (DateRange.isDateInValidRange(date)) {
-            if (exchangeRepository.existsByExchangeDate(date) == false) {
-                date = date.minusDays(1);
-            } else {
-                return date;
-            }
-        }
-        return AppVariables.EXCHANGE_DATE_OLDEST;
     }
 
 }

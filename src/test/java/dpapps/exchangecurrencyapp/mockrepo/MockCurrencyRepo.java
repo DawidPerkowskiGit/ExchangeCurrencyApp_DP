@@ -2,6 +2,8 @@ package dpapps.exchangecurrencyapp.mockrepo;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
+import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyNamesLocationObject;
+import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +13,11 @@ public class MockCurrencyRepo implements CurrencyRepository {
 
     List<Currency> listOfCurrencies = new ArrayList<>();
 
+    @NonNull
     @Override
-    public Currency save(Currency currency) {
+    public Currency save(@NonNull Currency currency) {
         listOfCurrencies.add(currency);
         return currency;
-    }
-
-    @Override
-    public boolean existsByIsoName(String name) {
-        for (Currency entry: listOfCurrencies
-             ) {
-            if (entry.getIsoName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -54,7 +46,7 @@ public class MockCurrencyRepo implements CurrencyRepository {
     }
 
     @Override
-    public boolean existsById(Integer id) {
+    public boolean existsById(@NonNull Integer id) {
         for (Currency currency: listOfCurrencies
              ) {
             if (currency.getId()==id) {
@@ -117,6 +109,11 @@ public class MockCurrencyRepo implements CurrencyRepository {
 
     @Override
     public List<Currency> getAll() {
+        return null;
+    }
+
+    @Override
+    public List<CurrencyNamesLocationObject> getCurrenciesAndLocations() {
         return null;
     }
 }

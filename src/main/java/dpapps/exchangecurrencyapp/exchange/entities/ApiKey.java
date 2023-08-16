@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
+
+/**
+ * Entity model of Api key
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,10 +23,10 @@ public class ApiKey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="value")
+    @Column(name = "value")
     private String value;
 
-    @Column(name="active")
+    @Column(name = "active")
     private boolean active = true;
 
     @ManyToOne

@@ -2,6 +2,9 @@ package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Location;
 
+/**
+ * Location Object conversion to JSON ready object
+ */
 public class JsonLocation {
 
     private String name;
@@ -25,14 +28,15 @@ public class JsonLocation {
         this.name = name;
     }
 
+    /**
+     * Method converts Location object to JSON conversion ready object
+     *
+     * @param location Location object
+     * @return JSON ready location object
+     */
     public JsonLocation convertLocationToJsonLocation(Location location) {
         setName(location.getName());
         return this;
     }
 
-    public Location convertJsonLocationToLocation() {
-        Location location = new Location();
-        location.setName(getName());
-        return location;
-    }
 }
