@@ -1,5 +1,6 @@
 package dpapps.exchangecurrencyapp.shedules;
 
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.entities.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
@@ -71,6 +72,14 @@ public class CurrencyExchangesScheduler {
 
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
+
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(AppVariables.FRONTEND_APP_URL))
+                    .build();
+
+            response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+
         }
         catch (Exception e) {
             System.out.println("Failed to perform scheduled task. Exception: "+ e);
