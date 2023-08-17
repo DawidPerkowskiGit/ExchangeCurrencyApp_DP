@@ -1,19 +1,26 @@
-package dpapps.exchangecurrencyapp.jsonparser.requestexchanges;
+package dpapps.exchangecurrencyapp.jsonparser.responseforeignapi;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The class represents data structure of exchangeratesapi.io JSON response body.
  */
-public class RequestBodyObject {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ResponseBodyObject {
 
     private boolean success;
 
@@ -23,8 +30,7 @@ public class RequestBodyObject {
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonFormat
-            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     private Boolean historical;
@@ -35,24 +41,8 @@ public class RequestBodyObject {
         return success;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public int getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(int timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getBase() {
         return base;
-    }
-
-    public void setBase(String base) {
-        this.base = base;
     }
 
     public LocalDate getDate() {
@@ -71,6 +61,11 @@ public class RequestBodyObject {
         this.rates = rates;
     }
 
+    /**
+     * Method checks if nullable fields contain data
+     *
+     * @return Result of checks
+     */
     public boolean doAllNullableFieldsContainData() {
         if (getRates() == null) {
             return false;

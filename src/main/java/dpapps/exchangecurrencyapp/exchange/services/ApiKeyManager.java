@@ -58,8 +58,7 @@ public class ApiKeyManager {
      * @return Boolean result
      */
     public boolean doesUserHaveSpecificRole(String role) {
-        for (Role singleRole : user.getRoles()
-        ) {
+        for (Role singleRole : user.getRoles()) {
             if (singleRole.getName().equals(role)) {
                 return true;
             }
@@ -77,8 +76,7 @@ public class ApiKeyManager {
         if (user.isNonLocked() == false) {
             return "Could not generate new API key, account is locked";
         }
-        for (ApiKey singleKey : user.getApiKeys()
-        ) {
+        for (ApiKey singleKey : user.getApiKeys()) {
             if (singleKey.isActive()) {
                 singleKey.deactivateKey();
             }
@@ -101,8 +99,7 @@ public class ApiKeyManager {
      * @return active API key
      */
     public ApiKey returnActiveKey() {
-        for (ApiKey key : user.getApiKeys()
-        ) {
+        for (ApiKey key : user.getApiKeys()) {
             if (key.isActive()) {
                 return key;
             }

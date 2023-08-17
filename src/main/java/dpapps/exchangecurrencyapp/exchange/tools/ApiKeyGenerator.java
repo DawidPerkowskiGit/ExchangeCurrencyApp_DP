@@ -10,7 +10,7 @@ public class ApiKeyGenerator {
     /**
      * Generates new API key
      *
-     * @return API key
+     * @return API key as a String
      */
     public static String generateApiKey() {
         String apiKey = new RandomValueStringGenerator(64).generate();

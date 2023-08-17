@@ -12,8 +12,7 @@ public class AvailableCurrencyTypesChecker {
      * @return Boolean result
      */
     public static boolean isThisCurrencyAvailable(String currency) {
-        for (AvailableCurrencyTypes entry : AvailableCurrencyTypes.values()
-        ) {
+        for (AvailableCurrencyTypes entry : AvailableCurrencyTypes.values()) {
             if (currency.equals(entry.toString())) {
                 return true;
             }

@@ -33,9 +33,7 @@ public class ApplicationController {
 
 
     @Autowired
-    public ApplicationController(UserService userService,
-                                 ApiKeyRepository apiKeyRepository,
-                                 UserRepository userRepository) {
+    public ApplicationController(UserService userService, ApiKeyRepository apiKeyRepository, UserRepository userRepository) {
         this.userService = userService;
         this.apiKeyRepository = apiKeyRepository;
         this.userRepository = userRepository;
@@ -85,14 +83,11 @@ public class ApplicationController {
      * "/index" view if registration was a success
      */
     @PostMapping("/register/save")
-    public String registration(@Valid @ModelAttribute("user") UserDto userDto,
-                               BindingResult result,
-                               Model model) {
+    public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
         User existingUser = userService.findUserByEmail(userDto.getLogin());
 
         if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
-            result.rejectValue("login", null,
-                    "There is already an account registered with the same login");
+            result.rejectValue("login", null, "There is already an account registered with the same login");
         }
 
         if (result.hasErrors()) {

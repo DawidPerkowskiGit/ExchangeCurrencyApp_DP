@@ -3,13 +3,21 @@ package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
 import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Converts Exchange to JSON conversion ready object
+ * Stores and converts Exchange entity data to JSON format
  */
 @Service
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class JsonExchange {
 
     private CurrencyRepository currencyRepository;
@@ -20,9 +28,6 @@ public class JsonExchange {
     @Autowired
     public JsonExchange(CurrencyRepository currencyRepository) {
         this.currencyRepository = currencyRepository;
-    }
-
-    public JsonExchange() {
     }
 
     public double getValue() {
@@ -39,10 +44,6 @@ public class JsonExchange {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public String getExchangeDate() {
-        return exchangeDate;
     }
 
     public void setExchangeDate(String exchangeDate) {

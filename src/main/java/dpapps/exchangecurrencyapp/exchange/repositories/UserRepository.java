@@ -19,7 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Query("UPDATE User u SET u.currentRequestsCount = :usages WHERE u.id = :id")
-    public int increaseNumberOfUsages(@Param("id") Long id,
-                                      @Param("usages") int usages);
+    public int increaseNumberOfUsages(@Param("id") Long id, @Param("usages") int usages);
 
 }

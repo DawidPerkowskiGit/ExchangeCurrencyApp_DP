@@ -1,30 +1,24 @@
 package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * Object used to represent Currency data as JSON
+ * Stores and converts Currency entity data to JSON format
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class JsonCurrency {
     private String isoName;
-
     private String fullName;
-
-    public JsonCurrency(String isoName, String fullName) {
-        this.isoName = isoName;
-        this.fullName = fullName;
-    }
-
-    public String getIsoName() {
-        return isoName;
-    }
 
     public void setIsoName(String isoName) {
         this.isoName = isoName;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     public void setFullName(String fullName) {
@@ -34,8 +28,8 @@ public class JsonCurrency {
     /**
      * Converts Currency to JsonCurrency
      *
-     * @param currency
-     * @return
+     * @param currency Currency entity object
+     * @return Currency object prepared to be converted to JSON
      */
     public JsonCurrency convertCurrencyToJsonCurrency(Currency currency) {
         setIsoName(currency.getIsoName());

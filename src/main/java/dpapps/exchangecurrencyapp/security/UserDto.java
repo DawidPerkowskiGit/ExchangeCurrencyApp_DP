@@ -7,13 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+/**
+ * User registration for data
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto
-{
+public class UserDto {
     private Long id;
     @NotEmpty(message = "Login should not be empty")
     private String login;

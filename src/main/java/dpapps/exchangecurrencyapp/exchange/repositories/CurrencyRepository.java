@@ -1,7 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.repositories;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
-import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyNamesLocationObject;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;

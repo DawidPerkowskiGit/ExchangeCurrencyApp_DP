@@ -11,7 +11,7 @@ import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
-import dpapps.exchangecurrencyapp.jsonparser.responsepojo.*;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.*;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +38,7 @@ public class ResponseApiController {
     private final UserRepository userRepository;
 
     @Autowired
-    public ResponseApiController(CurrencyRepository currencyRepository,
-                                 ExchangeRepository exchangeRepository,
-                                 LocationRepository locationRepository,
-                                 LocationCurrencyPairRepository locationCurrencyPairRepository,
-                                 ApiKeyRepository apiKeyRepository,
-                                 UserRepository userRepository,
-                                 RoleRepository roleRepository) {
+    public ResponseApiController(CurrencyRepository currencyRepository, ExchangeRepository exchangeRepository, LocationRepository locationRepository, LocationCurrencyPairRepository locationCurrencyPairRepository, ApiKeyRepository apiKeyRepository, UserRepository userRepository, RoleRepository roleRepository) {
         this.currencyRepository = currencyRepository;
         this.exchangeRepository = exchangeRepository;
         this.locationRepository = locationRepository;
@@ -62,7 +56,7 @@ public class ResponseApiController {
     @GetMapping("/currencies")
     public String getCurrencies() {
         System.out.println("api/currencies called");
-        CurrenciesListPojo currencyListPojo = new CurrenciesListPojo();
+        CurrencyListPojo currencyListPojo = new CurrencyListPojo();
         Iterable<Currency> currencyList = currencyRepository.getAll();
         currencyListPojo.convertCurrencyListToJsonCurrency(currencyList);
 
@@ -80,8 +74,8 @@ public class ResponseApiController {
         System.out.println("api/currandloc called");
         List<String[]> pojo = currencyRepository.getCurrenciesAndLocations();
         System.out.println(pojo);
-        CurrencyNamesLocationObjectJsonReadyListCreator rowsToObjectConverter = new CurrencyNamesLocationObjectJsonReadyListCreator();
-        List<JsonConvertable> jsonReadyObject = rowsToObjectConverter.packCurrenciesLocationArrayToObject(pojo);
+        CurrencyNamesLocationJsonReady rowsToObjectConverter = new CurrencyNamesLocationJsonReady();
+        List<JsonConvertable> jsonReadyObject = rowsToObjectConverter.convert(pojo);
         System.out.println(jsonReadyObject);
         String returnedJson = buildJsonFromPojo(jsonReadyObject);
         return returnedJson;
@@ -95,8 +89,7 @@ public class ResponseApiController {
      * @return status result of currency import request from the scheduler
      */
     @GetMapping("/forceRequestUrl")
-    public String forceRequestUrl(@RequestParam(required = false) String apiKey,
-                                  @RequestParam(required = false) String requestUrl) {
+    public String forceRequestUrl(@RequestParam(required = false) String apiKey, @RequestParam(required = false) String requestUrl) {
 
         String apiKeyParsingResult = checkApiKey(apiKey);
         if (!apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
@@ -145,12 +138,7 @@ public class ResponseApiController {
      */
 
     @GetMapping("/exchange")
-    public String getExchangeRates(@RequestParam(required = false) String currency,
-                                   @RequestParam(required = false) String startDate,
-                                   @RequestParam(required = false) String finishDate,
-                                   @RequestParam(required = false) String baseCurrency,
-                                   @RequestParam(required = false) String apiKey,
-                                   @RequestHeader Map<String, String> headers) {
+    public String getExchangeRates(@RequestParam(required = false) String currency, @RequestParam(required = false) String startDate, @RequestParam(required = false) String finishDate, @RequestParam(required = false) String baseCurrency, @RequestParam(required = false) String apiKey, @RequestHeader Map<String, String> headers) {
 
         System.out.println("entered exchange");
 
@@ -240,7 +228,7 @@ public class ResponseApiController {
         }
 
 
-        Optional<CurrencyExchangesFromSingleDayPojo> pojo = Optional.empty();
+        Optional<SingleDayExchangeRates> pojo = Optional.empty();
         String returnedJson = "";
         List<JsonConvertable> pojoList = new ArrayList<>();
 
@@ -283,16 +271,13 @@ public class ResponseApiController {
      * @param baseCurrency Base currency
      * @return List of exchange rates
      */
-    public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate,
-                                                              LocalDate endDate,
-                                                              String currency,
-                                                              String baseCurrency) {
+    public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, String currency, String baseCurrency) {
 
         List<JsonConvertable> exchangeList = new ArrayList<>();
 
         LocalDate currentDate = beginDate;
         while (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) {
-            CurrencyExchangesFromSingleDayPojo singleDayExchanges = getExchangesFromSingleDay(currentDate, currency, baseCurrency).get();
+            SingleDayExchangeRates singleDayExchanges = getExchangesFromSingleDay(currentDate, currency, baseCurrency).get();
             if (singleDayExchanges.isSuccess()) {
                 exchangeList.add(singleDayExchanges);
             }
@@ -311,12 +296,10 @@ public class ResponseApiController {
      * @param baseCurrency Base currency
      * @return Object containing exchange rated from single day
      */
-    public Optional<CurrencyExchangesFromSingleDayPojo> getExchangesFromSingleDay(LocalDate inputDate,
-                                                                                  String currency,
-                                                                                  String baseCurrency) {
+    public Optional<SingleDayExchangeRates> getExchangesFromSingleDay(LocalDate inputDate, String currency, String baseCurrency) {
 
 
-        CurrencyExchangesFromSingleDayPojo pojo = new CurrencyExchangesFromSingleDayPojo();
+        SingleDayExchangeRates pojo = new SingleDayExchangeRates();
 
         LocalDate exchangeDate = inputDate;
 //        /**
@@ -375,15 +358,13 @@ public class ResponseApiController {
              */
             Map<String, Double> rates = new HashMap<>();
             if (pojo.getBase().equals(AppVariables.CURRENCY_BASE)) {
-                for (Exchange entry : latestExchangesList
-                ) {
+                for (Exchange entry : latestExchangesList) {
                     rates.put(entry.getCurrency().getIsoName(), entry.getValue());
                 }
             } else {
                 if (exchangeRepository.existsByExchangeDateAndCurrency_IsoName(exchangeDate, baseCurrency)) {
                     double newRatio = calculateNewRatio(exchangeDate, baseCurrency);
-                    for (Exchange entry : latestExchangesList
-                    ) {
+                    for (Exchange entry : latestExchangesList) {
                         rates.put(entry.getCurrency().getIsoName(), entry.getValue() * newRatio);
                     }
                 } else {

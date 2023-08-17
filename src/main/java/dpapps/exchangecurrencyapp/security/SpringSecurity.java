@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Module responsible for granting or rejecting users access to specified endpoints, based on roles and authorization
+ */
 @Configuration
 @EnableWebSecurity
 public class SpringSecurity {
@@ -26,42 +29,20 @@ public class SpringSecurity {
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/register/**").permitAll()
-                                .requestMatchers("/index").permitAll()
-                                .requestMatchers("/users").hasRole("ADMIN")
-                                .requestMatchers("/profile").authenticated()
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("").permitAll()
-                                .requestMatchers("/generate").authenticated()
-                                .requestMatchers("/api/**").permitAll()
+        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> authorize.requestMatchers("/register/**").permitAll().requestMatchers("/index").permitAll().requestMatchers("/users").hasRole("ADMIN").requestMatchers("/profile").authenticated().requestMatchers("/").permitAll().requestMatchers("").permitAll().requestMatchers("/generate").authenticated().requestMatchers("/api/**").permitAll()
 
-                ).formLogin(
-                        form -> form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/login")
-                                .successForwardUrl("/index")
-                                .defaultSuccessUrl("/index")
-                                .permitAll()
-                ).logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .permitAll()
-                );
+        ).formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").successForwardUrl("/index").defaultSuccessUrl("/index").permitAll()).logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll());
         return http.build();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 }
