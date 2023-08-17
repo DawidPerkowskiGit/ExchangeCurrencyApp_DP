@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
+/**
+ * Object of this class hold single database row containing currency iso name, currency full name and location.
+ * List of these objects are going to be converted to List of locations and later to JSON format.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,5 +18,6 @@ public class CurrencyNamesLocationObject {
 
     private String full_name;
 
-    private List<String> locations;
+    private String locations;
+
 }

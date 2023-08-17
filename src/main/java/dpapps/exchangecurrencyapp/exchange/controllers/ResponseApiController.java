@@ -11,9 +11,7 @@ import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
-import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyNamesLocationObject;
-import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrenciesListPojo;
-import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyExchangesFromSingleDayPojo;
+import dpapps.exchangecurrencyapp.jsonparser.responsepojo.*;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +20,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 /**
- * Controller containing all REST API endpoints
+ * Controller defining all REST API endpoints
  */
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -45,7 +43,8 @@ public class ResponseApiController {
                                  LocationRepository locationRepository,
                                  LocationCurrencyPairRepository locationCurrencyPairRepository,
                                  ApiKeyRepository apiKeyRepository,
-                                 UserRepository userRepository) {
+                                 UserRepository userRepository,
+                                 RoleRepository roleRepository) {
         this.currencyRepository = currencyRepository;
         this.exchangeRepository = exchangeRepository;
         this.locationRepository = locationRepository;
@@ -76,12 +75,16 @@ public class ResponseApiController {
      * @return Currencies list with all the countries they can be used in returned in JSON format
      */
 
-    @GetMapping("/currandloc")
+    @GetMapping("/currencies/locations")
     public String getCurrenciesAndLocations() {
         System.out.println("api/currandloc called");
-        Iterable<CurrencyNamesLocationObject> pojo = currencyRepository.getCurrenciesAndLocations();
-        Map<String, String> oneCurrencyMultiplelocationsMap = new HashMap<>();
-        return "";
+        List<String[]> pojo = currencyRepository.getCurrenciesAndLocations();
+        System.out.println(pojo);
+        CurrencyNamesLocationObjectJsonReadyListCreator rowsToObjectConverter = new CurrencyNamesLocationObjectJsonReadyListCreator();
+        List<JsonConvertable> jsonReadyObject = rowsToObjectConverter.packCurrenciesLocationArrayToObject(pojo);
+        System.out.println(jsonReadyObject);
+        String returnedJson = buildJsonFromPojo(jsonReadyObject);
+        return returnedJson;
     }
 
     /**
@@ -239,7 +242,7 @@ public class ResponseApiController {
 
         Optional<CurrencyExchangesFromSingleDayPojo> pojo = Optional.empty();
         String returnedJson = "";
-        List<CurrencyExchangesFromSingleDayPojo> pojoList = new ArrayList<>();
+        List<JsonConvertable> pojoList = new ArrayList<>();
 
         /**
          * Check if requested exchange rates are form a single day, if they, are return exchanges form the day.
@@ -280,12 +283,12 @@ public class ResponseApiController {
      * @param baseCurrency Base currency
      * @return List of exchange rates
      */
-    public List<CurrencyExchangesFromSingleDayPojo> getExchangesFromMultipleDays(LocalDate beginDate,
+    public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate,
                                                                                  LocalDate endDate,
                                                                                  String currency,
                                                                                  String baseCurrency) {
 
-        List<CurrencyExchangesFromSingleDayPojo> exchangeList = new ArrayList<>();
+        List<JsonConvertable> exchangeList = new ArrayList<>();
 
         LocalDate currentDate = beginDate;
         while (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) {
@@ -413,31 +416,12 @@ public class ResponseApiController {
 
 
     /**
-     * Returns exchange rates from single day in JSON format
+     * Returns list of JSON-parseable objects in JSON format
      *
-     * @param pojo Java object containing exchange rates
-     * @return Exchange rates from single day in JSON format
+     * @param pojoList Java List object containing Exchange or Currency data
+     * @return Object list in JSON format
      */
-    public String buildJsonFromPojo(CurrencyExchangesFromSingleDayPojo pojo) {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String exchangesToJson = "";
-        try {
-            exchangesToJson = objectMapper.writeValueAsString(pojo);
-        } catch (Exception e) {
-            System.out.println("Could not map object to JSON. Exception: " + e);
-        }
-
-        return exchangesToJson;
-    }
-
-    /**
-     * Returns exchange list in JSON format
-     *
-     * @param pojoList Java object containing exchange rates
-     * @return Exchange list in JSON format
-     */
-    public String buildJsonFromPojo(List<CurrencyExchangesFromSingleDayPojo> pojoList) {
+    public String buildJsonFromPojo(List<JsonConvertable> pojoList) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String exchangesToJson = "";
@@ -451,23 +435,17 @@ public class ResponseApiController {
     }
 
     /**
-     * Returns currencies list in JSON format
+     * Returns an Object in JSON format
      *
-     * @param pojoList Java object containing currency list
-     * @return Currency list in JSON format
+     * @param pojoList Java object containing Exchange or Currency data
+     * @return Requested data in JSON format
      */
 
-    public String buildJsonFromPojo(CurrenciesListPojo pojoList) {
+    public String buildJsonFromPojo(JsonConvertable pojoList) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String exchangesToJson = "";
-        try {
-            exchangesToJson = objectMapper.writeValueAsString(pojoList);
-        } catch (Exception e) {
-            System.out.println("Could not map object to JSON. Exception: " + e);
-        }
-
-        return exchangesToJson;
+        List<JsonConvertable> list = new ArrayList<>();
+        list.add(pojoList);
+        return buildJsonFromPojo(list);
     }
 
 }

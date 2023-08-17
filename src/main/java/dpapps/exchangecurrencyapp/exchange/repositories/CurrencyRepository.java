@@ -26,6 +26,7 @@ public interface CurrencyRepository extends CrudRepository<Currency, Integer> {
     List<Currency> getAll();
 
     @Query("SELECT c.isoName, c.fullName, l.name FROM Currency c, Location l, LocationCurrencyPair lcp WHERE lcp.currency = c AND lcp.location = l")
-    List<CurrencyNamesLocationObject> getCurrenciesAndLocations();
+    List<String[]> getCurrenciesAndLocations();
+
 
 }

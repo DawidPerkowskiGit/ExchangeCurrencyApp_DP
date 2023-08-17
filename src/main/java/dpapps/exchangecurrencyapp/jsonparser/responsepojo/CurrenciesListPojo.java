@@ -29,7 +29,7 @@ import java.util.Map;
 //    }
 //}
 
-public class CurrenciesListPojo extends ResponsePojo{
+public class CurrenciesListPojo implements JsonConvertable{
     Map<String, String> currencies = new HashMap<>();
 
     public CurrenciesListPojo convertCurrencyListToJsonCurrency(Iterable<Currency> currencyList) {

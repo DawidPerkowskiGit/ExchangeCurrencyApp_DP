@@ -37,13 +37,10 @@ public class SpringSecurity {
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/index").permitAll()
                                 .requestMatchers("/users").hasRole("ADMIN")
-                                .requestMatchers("/currencies").authenticated()
                                 .requestMatchers("/profile").authenticated()
-//                                .requestMatchers("/api/exchange**").permitAll()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("").permitAll()
                                 .requestMatchers("/generate").authenticated()
-//                                .requestMatchers("/api/forceRequestUrl").permitAll()
                                 .requestMatchers("/api/**").permitAll()
 
                 ).formLogin(

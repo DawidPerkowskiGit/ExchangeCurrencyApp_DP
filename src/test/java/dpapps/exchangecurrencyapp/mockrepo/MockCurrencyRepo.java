@@ -2,7 +2,6 @@ package dpapps.exchangecurrencyapp.mockrepo;
 
 import dpapps.exchangecurrencyapp.exchange.entities.Currency;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
-import dpapps.exchangecurrencyapp.jsonparser.responsepojo.CurrencyNamesLocationObject;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
@@ -113,7 +112,7 @@ public class MockCurrencyRepo implements CurrencyRepository {
     }
 
     @Override
-    public List<CurrencyNamesLocationObject> getCurrenciesAndLocations() {
+    public List<String[]> getCurrenciesAndLocations() {
         return null;
     }
 }

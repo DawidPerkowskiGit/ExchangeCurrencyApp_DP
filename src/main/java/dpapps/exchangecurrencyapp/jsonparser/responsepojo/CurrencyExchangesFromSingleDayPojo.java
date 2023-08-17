@@ -9,7 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class CurrencyExchangesFromSingleDayPojo extends ResponsePojo{
+public class CurrencyExchangesFromSingleDayPojo implements JsonConvertable{
     private boolean success = false;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
