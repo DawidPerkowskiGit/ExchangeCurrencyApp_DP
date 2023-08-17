@@ -284,9 +284,9 @@ public class ResponseApiController {
      * @return List of exchange rates
      */
     public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate,
-                                                                                 LocalDate endDate,
-                                                                                 String currency,
-                                                                                 String baseCurrency) {
+                                                              LocalDate endDate,
+                                                              String currency,
+                                                              String baseCurrency) {
 
         List<JsonConvertable> exchangeList = new ArrayList<>();
 
@@ -422,13 +422,21 @@ public class ResponseApiController {
      * @return Object list in JSON format
      */
     public String buildJsonFromPojo(List<JsonConvertable> pojoList) {
-
         ObjectMapper objectMapper = new ObjectMapper();
         String exchangesToJson = "";
-        try {
-            exchangesToJson = objectMapper.writeValueAsString(pojoList);
-        } catch (Exception e) {
-            System.out.println("Could not map object to JSON. Exception: " + e);
+
+        if (pojoList.size() == 1) {
+            try {
+                exchangesToJson = objectMapper.writeValueAsString(pojoList.get(0));
+            } catch (Exception e) {
+                System.out.println("Could not map object to JSON. Exception: " + e);
+            }
+        } else {
+            try {
+                exchangesToJson = objectMapper.writeValueAsString(pojoList);
+            } catch (Exception e) {
+                System.out.println("Could not map object to JSON. Exception: " + e);
+            }
         }
 
         return exchangesToJson;
@@ -437,14 +445,14 @@ public class ResponseApiController {
     /**
      * Returns an Object in JSON format
      *
-     * @param pojoList Java object containing Exchange or Currency data
+     * @param pojoElement Java object containing Exchange or Currency data
      * @return Requested data in JSON format
      */
 
-    public String buildJsonFromPojo(JsonConvertable pojoList) {
+    public String buildJsonFromPojo(JsonConvertable pojoElement) {
 
         List<JsonConvertable> list = new ArrayList<>();
-        list.add(pojoList);
+        list.add(pojoElement);
         return buildJsonFromPojo(list);
     }
 
