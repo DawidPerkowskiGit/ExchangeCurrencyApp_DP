@@ -53,7 +53,7 @@ The user can access this endpoint without provding api key. Returns list of avai
     },
     {
         "isoName": "HRK",
-        "fullName": "Turkish lira",
+        "fullName": "Croatian kuna",
         "locationList": [
             "Croatia"
         ]
