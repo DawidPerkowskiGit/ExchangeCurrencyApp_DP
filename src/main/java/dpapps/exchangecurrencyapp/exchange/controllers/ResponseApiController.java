@@ -209,6 +209,7 @@ public class ResponseApiController {
 
         if (beginDate.isEqual(onesDate) && endDate.isEqual(onesDate)) {
             beginDate = endDate = LocalDate.now();
+            //beginDate = endDate = exchangeRepository.getLatestExchangeDate();
         }
         if (beginDate.isEqual(onesDate)) {
             beginDate = endDate;
@@ -220,12 +221,19 @@ public class ResponseApiController {
         /**
          * Check if dates are in valid range, if they are not, return correct date range.
          */
+        LocalDate latestDate = exchangeRepository.getLatestExchangeDate();
 
-        if (DateRange.isDateInValidRange(beginDate, endDate) == false) {
-            LocalDate[] beginEndDate = DateRange.returnValidRange(beginDate, endDate);
+        if (DateRange.isDateInValidRange(beginDate, endDate, latestDate) == false) {
+            LocalDate[] beginEndDate = DateRange.returnValidRange(beginDate, endDate, latestDate);
             beginDate = beginEndDate[0];
             endDate = beginEndDate[1];
         }
+
+//        if (DateRange.isDateInValidRange(beginDate, endDate) == false) {
+//            LocalDate[] beginEndDate = DateRange.returnValidRange(beginDate, endDate);
+//            beginDate = beginEndDate[0];
+//            endDate = beginEndDate[1];
+//        }
 
 
         Optional<SingleDayExchangeRates> pojo = Optional.empty();

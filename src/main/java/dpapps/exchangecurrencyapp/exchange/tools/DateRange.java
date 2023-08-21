@@ -17,11 +17,11 @@ public class DateRange {
      * @param date Requested date
      * @return Boolean result
      */
-    public static boolean isDateInValidRange(LocalDate date) {
+    public static boolean isDateInValidRange(LocalDate date, LocalDate latestDate) {
         if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
-        if (date.isAfter(LocalDate.now())) {
+        if (date.isAfter(latestDate)) {
             return false;
         }
         return true;
@@ -35,7 +35,7 @@ public class DateRange {
      * @return Boolean result
      */
 
-    public static boolean isDateInValidRange(LocalDate left, LocalDate right) {
+    public static boolean isDateInValidRange(LocalDate left, LocalDate right, LocalDate latestDate) {
         if (right.isBefore(left)) {
             return false;
         }
@@ -45,10 +45,16 @@ public class DateRange {
         if (right.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
-        if (left.isAfter(LocalDate.now())) {
+//        if (left.isAfter(LocalDate.now())) {
+//            return false;
+//        }
+//        if (right.isAfter(LocalDate.now())) {
+//            return false;
+//        }
+        if (left.isAfter(latestDate)) {
             return false;
         }
-        if (right.isAfter(LocalDate.now())) {
+        if (right.isAfter(latestDate)) {
             return false;
         }
 
@@ -62,12 +68,12 @@ public class DateRange {
      * @return Date in valid range
      */
 
-    public static LocalDate returnValidRange(LocalDate date) {
+    public static LocalDate returnValidRange(LocalDate date, LocalDate latestDate) {
         if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return AppVariables.EXCHANGE_DATE_OLDEST;
         }
-        if (date.isAfter(LocalDate.now())) {
-            return LocalDate.now();
+        if (date.isAfter(latestDate)) {
+            return latestDate;
         }
         return date;
     }
@@ -80,7 +86,7 @@ public class DateRange {
      * @return Scope of dates in valid range
      */
 
-    public static LocalDate[] returnValidRange(LocalDate left, LocalDate right) {
+    public static LocalDate[] returnValidRange(LocalDate left, LocalDate right, LocalDate latestDate) {
         LocalDate temp;
         if (right.isBefore(left)) {
             temp = right;
@@ -94,11 +100,11 @@ public class DateRange {
         if (right.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             right = AppVariables.EXCHANGE_DATE_OLDEST;
         }
-        if (left.isAfter(LocalDate.now())) {
-            left = LocalDate.now();
+        if (left.isAfter(latestDate)) {
+            left = latestDate;
         }
-        if (right.isAfter(LocalDate.now())) {
-            right = LocalDate.now();
+        if (right.isAfter(latestDate)) {
+            right = latestDate;
         }
 
         LocalDate[] returnDates = new LocalDate[2];

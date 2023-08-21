@@ -106,4 +106,9 @@ public class MockExchangeRepository implements ExchangeRepository {
     public boolean existsByExchangeDateAndCurrency_IsoName(LocalDate date, String iso_name) {
         return false;
     }
+
+    @Override
+    public LocalDate getLatestExchangeDate() {
+        return null;
+    }
 }

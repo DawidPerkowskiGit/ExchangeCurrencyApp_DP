@@ -28,5 +28,8 @@ public interface ExchangeRepository extends CrudRepository<Exchange, Integer> {
 
     boolean existsByExchangeDateAndCurrency_IsoName(LocalDate date, String iso_name);
 
+    @Query("SELECT MAX(e.exchangeDate) FROM Exchange e")
+    LocalDate getLatestExchangeDate();
+
 
 }
