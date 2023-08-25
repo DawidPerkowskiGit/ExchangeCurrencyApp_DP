@@ -36,6 +36,11 @@ public class CurrencyExchangesScheduler {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Schedule that performs automatic imports the newest currency exchange rates and saves them to the database.
+     *
+     * @return Call to the method which performs the import, empty string is the default request URL
+     */
     @Scheduled(fixedRate = 14400000, initialDelay = 3600000)
     public String performCurrencyExchangeImport() {
         System.out.println("Starting automatic currency exchange import");
@@ -44,6 +49,12 @@ public class CurrencyExchangesScheduler {
     }
 
 
+    /**
+     * Perform manual call to the exchangeratesapi.io and import currency exchange rates.
+     *
+     * @param url URL of the REST API to be called
+     * @return Call method which performs the data import.
+     */
     public String performCurrencyExchangeImport(String url) {
         ScheduleJobs scheduleJobs = new ScheduleJobs();
 
@@ -53,6 +64,7 @@ public class CurrencyExchangesScheduler {
     /**
      * Schedules the job that performs URL request to keep this and frontend apps running
      */
+
 
     @Scheduled(fixedRate = 600000, initialDelay = 600000)
     public void keepTheAppRunning() {
@@ -74,6 +86,9 @@ public class CurrencyExchangesScheduler {
         System.out.println("Successfully kept the app from un-allocating resources. Time: " + localDateTime.toString());
     }
 
+    /**
+     * Schedule job that resets the daily number of available REST API calls. Default is 5 daily uses
+     */
     @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Paris")
     public void apiUsagesReset() {
         List<User> userList = userRepository.findAll();
@@ -81,7 +96,7 @@ public class CurrencyExchangesScheduler {
             user.setCurrentRequestsCount(0);
             userRepository.save(user);
         }
-        System.out.println("Successfully reseted number of Api uses for every user. Time: " + LocalDateTime.now().toString());
+        System.out.println("Successfully performed reset number of Api uses for every user. Time: " + LocalDateTime.now().toString());
         LocalDateTime.now();
     }
 }
