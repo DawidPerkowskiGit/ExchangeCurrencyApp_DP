@@ -38,6 +38,30 @@ The user can access this endpoint without provding api key. Returns list of avai
 }
 ```
 
+### /api/currencies/locations
+
+The user can access this endpoint without provding api key. Returns list of available currencies and locations they can be used in JSON format, for example:
+```
+[
+    {
+        "isoName": "CHF",
+        "fullName": "Swiss franc",
+        "locationList": [
+            "Switzerland",
+            "Liechtenstein"
+        ]
+    },
+    {
+        "isoName": "HRK",
+        "fullName": "Croatian kuna",
+        "locationList": [
+            "Croatia"
+        ]
+    },
+(...)
+]
+```
+
 ### /api/exchange
 
 The user can access this enpoint only when providing an api key. Returns exchange rates list in JSON format, for example:
