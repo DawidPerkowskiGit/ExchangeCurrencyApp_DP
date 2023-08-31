@@ -50,14 +50,32 @@ public class ResponseApiController {
     /**
      * Currencies List
      *
+     * @param date Optional parameter - currencies active at specified date
      * @return Currencies List in JSON format
      */
 
     @GetMapping("/currencies")
-    public String getCurrencies() {
+    public String getCurrencies(@RequestParam(required = false) String date) {
         System.out.println("api/currencies called");
         CurrencyListPojo currencyListPojo = new CurrencyListPojo();
-        Iterable<Currency> currencyList = currencyRepository.getAll();
+        Iterable<Currency> currencyList;
+        if (date != null) {
+            LocalDate currenciesDate = ConversionLocalDateString.convertStringToLocalDate(date);
+            LocalDate onesDate = LocalDate.of(1, 1, 1);
+            if (currenciesDate.isEqual(onesDate)) {
+                currenciesDate = LocalDate.now();
+            }
+
+            LocalDate latestDate = exchangeRepository.getLatestExchangeDate();
+            if (DateRange.isDateInValidRange(currenciesDate, latestDate) == false) {
+                currenciesDate = DateRange.returnValidRange(currenciesDate, latestDate);
+            }
+            currencyList = currencyRepository.getActivelyUsedCurrenciesAtDate(currenciesDate);
+
+        }
+        else {
+            currencyList = currencyRepository.getAll();
+        }
         currencyListPojo.convertCurrencyListToJsonCurrency(currencyList);
 
         return buildJsonFromPojo(currencyListPojo);

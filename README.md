@@ -25,7 +25,11 @@ URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
 
 ### /api/currencies
 
-The user can access this endpoint without provding api key. Returns list of available currencies in JSON format, for example:
+The user can access this endpoint without providing api key. Returns list of all available currencies (including ones no longer used) in JSON format.
+
+Available optional URL parameters:
+- date - provide date when you want to fetch currencies, which were actively used at specified time
+
 ```
 {
     "currencies": {
@@ -40,7 +44,7 @@ The user can access this endpoint without provding api key. Returns list of avai
 
 ### /api/currencies/locations
 
-The user can access this endpoint without provding api key. Returns list of available currencies and locations they can be used in JSON format, for example:
+The user can access this endpoint without providing api key. Returns list of available currencies and locations they can be used in JSON format, for example:
 ```
 [
     {
