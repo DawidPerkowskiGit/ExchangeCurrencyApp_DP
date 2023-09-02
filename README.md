@@ -30,7 +30,7 @@ The user can access this endpoint without providing api key. Returns list of all
 Available optional URL parameters:
 - date - provide date when you want to fetch currencies, which were actively used at specified time
 
-```
+```json
 {
     "currencies": {
         "0": "EUR",
@@ -45,7 +45,7 @@ Available optional URL parameters:
 ### /api/currencies/locations
 
 The user can access this endpoint without providing api key. Returns list of available currencies and locations they can be used in JSON format, for example:
-```
+```json
 [
     {
         "isoName": "CHF",
@@ -69,7 +69,7 @@ The user can access this endpoint without providing api key. Returns list of ava
 ### /api/exchange
 
 The user can access this enpoint only when providing an api key. Returns exchange rates list in JSON format, for example:
-```
+```json
 {
     "success": true,
     "date": "2023-08-09",
