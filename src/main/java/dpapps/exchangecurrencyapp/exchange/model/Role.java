@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.exchange.entities;
+package dpapps.exchangecurrencyapp.exchange.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

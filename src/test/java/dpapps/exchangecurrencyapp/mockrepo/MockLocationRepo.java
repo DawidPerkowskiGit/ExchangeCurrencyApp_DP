@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.mockrepo;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Location;
+import dpapps.exchangecurrencyapp.exchange.model.Location;
 import dpapps.exchangecurrencyapp.exchange.repositories.LocationRepository;
 
 import java.util.ArrayList;

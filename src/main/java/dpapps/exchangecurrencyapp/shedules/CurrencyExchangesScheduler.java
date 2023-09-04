@@ -1,7 +1,7 @@
 package dpapps.exchangecurrencyapp.shedules;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
-import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;

@@ -1,8 +1,6 @@
 package dpapps.exchangecurrencyapp.locationtests;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Currency;
-import dpapps.exchangecurrencyapp.exchange.entities.Location;
-import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonCurrency;
+import dpapps.exchangecurrencyapp.exchange.model.Location;
 import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonLocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

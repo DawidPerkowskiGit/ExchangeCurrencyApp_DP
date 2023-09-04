@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.shedules;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
+import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.jsonparser.responseforeignapi.ResponseBodyJsonParser;

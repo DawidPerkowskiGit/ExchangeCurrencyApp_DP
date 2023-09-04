@@ -1,12 +1,14 @@
 package dpapps.exchangecurrencyapp.security;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Role;
-import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.exchange.model.Role;
+import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.RoleRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
-import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
+import dpapps.exchangecurrencyapp.exchange.service.ApiKeyManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +22,21 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private ApiKeyRepository apiKeyRepository;
+    private final ApiKeyRepository apiKeyRepository;
+
+    private final ApiKeyManager apiKeyManager;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApiKeyRepository apiKeyRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApiKeyRepository apiKeyRepository, ApiKeyManager apiKeyManager) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.apiKeyRepository = apiKeyRepository;
+        this.apiKeyManager = apiKeyManager;
     }
 
     /**
@@ -54,8 +59,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        ApiKeyManager apiKeyManager = new ApiKeyManager(apiKeyRepository, user);
-        String output = apiKeyManager.generateNewKey();
+        apiKeyManager.generateNewKey(user);
     }
 
     /**
@@ -106,5 +110,16 @@ public class UserServiceImpl implements UserService {
         Role role1 = new Role();
         role1.setName("ROLE_USER");
         return roleRepository.save(role1);
+    }
+
+
+    /**
+     * Method which returns currently authenticated user
+     *
+     * @return Authenticated user
+     */
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return findUserByEmail(auth.getName());
     }
 }

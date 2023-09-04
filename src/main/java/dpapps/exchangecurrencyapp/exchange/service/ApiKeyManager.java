@@ -1,42 +1,35 @@
-package dpapps.exchangecurrencyapp.exchange.services;
+package dpapps.exchangecurrencyapp.exchange.service;
 
-import dpapps.exchangecurrencyapp.exchange.entities.ApiKey;
-import dpapps.exchangecurrencyapp.exchange.entities.Role;
-import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.exchange.model.ApiKey;
+import dpapps.exchangecurrencyapp.exchange.model.Role;
+import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Service for managing API keys
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Component
+@Service
 public class ApiKeyManager {
 
-    private User user;
+    private final ApiKeyRepository apiKeyRepository;
 
-    ApiKeyRepository apiKeyRepository;
-
-    public ApiKeyManager(ApiKeyRepository apiKeyRepository, User user) {
+    @Autowired
+    public ApiKeyManager(ApiKeyRepository apiKeyRepository) {
         this.apiKeyRepository = apiKeyRepository;
-        this.user = user;
     }
 
     /**
      * Method which determines if user can use this API key
      *
      * @param apiKey Api key
+     * @param user User which uses the ApiKey
      * @return Boolean result
      */
-    public boolean canUseTheApiKey(ApiKey apiKey) {
-        if (doesUserHaveSpecificRole("ROLE_ADMIN")) {
+    public boolean canUseTheApiKey(ApiKey apiKey, User user) {
+        if (doesUserHaveSpecificRole("ROLE_ADMIN", user)) {
             return true;
         }
         if (user.isRequestLimitIsReached()) {
@@ -54,10 +47,11 @@ public class ApiKeyManager {
     /**
      * Method checks if user has specific role
      *
-     * @param role User role
+     * @param role Check for this role
+     * @param user User which needs the role checked
      * @return Boolean result
      */
-    public boolean doesUserHaveSpecificRole(String role) {
+    public boolean doesUserHaveSpecificRole(String role, User user) {
         for (Role singleRole : user.getRoles()) {
             if (singleRole.getName().equals(role)) {
                 return true;
@@ -66,13 +60,14 @@ public class ApiKeyManager {
         return false;
     }
 
+
     /**
-     * Method which generates new Api key for the user and deactivates all other active keys
-     *
+     * Generates new Api key for the user and deactivates all other active keys
+     * @param user User who receives the ApiKey
      * @return String result of generating new API key
      */
 
-    public String generateNewKey() {
+    public String generateNewKey(User user) {
         if (user.isNonLocked() == false) {
             return "Could not generate new API key, account is locked";
         }
@@ -85,7 +80,7 @@ public class ApiKeyManager {
         try {
             apiKey.generateNewValue();
             apiKey.setUser(user);
-            addApiKey(apiKey);
+            addApiKey(apiKey, user);
             apiKeyRepository.save(apiKey);
         } catch (Exception e) {
             return "Could not generate new API key. Exception: " + e;
@@ -96,9 +91,10 @@ public class ApiKeyManager {
     /**
      * Returns this users active API key
      *
+     * @param user User
      * @return active API key
      */
-    public ApiKey returnActiveKey() {
+    public ApiKey returnActiveKey(User user) {
         for (ApiKey key : user.getApiKeys()) {
             if (key.isActive()) {
                 return key;
@@ -111,10 +107,29 @@ public class ApiKeyManager {
      * Add this API key to users account
      *
      * @param apiKey API key
+     * @param user User
      */
 
-    public void addApiKey(ApiKey apiKey) {
+    public void addApiKey(ApiKey apiKey, User user) {
         user.getApiKeys().add(apiKey);
+    }
+
+    /**
+     * Method that checks if API key is valid
+     *
+     * @param apiKey API key
+     * @return result of API key check
+     */
+    public String checkApiKey(String apiKey) {
+        if (apiKey == null) {
+            return "You didnt provide api key";
+        }
+
+        if (apiKeyRepository.existsByValue(apiKey) == false) {
+            return "Api key is invalid";
+        }
+
+        return AppVariables.VALID_API_KEY_MESSAGE;
     }
 
 

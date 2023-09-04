@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.currencytests;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Currency;
+import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonCurrency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.mockrepo;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
+import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 
 import java.time.LocalDate;

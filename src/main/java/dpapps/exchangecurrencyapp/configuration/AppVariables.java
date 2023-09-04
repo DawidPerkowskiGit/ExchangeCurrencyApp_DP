@@ -31,4 +31,5 @@ public class AppVariables {
      */
 
     public final static String FRONTEND_APP_URL = "https://dp-exchange-currency-app-ng.onrender.com";
+
 }

@@ -1,7 +1,7 @@
 package dpapps.exchangecurrencyapp.security;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Role;
-import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.exchange.model.Role;
+import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

@@ -9,7 +9,7 @@ import java.time.LocalDate;
  * Valid is between first and last entry in the database
  */
 
-public class DateRange {
+public class DateRangeValidator {
 
     /**
      * Method checks if requested date is in valid range.

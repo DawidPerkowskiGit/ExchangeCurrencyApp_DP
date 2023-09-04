@@ -1,25 +1,21 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
-import dpapps.exchangecurrencyapp.exchange.entities.User;
-import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
+import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
-import dpapps.exchangecurrencyapp.exchange.services.ApiKeyManager;
+import dpapps.exchangecurrencyapp.exchange.service.ApiKeyManager;
+import dpapps.exchangecurrencyapp.exchange.service.MainControllerService;
 import dpapps.exchangecurrencyapp.security.UserDto;
 import dpapps.exchangecurrencyapp.security.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import jakarta.validation.Valid;
-
-import java.util.List;
 
 /**
  * Controller for non REST API endpoints
@@ -27,36 +23,54 @@ import java.util.List;
 @Controller
 public class ApplicationController {
 
-    private final UserService userService;
-    private final ApiKeyRepository apiKeyRepository;
-    private final UserRepository userRepository;
+    private final MainControllerService controller;
 
 
     @Autowired
-    public ApplicationController(UserService userService, ApiKeyRepository apiKeyRepository, UserRepository userRepository) {
-        this.userService = userService;
-        this.apiKeyRepository = apiKeyRepository;
-        this.userRepository = userRepository;
+    public ApplicationController(MainControllerService controller) {
+        this.controller = controller;
     }
+
+    /**
+     * Home mapping endpoint
+     * @return Homepage view
+     */
 
     @GetMapping("/")
     public String homeMain() {
-        return "homePage";
+        return controller.getHomePage();
     }
+
+    /**
+     * Homepage mapping endpoint
+     * @return Homepage view
+     */
 
     @GetMapping("")
     public String homeMain2() {
-        return "homePage";
+        return controller.getHomePage();
     }
+
+    /**
+     * Health check endpoint
+     *
+     * @return HTTP status 200 - OK
+     */
 
     @GetMapping("/health")
     public ResponseEntity<Void> healthCheck() {
-        return ResponseEntity.ok().build();
+        return controller.getHealthStatus();
     }
+
+    /**
+     * Page index endpoint
+     *
+     * @return Index page view
+     */
 
     @GetMapping("/index")
     public String home() {
-        return "index";
+        return controller.getIndex();
     }
 
     /**
@@ -65,16 +79,14 @@ public class ApplicationController {
      * @param model User registration fields model
      * @return register view
      */
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        // create model object to store form data
-        UserDto user = new UserDto();
-        model.addAttribute("user", user);
-        return "register";
+        return controller.register(model);
     }
 
     /**
-     * Register user and save its info to database
+     * Register user and save its info to database endpoint
      *
      * @param userDto User data transfer object
      * @param result  Attribute that enables checking if login already exists
@@ -84,20 +96,7 @@ public class ApplicationController {
      */
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-        User existingUser = userService.findUserByEmail(userDto.getLogin());
-
-        if (existingUser != null && existingUser.getLogin() != null && !existingUser.getLogin().isEmpty()) {
-            result.rejectValue("login", null, "There is already an account registered with the same login");
-        }
-
-        if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
-            return "/register";
-        }
-
-
-        userService.saveUser(userDto);
-        return "redirect:/index";
+        return controller.processRegister(userDto, result, model);
     }
 
     /**
@@ -108,60 +107,37 @@ public class ApplicationController {
      */
     @GetMapping("/users")
     public String users(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-        return "users";
+        return controller.getUsers(model);
     }
 
     /**
-     * Handler method for logging in
+     * User logging in endpoint
      *
      * @return Login view
      */
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return controller.processLogin();
     }
 
     /**
-     * Method that generates new API key
+     * Accessing this endpoint generates new API key
      *
      * @return User profile view
      */
     @GetMapping("/generate")
-    public String generate() {
-        User user = getCurrentUser();
-        ApiKeyManager apiKeyManager = new ApiKeyManager(apiKeyRepository, user);
-        String output = apiKeyManager.generateNewKey();
-        System.out.println(output);
-        return "redirect:/profile";
+    public String generateApiKey() {
+        return controller.generateNewApiKey();
     }
 
     /**
      * Users profile view
      *
-     * @param model Model whoch includes user and API key data
+     * @param model Model which includes user and API key data
      * @return Profile view
      */
     @GetMapping("/profile")
     public String profile(Model model) {
-        User user = getCurrentUser();
-        ApiKeyManager apiKeyManager = new ApiKeyManager(this.apiKeyRepository, user);
-        model.addAttribute("user", apiKeyManager);
-        String apiRequestsString = "" + user.getCurrentRequestsCount() + "/" + AppVariables.DAILY_LIMIT_OF_DAILY_USAGES;
-        model.addAttribute("apiRequestString", apiRequestsString);
-        return "profile";
+        return controller.getProfile(model);
     }
-
-    /**
-     * Method which returns currently authenticated user
-     *
-     * @return Authenticated user
-     */
-    public User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
-        return user;
-    }
-
 }

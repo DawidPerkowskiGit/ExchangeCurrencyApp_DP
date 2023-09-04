@@ -1,8 +1,8 @@
 package dpapps.exchangecurrencyapp.datetests;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
-import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
-import dpapps.exchangecurrencyapp.exchange.tools.DateRange;
+import dpapps.exchangecurrencyapp.exchange.model.Exchange;
+import dpapps.exchangecurrencyapp.exchange.tools.DateRangeValidator;
 import dpapps.exchangecurrencyapp.mockrepo.MockExchangeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,83 +59,83 @@ public class DateTests {
 
     @Test
     public void assertThatSingleDateIsValid() {
-        assertThat(DateRange.isDateInValidRange(beforeLeft, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(left, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(middle, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(right, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(afterRight, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(beforeLeft, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(left, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(right, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(afterRight, latestDate)).isFalse();
     }
 
     @Test
     public void assertThatPairOfDatesIsValid() {
-        assertThat(DateRange.isDateInValidRange(beforeLeft, beforeLeft, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(beforeLeft, left, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(beforeLeft, middle, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(beforeLeft, right, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(beforeLeft, afterRight, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(beforeLeft, beforeLeft, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(beforeLeft, left, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(beforeLeft, middle, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(beforeLeft, right, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(beforeLeft, afterRight, latestDate)).isFalse();
 
-        assertThat(DateRange.isDateInValidRange(left, beforeLeft, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(left, left, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(left, middle, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(left, right, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(left, afterRight, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(left, beforeLeft, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(left, left, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(left, middle, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(left, right, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(left, afterRight, latestDate)).isFalse();
 
-        assertThat(DateRange.isDateInValidRange(middle, beforeLeft, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(middle, left, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(middle, middle, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(middle, right, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(middle, afterRight, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, beforeLeft, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, left, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, middle, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, right, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, afterRight, latestDate)).isFalse();
 
-        assertThat(DateRange.isDateInValidRange(right, beforeLeft, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(right, left, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(right, middle, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(right, right, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(right, afterRight, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(right, beforeLeft, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(right, left, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(right, middle, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(right, right, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(right, afterRight, latestDate)).isFalse();
 
-        assertThat(DateRange.isDateInValidRange(afterRight, beforeLeft, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(afterRight, left, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(afterRight, middle, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(afterRight, right, latestDate)).isFalse();
-        assertThat(DateRange.isDateInValidRange(afterRight, afterRight, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(afterRight, beforeLeft, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(afterRight, left, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(afterRight, middle, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(afterRight, right, latestDate)).isFalse();
+        assertThat(DateRangeValidator.isDateInValidRange(afterRight, afterRight, latestDate)).isFalse();
     }
 
     @DirtiesContext
     @Test
     public void assertThatSingleDateIsInRangeAfterFixing() {
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(beforeLeft, latestDate) , latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(afterRight, latestDate) , latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(beforeLeft, latestDate) , latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(afterRight, latestDate) , latestDate)).isTrue();
     }
 
     @DirtiesContext
     @Test
     public void assertThatPairsOfDatesAreInRangeAfterFixing() {
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(beforeLeft, latestDate), DateRange.returnValidRange(beforeLeft, latestDate))).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(beforeLeft, latestDate), left, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(beforeLeft, latestDate), middle, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(beforeLeft, latestDate), right)).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(beforeLeft, latestDate), DateRange.returnValidRange(afterRight, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(beforeLeft, latestDate), DateRangeValidator.returnValidRange(beforeLeft, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(beforeLeft, latestDate), left, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(beforeLeft, latestDate), middle, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(beforeLeft, latestDate), right)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(beforeLeft, latestDate), DateRangeValidator.returnValidRange(afterRight, latestDate))).isTrue();
 
-        assertThat(DateRange.isDateInValidRange(left, DateRange.returnValidRange(beforeLeft, latestDate))).isTrue();
-        assertThat(DateRange.isDateInValidRange(left, DateRange.returnValidRange(afterRight, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(left, DateRangeValidator.returnValidRange(beforeLeft, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(left, DateRangeValidator.returnValidRange(afterRight, latestDate))).isTrue();
 
-        assertThat(DateRange.isDateInValidRange(middle, DateRange.returnValidRange(beforeLeft, latestDate))).isTrue();
-        assertThat(DateRange.isDateInValidRange(middle, DateRange.returnValidRange(afterRight, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, DateRangeValidator.returnValidRange(beforeLeft, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(middle, DateRangeValidator.returnValidRange(afterRight, latestDate))).isTrue();
 
-        assertThat(DateRange.isDateInValidRange(right, DateRange.returnValidRange(beforeLeft, latestDate))).isTrue();
-        assertThat(DateRange.isDateInValidRange(right, DateRange.returnValidRange(afterRight, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(right, DateRangeValidator.returnValidRange(beforeLeft, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(right, DateRangeValidator.returnValidRange(afterRight, latestDate))).isTrue();
 
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(afterRight, latestDate), DateRange.returnValidRange(beforeLeft, latestDate))).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(afterRight, latestDate), left, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(afterRight, latestDate), middle, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(afterRight, latestDate), right, latestDate)).isTrue();
-        assertThat(DateRange.isDateInValidRange(DateRange.returnValidRange(afterRight, latestDate), DateRange.returnValidRange(afterRight, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(afterRight, latestDate), DateRangeValidator.returnValidRange(beforeLeft, latestDate))).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(afterRight, latestDate), left, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(afterRight, latestDate), middle, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(afterRight, latestDate), right, latestDate)).isTrue();
+        assertThat(DateRangeValidator.isDateInValidRange(DateRangeValidator.returnValidRange(afterRight, latestDate), DateRangeValidator.returnValidRange(afterRight, latestDate))).isTrue();
     }
 
     @DirtiesContext
     @Test
     public void shouldReturnCorrectValuesOfFixedDate() {
-        assertThat(DateRange.returnValidRange(beforeLeft, latestDate).equals(left));
-        assertThat(DateRange.returnValidRange(afterRight, latestDate).equals(right));
+        assertThat(DateRangeValidator.returnValidRange(beforeLeft, latestDate).equals(left));
+        assertThat(DateRangeValidator.returnValidRange(afterRight, latestDate).equals(right));
     }
 
     @DirtiesContext
@@ -145,86 +145,86 @@ public class DateTests {
 
         shouldReturn[0] = left;
         shouldReturn[1] = left;
-        LocalDate[] returnedPair = DateRange.returnValidRange(beforeLeft, beforeLeft, latestDate);
+        LocalDate[] returnedPair = DateRangeValidator.returnValidRange(beforeLeft, beforeLeft, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = left;
         shouldReturn[1] = left;
-        returnedPair = DateRange.returnValidRange(beforeLeft, left, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(beforeLeft, left, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = left;
         shouldReturn[1] = middle;
-        returnedPair = DateRange.returnValidRange(beforeLeft, middle, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(beforeLeft, middle, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = left;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(beforeLeft, right, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(beforeLeft, right, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = left;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(beforeLeft, afterRight, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(beforeLeft, afterRight, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
 
         shouldReturn[0] = left;
         shouldReturn[1] = left;
-        returnedPair = DateRange.returnValidRange(left, beforeLeft, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(left, beforeLeft, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = left;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(left, afterRight, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(left, afterRight, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
 
         shouldReturn[0] = left;
         shouldReturn[1] = middle;
-        returnedPair = DateRange.returnValidRange(middle, beforeLeft, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(middle, beforeLeft, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = middle;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(middle, afterRight, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(middle, afterRight, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
 
         shouldReturn[0] = left;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(right, beforeLeft, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(right, beforeLeft, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = right;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(right, afterRight, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(right, afterRight, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
 
         shouldReturn[0] = left;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(afterRight, beforeLeft, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(afterRight, beforeLeft, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = left;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(afterRight, left, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(afterRight, left, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = middle;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(afterRight, middle, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(afterRight, middle, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = right;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(afterRight, right, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(afterRight, right, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
 
         shouldReturn[0] = right;
         shouldReturn[1] = right;
-        returnedPair = DateRange.returnValidRange(afterRight, afterRight, latestDate);
+        returnedPair = DateRangeValidator.returnValidRange(afterRight, afterRight, latestDate);
         assertThat(compareTwoPairsOfDates(shouldReturn, returnedPair)).isTrue();
     }
 
@@ -257,7 +257,7 @@ public class DateTests {
 
     public LocalDate returnExchangeDateThatExistsInDb(LocalDate date) {
 
-        while (DateRange.isDateInValidRange(date, latestDate)) {
+        while (DateRangeValidator.isDateInValidRange(date, latestDate)) {
             if (exchangeRepository.existsByExchangeDate(date) == false) {
                 date = date.minusDays(1);
             }

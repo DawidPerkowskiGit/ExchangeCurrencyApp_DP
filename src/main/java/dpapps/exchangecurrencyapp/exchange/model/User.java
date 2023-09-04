@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.exchange.entities;
+package dpapps.exchangecurrencyapp.exchange.model;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import jakarta.persistence.*;

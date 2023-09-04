@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.repositories;
 
-import dpapps.exchangecurrencyapp.exchange.entities.ApiKey;
+import dpapps.exchangecurrencyapp.exchange.model.ApiKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

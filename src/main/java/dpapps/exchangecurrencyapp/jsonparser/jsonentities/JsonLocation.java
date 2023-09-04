@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Location;
+import dpapps.exchangecurrencyapp.exchange.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

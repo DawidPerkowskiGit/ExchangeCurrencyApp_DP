@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.security;
 
-import dpapps.exchangecurrencyapp.exchange.entities.User;
+import dpapps.exchangecurrencyapp.exchange.model.User;
 
 import java.util.List;
 
@@ -13,4 +13,6 @@ public interface UserService {
     User findUserByEmail(String email);
 
     List<UserDto> findAllUsers();
+
+    public User getCurrentUser();
 }

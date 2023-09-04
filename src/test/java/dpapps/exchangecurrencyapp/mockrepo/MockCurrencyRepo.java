@@ -1,9 +1,10 @@
 package dpapps.exchangecurrencyapp.mockrepo;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Currency;
+import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import org.springframework.lang.NonNull;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -113,6 +114,11 @@ public class MockCurrencyRepo implements CurrencyRepository {
 
     @Override
     public List<String[]> getCurrenciesAndLocations() {
+        return null;
+    }
+
+    @Override
+    public List<Currency> getActivelyUsedCurrenciesAtDate(LocalDate date) {
         return null;
     }
 }

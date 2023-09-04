@@ -1,14 +1,11 @@
-package dpapps.exchangecurrencyapp.exchange.entities;
+package dpapps.exchangecurrencyapp.exchange.model;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import dpapps.exchangecurrencyapp.exchange.tools.ApiKeyGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Objects;
 
 /**
  * Entity model of Api key

@@ -1,7 +1,7 @@
 package dpapps.exchangecurrencyapp.exchangetests;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Currency;
-import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
+import dpapps.exchangecurrencyapp.exchange.model.Currency;
+import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonExchange;
 import dpapps.exchangecurrencyapp.mockrepo.MockCurrencyRepo;

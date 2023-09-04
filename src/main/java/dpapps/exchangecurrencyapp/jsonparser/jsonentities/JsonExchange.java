@@ -1,8 +1,7 @@
 package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Exchange;
+import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
-import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

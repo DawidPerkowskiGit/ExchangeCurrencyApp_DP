@@ -21,7 +21,7 @@
           <b class="header"> Key value</b>
           <div class="card">
 
-              <p class="flex-box" th:text="${user.returnActiveKey().getValue()}"></p>
+              <p class="flex-box" th:text="${apiKeyManager.returnActiveKey(user).getValue()}"></p>
 
           </div>
           <span>Api uses remaining <b th:text="${apiRequestString}"></b></span>

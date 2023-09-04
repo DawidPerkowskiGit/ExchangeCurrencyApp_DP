@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.repositories;
 
-import dpapps.exchangecurrencyapp.exchange.entities.Role;
+import dpapps.exchangecurrencyapp.exchange.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
