@@ -1,12 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
-import dpapps.exchangecurrencyapp.exchange.model.User;
-import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
-import dpapps.exchangecurrencyapp.exchange.service.ApiKeyManager;
 import dpapps.exchangecurrencyapp.exchange.service.MainControllerService;
 import dpapps.exchangecurrencyapp.security.UserDto;
-import dpapps.exchangecurrencyapp.security.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
  * Controller for non REST API endpoints
  */
 @Controller
-public class ApplicationController {
+public class MainApplicationController {
 
     private final MainControllerService controller;
 
 
     @Autowired
-    public ApplicationController(MainControllerService controller) {
+    public MainApplicationController(MainControllerService controller) {
         this.controller = controller;
     }
 

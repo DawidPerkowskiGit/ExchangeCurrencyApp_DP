@@ -1,7 +1,7 @@
 package dpapps.exchangecurrencyapp.currencytests;
 
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
-import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonCurrency;
+import dpapps.exchangecurrencyapp.jsonparser.entity.JsonCurrency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

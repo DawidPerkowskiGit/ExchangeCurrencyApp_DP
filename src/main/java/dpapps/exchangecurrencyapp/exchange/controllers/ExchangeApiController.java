@@ -12,12 +12,12 @@ import java.util.*;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api")
-public class ResponseApiController {
+public class ExchangeApiController {
 
     private final ExchangeService exchangeService;
 
     @Autowired
-    public ResponseApiController(ExchangeService exchangeService) {
+    public ExchangeApiController(ExchangeService exchangeService) {
         this.exchangeService = exchangeService;
     }
 

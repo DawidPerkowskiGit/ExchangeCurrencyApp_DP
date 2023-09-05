@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.requestapi;
+package dpapps.exchangecurrencyapp.jsonparser.entity;
 
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrencyListPojo implements JsonConvertable {
+public class CurrencyEntityListToMap implements JsonConvertable {
     Map<String, String> currencies = new HashMap<>();
 
     /**
@@ -26,7 +26,7 @@ public class CurrencyListPojo implements JsonConvertable {
      * @param currencyList
      * @return
      */
-    public CurrencyListPojo convertCurrencyListToJsonCurrency(Iterable<Currency> currencyList) {
+    public CurrencyEntityListToMap convertCurrencyListToJsonCurrency(Iterable<Currency> currencyList) {
 
         for (Currency currency : currencyList) {
             currencies.put(currency.getIsoName(), currency.getFullName());

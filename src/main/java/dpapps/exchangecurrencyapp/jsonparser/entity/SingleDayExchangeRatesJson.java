@@ -1,10 +1,11 @@
-package dpapps.exchangecurrencyapp.jsonparser.requestapi;
+package dpapps.exchangecurrencyapp.jsonparser.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * Holds Exchange entity data, which is ready to be converted to JSON
  */
-public class SingleDayExchangeRates implements JsonConvertable {
+public class SingleDayExchangeRatesJson implements JsonConvertable {
     private boolean success = false;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -56,13 +57,13 @@ public class SingleDayExchangeRates implements JsonConvertable {
         this.base = base;
     }
 
-    public SingleDayExchangeRates(boolean success, LocalDate date, Map<String, Double> rates, String base) {
+    public SingleDayExchangeRatesJson(boolean success, LocalDate date, Map<String, Double> rates, String base) {
         this.success = success;
         this.date = date;
         this.rates = rates;
         this.base = base;
     }
 
-    public SingleDayExchangeRates() {
+    public SingleDayExchangeRatesJson() {
     }
 }

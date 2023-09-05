@@ -2,8 +2,8 @@ package dpapps.exchangecurrencyapp.exchangetests;
 
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
-import dpapps.exchangecurrencyapp.exchange.tools.ConversionLocalDateString;
-import dpapps.exchangecurrencyapp.jsonparser.jsonentities.JsonExchange;
+import dpapps.exchangecurrencyapp.exchange.tools.LocalDateStringConverter;
+import dpapps.exchangecurrencyapp.jsonparser.entity.JsonExchange;
 import dpapps.exchangecurrencyapp.mockrepo.MockCurrencyRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,9 +40,9 @@ public class ExchangeJsonTests {
         currencies.add(new Currency(2, "USD", "United States dollar"));
         currencies.add(new Currency(3, "JPY", "Japanese yen"));
 
-        exchanges.add(new Exchange(6, 7.6541 ,  currencies.get(0), ConversionLocalDateString.convertStringToLocalDate("2023-06-08")));
-        exchanges.add(new Exchange(7, 37.408 ,  currencies.get(1), ConversionLocalDateString.convertStringToLocalDate("2023-06-10")));
-        exchanges.add(new Exchange(8, 1.6061 ,  currencies.get(2), ConversionLocalDateString.convertStringToLocalDate("2023-06-12")));
+        exchanges.add(new Exchange(6, 7.6541 ,  currencies.get(0), LocalDateStringConverter.convertStringToLocalDate("2023-06-08")));
+        exchanges.add(new Exchange(7, 37.408 ,  currencies.get(1), LocalDateStringConverter.convertStringToLocalDate("2023-06-10")));
+        exchanges.add(new Exchange(8, 1.6061 ,  currencies.get(2), LocalDateStringConverter.convertStringToLocalDate("2023-06-12")));
 
         jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(0)));
         jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(1)));

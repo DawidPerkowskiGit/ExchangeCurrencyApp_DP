@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.requestapi;
+package dpapps.exchangecurrencyapp.jsonparser.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrencyNamesLocationListPojo implements JsonConvertable {
+public class CurrenciesWithLocationList implements JsonConvertable {
 
     private String isoName;
 

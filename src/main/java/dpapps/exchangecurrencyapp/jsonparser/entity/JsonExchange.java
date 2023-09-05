@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.jsonentities;
+package dpapps.exchangecurrencyapp.jsonparser.entity;
 
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;

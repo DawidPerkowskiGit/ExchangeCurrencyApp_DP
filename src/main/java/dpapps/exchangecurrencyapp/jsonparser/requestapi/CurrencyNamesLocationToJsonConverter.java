@@ -1,5 +1,8 @@
 package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
+import dpapps.exchangecurrencyapp.jsonparser.entity.CurrenciesWithLocationList;
+import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.Map;
 /**
  * Converts List of database row entries to format ready for JSON serialization
  */
-public class CurrencyNamesLocationJsonReady {
+public class CurrencyNamesLocationToJsonConverter {
 
     /**
      * Converts returned database rows to object ready for serialization
@@ -35,7 +38,7 @@ public class CurrencyNamesLocationJsonReady {
         List<JsonConvertable> pojoToSerialize = new ArrayList<>();
 
         for (String entry : isoNameLocation.keySet()) {
-            CurrencyNamesLocationListPojo singleObject = new CurrencyNamesLocationListPojo();
+            CurrenciesWithLocationList singleObject = new CurrenciesWithLocationList();
             singleObject.setIsoName(entry);
             singleObject.setFullName(isoNameFullName.get(entry));
             singleObject.setLocationList(isoNameLocation.get(entry));

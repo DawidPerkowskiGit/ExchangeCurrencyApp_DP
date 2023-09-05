@@ -5,7 +5,7 @@ import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.RoleRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
-import dpapps.exchangecurrencyapp.exchange.service.ApiKeyManager;
+import dpapps.exchangecurrencyapp.exchange.service.ApiKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,15 +28,15 @@ public class UserServiceImpl implements UserService {
 
     private final ApiKeyRepository apiKeyRepository;
 
-    private final ApiKeyManager apiKeyManager;
+    private final ApiKeyService apiKeyService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApiKeyRepository apiKeyRepository, ApiKeyManager apiKeyManager) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ApiKeyRepository apiKeyRepository, ApiKeyService apiKeyService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.apiKeyRepository = apiKeyRepository;
-        this.apiKeyManager = apiKeyManager;
+        this.apiKeyService = apiKeyService;
     }
 
     /**
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        apiKeyManager.generateNewKey(user);
+        apiKeyService.generateNewKey(user);
     }
 
     /**

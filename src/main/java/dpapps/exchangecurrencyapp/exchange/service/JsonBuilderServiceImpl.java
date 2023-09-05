@@ -1,14 +1,14 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dpapps.exchangecurrencyapp.jsonparser.requestapi.JsonConvertable;
+import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class JsonBuilder {
+public class JsonBuilderServiceImpl implements JsonBuilderService{
     /**
      * Returns list of JSON-parseable objects in JSON format
      *

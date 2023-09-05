@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
  * Service for managing API keys
  */
 @Service
-public class ApiKeyManager {
+public class ApiKeyServiceImpl implements ApiKeyService {
 
     private final ApiKeyRepository apiKeyRepository;
 
     @Autowired
-    public ApiKeyManager(ApiKeyRepository apiKeyRepository) {
+    public ApiKeyServiceImpl(ApiKeyRepository apiKeyRepository) {
         this.apiKeyRepository = apiKeyRepository;
     }
 

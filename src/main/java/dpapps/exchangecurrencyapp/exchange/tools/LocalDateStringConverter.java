@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * Tool which converts Date in yyyy-MM-dd format to String or vice-versa
  */
-public class ConversionLocalDateString {
+public class LocalDateStringConverter {
 
     /**
      * Convert String to Date format

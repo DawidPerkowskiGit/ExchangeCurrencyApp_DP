@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.requestapi;
+package dpapps.exchangecurrencyapp.jsonparser.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrencyNamesLocationPojo {
+public class CurrencyNamesIsoFullLocationDatabaseEntry {
     private String iso_name;
 
     private String full_name;
