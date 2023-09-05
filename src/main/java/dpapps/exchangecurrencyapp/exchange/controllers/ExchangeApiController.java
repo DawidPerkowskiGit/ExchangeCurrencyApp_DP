@@ -50,7 +50,7 @@ public class ExchangeApiController {
      *
      * @param apiKey     REST APi key
      * @param requestUrl Requested URL
-     * @return status result of currency import request from the scheduler
+     * @return status result of currency import requestapi from the scheduler
      */
     @GetMapping("/manualRequestUrl")
     public String forceRequestUrl(@RequestParam(required = false) String apiKey, @RequestParam(required = false) String requestUrl) {

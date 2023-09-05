@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.responseforeignapi;
+package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -8,10 +8,10 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
- * This class performs exchangeratesapi.io JSON response body deserialization.
+ * This class performs exchangeratesapi.io JSON requestapi body deserialization.
  */
 @Service
-public class ResponseBodyJsonParser {
+public class JsonToDataParser {
 
     private final boolean DEBUG = true;
 
@@ -23,9 +23,9 @@ public class ResponseBodyJsonParser {
      * @param filePath filepath to the file
      * @return Java Object of exchangeratesapi.io exchange rates
      */
-    public Optional<ResponseBodyObject> parseJsonFromFile(String filePath) {
+    public Optional<RequestDataModel> parseJsonFromFile(String filePath) {
 
-        ResponseBodyObject responseBodyObject = new ResponseBodyObject();
+        RequestDataModel requestDataModel = new RequestDataModel();
         String jsonInString = "";
 
         try {
@@ -38,25 +38,25 @@ public class ResponseBodyJsonParser {
     }
 
     /**
-     * Performs JSON response body deserialziation
+     * Performs JSON requestapi body deserialziation
      *
      * @param jsonInString JSON stored in String type variable
      * @return Java Object of exchangeratesapi.io exchange rates
      */
-    public Optional<ResponseBodyObject> jsonDeserialization(String jsonInString) {
-        ResponseBodyObject responseBodyObject;
+    public Optional<RequestDataModel> jsonDeserialization(String jsonInString) {
+        RequestDataModel requestDataModel;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            responseBodyObject = mapper.readValue(jsonInString, ResponseBodyObject.class);
+            requestDataModel = mapper.readValue(jsonInString, RequestDataModel.class);
             if (DEBUG) {
-                String pojoToString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseBodyObject);
+                String pojoToString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestDataModel);
                 System.out.println(pojoToString);
             }
         } catch (Exception e) {
             System.out.println("Could not parse JSON body. Exception: " + e);
             return Optional.empty();
         }
-        return Optional.ofNullable(responseBodyObject);
+        return Optional.ofNullable(requestDataModel);
     }
 
 

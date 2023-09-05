@@ -1,9 +1,5 @@
-package dpapps.exchangecurrencyapp.jsonparser.responseforeignapi;
+package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -12,10 +8,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 /**
- * This module is responsible for sending API request to exchangeratesapi.io and fetching response body.
+ * This module is responsible for sending API requestapi to exchangeratesapi.io and fetching requestapi body.
  */
 @Service
-public class ResponseBodyFetcher {
+public class DataFetcher {
 
 
     public String retrieveApiResponse() {
@@ -24,10 +20,10 @@ public class ResponseBodyFetcher {
 
 
     /**
-     * Retrieves exchangeratesapi.io response body
+     * Retrieves exchangeratesapi.io requestapi body
      *
      * @param url Optional url to the REST API service, default path is stored i environmental variable
-     * @return JSON response
+     * @return JSON requestapi
      */
     public String retrieveApiResponse(String url) {
 
@@ -52,7 +48,7 @@ public class ResponseBodyFetcher {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             apiResponseBody = response.body();
         } catch (Exception e) {
-            System.out.printf("Could not process API request. Exception " + e);
+            System.out.printf("Could not process API requestapi. Exception " + e);
             return "";
         }
 

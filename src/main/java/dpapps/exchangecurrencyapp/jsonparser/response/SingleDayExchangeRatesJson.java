@@ -1,17 +1,17 @@
-package dpapps.exchangecurrencyapp.jsonparser.entity;
+package dpapps.exchangecurrencyapp.jsonparser.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 
 import java.time.LocalDate;
 import java.util.Map;
 
 /**
- * Holds Exchange entity data, which is ready to be converted to JSON
+ * Holds Exchange model data, which is ready to be converted to JSON
  */
 public class SingleDayExchangeRatesJson implements JsonConvertable {
     private boolean success = false;

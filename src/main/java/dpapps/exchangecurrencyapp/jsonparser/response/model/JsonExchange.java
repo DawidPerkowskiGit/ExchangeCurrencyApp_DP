@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.entity;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Stores and converts Exchange entity data to JSON format
+ * Stores and converts Exchange model data to JSON format
  */
 @Service
 @Getter
@@ -19,15 +19,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class JsonExchange {
 
-    private CurrencyRepository currencyRepository;
     private double value;
     private String currency;
     private String exchangeDate;
-
-    @Autowired
-    public JsonExchange(CurrencyRepository currencyRepository) {
-        this.currencyRepository = currencyRepository;
-    }
 
     public double getValue() {
         return value;

@@ -1,7 +1,7 @@
 package dpapps.exchangecurrencyapp.locationtests;
 
 import dpapps.exchangecurrencyapp.exchange.model.Location;
-import dpapps.exchangecurrencyapp.jsonparser.entity.JsonLocation;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonLocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

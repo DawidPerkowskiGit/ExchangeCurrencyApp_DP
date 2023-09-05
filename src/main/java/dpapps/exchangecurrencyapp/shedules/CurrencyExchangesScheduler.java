@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * This component is responsible for performing extracting exchange rates from API endpoint.
- * Fetched request is inserted into database.
+ * Fetched requestapi is inserted into database.
  */
 
 @Component
@@ -39,7 +39,7 @@ public class CurrencyExchangesScheduler {
     /**
      * Schedule that performs automatic imports the newest currency exchange rates and saves them to the database.
      *
-     * @return Call to the method which performs the import, empty string is the default request URL
+     * @return Call to the method which performs the import, empty string is the default requestapi URL
      */
     @Scheduled(fixedRate = 14400000, initialDelay = 3600000)
     public String performCurrencyExchangeImport() {
@@ -62,7 +62,7 @@ public class CurrencyExchangesScheduler {
     }
 
     /**
-     * Schedules the job that performs URL request to keep this and frontend apps running
+     * Schedules the job that performs URL requestapi to keep this and frontend apps running
      */
 
 

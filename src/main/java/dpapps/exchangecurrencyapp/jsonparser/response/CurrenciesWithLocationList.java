@@ -1,5 +1,6 @@
-package dpapps.exchangecurrencyapp.jsonparser.entity;
+package dpapps.exchangecurrencyapp.jsonparser.response;
 
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

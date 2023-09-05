@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.entity;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Stores and converts Currency entity data to JSON format
+ * Stores and converts Currency model data to JSON format
  */
 @Getter
 @Setter
@@ -28,7 +28,7 @@ public class JsonCurrency {
     /**
      * Converts Currency to JsonCurrency
      *
-     * @param currency Currency entity object
+     * @param currency Currency model object
      * @return Currency object prepared to be converted to JSON
      */
     public JsonCurrency convertCurrencyToJsonCurrency(Currency currency) {

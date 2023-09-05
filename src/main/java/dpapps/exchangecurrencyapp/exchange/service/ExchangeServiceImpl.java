@@ -9,10 +9,11 @@ import dpapps.exchangecurrencyapp.exchange.repositories.*;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.LocalDateStringConverter;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRangeValidator;
-import dpapps.exchangecurrencyapp.jsonparser.entity.CurrencyEntityListToMap;
-import dpapps.exchangecurrencyapp.jsonparser.requestapi.CurrencyNamesLocationToJsonConverter;
-import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
-import dpapps.exchangecurrencyapp.jsonparser.entity.SingleDayExchangeRatesJson;
+import dpapps.exchangecurrencyapp.jsonparser.response.CurrenciesWithLocationList;
+import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyEntityListToMap;
+//import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyNamesLocationToJsonConverter;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
+import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,7 @@ public class ExchangeServiceImpl implements ExchangeService{
 
     private final ExchangeRepository exchangeRepository;
 
-    private final LocationRepository locationRepository;
 
-    private final LocationCurrencyPairRepository locationCurrencyPairRepository;
     private final ApiKeyRepository apiKeyRepository;
 
     private final UserRepository userRepository;
@@ -43,8 +42,6 @@ public class ExchangeServiceImpl implements ExchangeService{
     public ExchangeServiceImpl(CurrencyRepository currencyRepository, ExchangeRepository exchangeRepository, LocationRepository locationRepository, LocationCurrencyPairRepository locationCurrencyPairRepository, ApiKeyRepository apiKeyRepository, UserRepository userRepository, RoleRepository roleRepository, ApiKeyService apiKeyService, JsonBuilderService jsonBuilderService) {
         this.currencyRepository = currencyRepository;
         this.exchangeRepository = exchangeRepository;
-        this.locationRepository = locationRepository;
-        this.locationCurrencyPairRepository = locationCurrencyPairRepository;
         this.apiKeyRepository = apiKeyRepository;
         this.userRepository = userRepository;
         this.apiKeyService = apiKeyService;
@@ -81,8 +78,7 @@ public class ExchangeServiceImpl implements ExchangeService{
         System.out.println("api/currandloc called");
         List<String[]> pojo = currencyRepository.getCurrenciesAndLocations();
         System.out.println(pojo);
-        CurrencyNamesLocationToJsonConverter rowsToObjectConverter = new CurrencyNamesLocationToJsonConverter();
-        List<JsonConvertable> jsonReadyObject = rowsToObjectConverter.convert(pojo);
+        List<JsonConvertable> jsonReadyObject = convertDbCurrencyNameLocationToObjectList(pojo);
         System.out.println(jsonReadyObject);
         String returnedJson = jsonBuilderService.buildJsonFromPojo(jsonReadyObject);
         return returnedJson;
@@ -95,7 +91,7 @@ public class ExchangeServiceImpl implements ExchangeService{
         }
 
         if (requestUrl == null) {
-            return "request Url is null";
+            return "requestapi Url is null";
         }
 
         ScheduleJobs scheduleJobs = new ScheduleJobs();
@@ -115,7 +111,7 @@ public class ExchangeServiceImpl implements ExchangeService{
         if (headers.containsKey("origin")) {
             if (headers.get("origin").equals(AppVariables.FRONTEND_APP_URL)) {
                 vipClientRequest = true;
-                System.out.println("Api request by Frontend app client");
+                System.out.println("Api requestapi by Frontend app client");
             }
         }
 
@@ -138,7 +134,7 @@ public class ExchangeServiceImpl implements ExchangeService{
 
             user = apiKeyObject.getUser();
             if (apiKeyService.canUseTheApiKey(apiKeyObject, user) == false) {
-                return "Cannot perform API request";
+                return "Cannot perform API requestapi";
             }
         }
 
@@ -201,24 +197,6 @@ public class ExchangeServiceImpl implements ExchangeService{
          * Check if requested exchange rates are form a single day, if they, are return exchanges form the day.
          * If the exchange rates are from multiple days, return list of exchanges.
          */
-
-//        if (beginDate.isEqual(endDate)) {
-//            pojo = getExchangesFromSingleDay(beginDate, currency, baseCurrency);
-//            if (pojo.isEmpty()) {
-//                return "Failed to return exchange rates";
-//            }
-//
-//            returnedJson = jsonBuilderService.buildJsonFromPojo(pojo.get());
-//
-//            if (returnedJson.equals("")) {
-//                return "Json body is empty";
-//            }
-//        } else {
-//            pojoList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
-//            returnedJson = jsonBuilderService.buildJsonFromPojo(pojoList);
-//        }
-
-
 
         pojoList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
 
@@ -377,6 +355,53 @@ public class ExchangeServiceImpl implements ExchangeService{
     public double calculateNewRatio(LocalDate date, String currency) {
         Exchange newBaseCurrency = exchangeRepository.findByExchangeDateAndCurrency_IsoName(date, currency);
         return 1 / newBaseCurrency.getValue();
+    }
+
+    /**
+     * Converts returned database rows to object ready for serialization
+     *
+     * @param databaseEntries entire retrieved from the database, structure [iso_name, full_name, location]
+     * @return Object of structure [iso_name, full_name, List<location>] ready for serialization
+     */
+    public List<JsonConvertable> convertDbCurrencyNameLocationToObjectList(Iterable<String[]> databaseEntries) {
+
+        Map<String, String> isoNameFullName = new HashMap();
+        Map<String, List<String>> isoNameLocation = new HashMap();
+
+        for (String[] singleEntry : databaseEntries) {
+            if (isoNameFullName.containsKey(singleEntry[0]) == false) {
+                isoNameFullName.put(singleEntry[0], singleEntry[1]);
+            }
+            if (isoNameLocation.containsKey(singleEntry[0]) == false) {
+                isoNameLocation.put(singleEntry[0], new ArrayList<>());
+            }
+            isoNameLocation.put(singleEntry[0], addValueReplaceMap(singleEntry[2], isoNameLocation.get(singleEntry[0])));
+
+        }
+
+        List<JsonConvertable> pojoToSerialize = new ArrayList<>();
+
+        for (String entry : isoNameLocation.keySet()) {
+            CurrenciesWithLocationList singleObject = new CurrenciesWithLocationList();
+            singleObject.setIsoName(entry);
+            singleObject.setFullName(isoNameFullName.get(entry));
+            singleObject.setLocationList(isoNameLocation.get(entry));
+            pojoToSerialize.add(singleObject);
+        }
+
+        return pojoToSerialize;
+    }
+
+    /**
+     * Adds entry to List property of a HashMap
+     *
+     * @param value Value needed to be added to the List
+     * @param list  List of entries
+     * @return List with an additional value
+     */
+    public List<String> addValueReplaceMap(String value, List<String> list) {
+        list.add(value);
+        return list;
     }
 
 

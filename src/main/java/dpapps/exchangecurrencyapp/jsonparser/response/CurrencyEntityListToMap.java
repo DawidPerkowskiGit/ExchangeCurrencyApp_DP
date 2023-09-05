@@ -1,6 +1,7 @@
-package dpapps.exchangecurrencyapp.jsonparser.entity;
+package dpapps.exchangecurrencyapp.jsonparser.response;
 
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 /**
  * Maps currency iso names to their full names.
- * Converts Currency entity data to object suitable for JSON conversion
+ * Converts Currency model data to object suitable for JSON conversion
  */
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class CurrencyEntityListToMap implements JsonConvertable {
     Map<String, String> currencies = new HashMap<>();
 
     /**
-     * Converts Currency entity data to Map
+     * Converts Currency model data to Map
      *
      * @param currencyList
      * @return

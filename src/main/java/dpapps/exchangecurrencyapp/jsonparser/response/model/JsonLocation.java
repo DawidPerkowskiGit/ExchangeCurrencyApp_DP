@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.entity;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import dpapps.exchangecurrencyapp.exchange.model.Location;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Stores and converts Location entity data to JSON format
+ * Stores and converts Location model data to JSON format
  */
 @Getter
 @Setter

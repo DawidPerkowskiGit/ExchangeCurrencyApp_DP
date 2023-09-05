@@ -1,7 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

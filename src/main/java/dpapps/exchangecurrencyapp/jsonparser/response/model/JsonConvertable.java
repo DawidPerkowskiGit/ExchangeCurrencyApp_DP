@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.entity;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 /**
  * Common interface of objects that are needed to be serialized to JSON type.

@@ -1,7 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
-import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
-import dpapps.exchangecurrencyapp.jsonparser.entity.SingleDayExchangeRatesJson;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
+import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,4 +21,21 @@ public interface ExchangeService {
     public Optional<SingleDayExchangeRatesJson> getExchangesFromSingleDay(LocalDate inputDate, String currency, String baseCurrency);
 
     public double calculateNewRatio(LocalDate date, String currency);
+
+    /**
+     * Converts returned database rows to object ready for serialization
+     *
+     * @param databaseEntries entire retrieved from the database, structure [iso_name, full_name, location]
+     * @return Object of structure [iso_name, full_name, List<location>] ready for serialization
+     */
+    public List<JsonConvertable> convertDbCurrencyNameLocationToObjectList(Iterable<String[]> databaseEntries);
+
+    /**
+     * Adds entry to List property of a HashMap
+     *
+     * @param value Value needed to be added to the List
+     * @param list  List of entries
+     * @return List with an additional value
+     */
+    public List<String> addValueReplaceMap(String value, List<String> list);
 }

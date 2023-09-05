@@ -22,8 +22,9 @@ public class CurrencyTests {
 
     @Test
     public void shouldReturnCurrenciesList() throws Exception {
-        this.mockMvc.perform(get("/currencies")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("[EUR, USD, JPY, BGN, CYP, CZK, DKK, EEK, GBP, HUF, LTL, LVL, MTL, ROL, RON, SEK, SIT, SKK, CHF, NOK, HRK, RUB, TRL, TRY, AUD, BRL, CAD, CNY, HKD, IDR, ILS, INR, KRW, MXN, MYR, NZD, PHP, SGD, THB, ZAR, PLN, ISK]")));
+        String validResponse = "{\"currencies\":{\"CHF\":\"Swiss franc\",\"HRK\":\"Croatian kuna\",\"MXN\":\"Mexican peso\",\"LVL\":\"Latvian lats\",\"MTL\":\"Maltese lira\",\"LTL\":\"Lithuanian litas\",\"ZAR\":\"South African rand\",\"INR\":\"Indian rupee\",\"CNY\":\"Chinese yuan renminbi\",\"THB\":\"Thai baht\",\"TRL\":\"Turkish lira\",\"AUD\":\"Australian dollar\",\"ILS\":\"Israeli new shekel\",\"KRW\":\"South Korean won\",\"JPY\":\"Japanese yen\",\"PLN\":\"Polish zloty\",\"GBP\":\"Pound sterling\",\"IDR\":\"Indonesian rupiah\",\"HUF\":\"Hungarian forint\",\"PHP\":\"Philippine peso\",\"TRY\":\"Turkish lira\",\"CYP\":\"Cypriot pound\",\"RUB\":\"Russian ruble\",\"HKD\":\"Hong Kong dollar\",\"ISK\":\"Icelandic krona\",\"EUR\":\"Euro\",\"DKK\":\"Danish krone\",\"CAD\":\"Canadian dollar\",\"MYR\":\"Malaysian ringgit\",\"USD\":\"United States dollar\",\"BGN\":\"Bulgarian lev\",\"EEK\":\"Estonian kroon\",\"NOK\":\"Norwegian krone\",\"ROL\":\"Romanian leu\",\"RON\":\"Romanian leu\",\"SGD\":\"Singapore dollar\",\"SKK\":\"Slovak koruna\",\"CZK\":\"Czech koruna\",\"SEK\":\"Swedish krona\",\"NZD\":\"New Zealand dollar\",\"BRL\":\"Brazilian real\",\"SIT\":\"Slovenian tolar\"}}";
+        this.mockMvc.perform(get("/api/currencies")).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
     }
 
     @Test

@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
-import dpapps.exchangecurrencyapp.jsonparser.entity.JsonConvertable;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 
 import java.util.List;
 

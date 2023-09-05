@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.responseforeignapi;
+package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,13 +14,13 @@ import java.time.LocalDate;
 import java.util.Map;
 
 /**
- * The class represents data structure of exchangeratesapi.io JSON response body.
+ * The class represents data structure of exchangeratesapi.io JSON requestapi body.
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseBodyObject {
+public class RequestDataModel {
 
     private boolean success;
 

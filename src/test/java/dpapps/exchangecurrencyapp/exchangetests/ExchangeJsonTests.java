@@ -3,7 +3,7 @@ package dpapps.exchangecurrencyapp.exchangetests;
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.tools.LocalDateStringConverter;
-import dpapps.exchangecurrencyapp.jsonparser.entity.JsonExchange;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonExchange;
 import dpapps.exchangecurrencyapp.mockrepo.MockCurrencyRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,9 +44,9 @@ public class ExchangeJsonTests {
         exchanges.add(new Exchange(7, 37.408 ,  currencies.get(1), LocalDateStringConverter.convertStringToLocalDate("2023-06-10")));
         exchanges.add(new Exchange(8, 1.6061 ,  currencies.get(2), LocalDateStringConverter.convertStringToLocalDate("2023-06-12")));
 
-        jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(0)));
-        jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(1)));
-        jsonExchanges.add(new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(2)));
+        jsonExchanges.add(new JsonExchange().convertBaseToJson(exchanges.get(0)));
+        jsonExchanges.add(new JsonExchange().convertBaseToJson(exchanges.get(1)));
+        jsonExchanges.add(new JsonExchange().convertBaseToJson(exchanges.get(2)));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ExchangeJsonTests {
                   "currency": "EUR"
                 }
                 """;
-        JsonExchange jsonExchange = new JsonExchange(currencyRepository).convertBaseToJson(exchanges.get(0));
+        JsonExchange jsonExchange = new JsonExchange().convertBaseToJson(exchanges.get(0));
         assertThat(json.write(jsonExchange)).isEqualToJson(expected);
     }
 

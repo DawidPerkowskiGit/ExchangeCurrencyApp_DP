@@ -85,9 +85,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Converts User entity data to registration/login data
+     * Converts User model data to registration/login data
      *
-     * @param user User entity data
+     * @param user User model data
      * @return UserDTO data
      */
 
