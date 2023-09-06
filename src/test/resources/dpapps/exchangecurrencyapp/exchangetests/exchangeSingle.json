@@ -1,5 +1,10 @@
 {
-  "exchangeDate": "2023-06-08",
-  "value": 7.6541,
-  "currency": "EUR"
+  "success": true,
+  "date": "2023-06-08",
+  "base": "AUD",
+  "rates": {
+    "EUR": 7.6541,
+    "USD": 37.408,
+    "JPY": 1.6061
+  }
 }
