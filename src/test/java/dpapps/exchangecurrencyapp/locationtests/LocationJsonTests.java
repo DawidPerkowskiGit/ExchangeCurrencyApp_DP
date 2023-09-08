@@ -25,12 +25,6 @@ public class LocationJsonTests {
 
     private List<JsonLocation> jsonLocationList = new ArrayList<>();
 
-    @Autowired
-    private JacksonTester<LocationJsonTests> jacksonLocation;
-
-    @Autowired
-    private JacksonTester<List<Location>> jacksonLocationList;
-
     private List<Location> locationList = new ArrayList<>();
 
     @BeforeEach

@@ -1,10 +1,9 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
-import dpapps.exchangecurrencyapp.exchange.model.ApiKey;
+import dpapps.exchangecurrencyapp.exchange.error.InvalidRequestBody;
+import dpapps.exchangecurrencyapp.exchange.model.*;
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
-import dpapps.exchangecurrencyapp.exchange.model.Exchange;
-import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.*;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.LocalDateStringConverter;
@@ -12,10 +11,12 @@ import dpapps.exchangecurrencyapp.exchange.tools.DateRangeValidator;
 import dpapps.exchangecurrencyapp.jsonparser.response.CurrenciesWithLocationList;
 import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyEntityListToMap;
 //import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyNamesLocationToJsonConverter;
+import dpapps.exchangecurrencyapp.jsonparser.response.ExchangesList;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,20 +36,23 @@ public class ExchangeServiceImpl implements ExchangeService{
 
     private final ApiKeyService apiKeyService;
 
-    private final JsonBuilderService jsonBuilderService;
-
 
     @Autowired
-    public ExchangeServiceImpl(CurrencyRepository currencyRepository, ExchangeRepository exchangeRepository, LocationRepository locationRepository, LocationCurrencyPairRepository locationCurrencyPairRepository, ApiKeyRepository apiKeyRepository, UserRepository userRepository, RoleRepository roleRepository, ApiKeyService apiKeyService, JsonBuilderService jsonBuilderService) {
+    public ExchangeServiceImpl(CurrencyRepository currencyRepository, ExchangeRepository exchangeRepository, ApiKeyRepository apiKeyRepository, UserRepository userRepository, ApiKeyService apiKeyService) {
         this.currencyRepository = currencyRepository;
         this.exchangeRepository = exchangeRepository;
         this.apiKeyRepository = apiKeyRepository;
         this.userRepository = userRepository;
         this.apiKeyService = apiKeyService;
-        this.jsonBuilderService = jsonBuilderService;
     }
 
-    public String getCurrencies(String date) {
+    /**
+     * Fetched available currencies from the database
+     *
+     * @param date Optional parameter - currencies active at specified date
+     * @return Currencies List in JSON format
+     */
+    public ResponseEntity<JsonConvertable> getCurrencies(String date) {
         System.out.println("api/currencies called");
         CurrencyEntityListToMap currencyEntityListToMap = new CurrencyEntityListToMap();
         Iterable<Currency> currencyList;
@@ -71,19 +75,31 @@ public class ExchangeServiceImpl implements ExchangeService{
         }
         currencyEntityListToMap.convertCurrencyListToJsonCurrency(currencyList);
 
-        return jsonBuilderService.buildJsonFromPojo(currencyEntityListToMap);
+        return ResponseEntity.ok(currencyEntityListToMap);
     }
 
-    public String getCurrenciesAndLocations() {
-        System.out.println("api/currandloc called");
+    /**
+     * Fetched currencies and countries/other locations where they can be used in.
+     *
+     * @return Currencies list with all the countries they can be used in returned in JSON format
+     */
+    public ResponseEntity<List<JsonConvertable>> getCurrenciesAndLocations() {
+        System.out.println("api/currencies/locations called");
         List<String[]> pojo = currencyRepository.getCurrenciesAndLocations();
         System.out.println(pojo);
         List<JsonConvertable> jsonReadyObject = convertDbCurrencyNameLocationToObjectList(pojo);
         System.out.println(jsonReadyObject);
-        String returnedJson = jsonBuilderService.buildJsonFromPojo(jsonReadyObject);
-        return returnedJson;
+        return ResponseEntity.ok(jsonReadyObject);
     }
 
+
+    /**
+     * Admin only accessible endpoint which performs requested URL requested. It was used to perform currency exchanges import.
+     *
+     * @param apiKey     REST APi key
+     * @param requestUrl Requested URL
+     * @return status result of currency import requestapi from the scheduler
+     */
     public String manualRequestUrl(String apiKey, String requestUrl) {
         String apiKeyParsingResult = apiKeyService.checkApiKey(apiKey);
         if (!apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
@@ -99,7 +115,18 @@ public class ExchangeServiceImpl implements ExchangeService{
         return scheduleJobs.performDailyDatabaseImport(requestUrl, this.currencyRepository, this.exchangeRepository);
     }
 
-    public String getExchanges(String currency, String startDate, String finishDate, String baseCurrency, String apiKey, Map<String, String> headers) {
+    /**
+     * Fetches exchange rates from the database
+     *
+     * @param currency     Optional http attribute - Requested currency
+     * @param startDate    Optional http attribute - start date for exchange rated from multiple days
+     * @param finishDate   Optional http attribute - finish date for exchange rated from multiple days
+     * @param baseCurrency Optional http attribute - http attribute Base currency
+     * @param apiKey       Required http attribute - User's API key
+     * @param headers      List of http headers
+     * @return Exchange rates in JSON format
+     */
+    public ResponseEntity<JsonConvertable> getExchanges(String apiKey, String currency, String baseCurrency, String startDate, String finishDate, Map<String, String> headers) {
         System.out.println("entered exchange");
 
         headers.forEach((key, value) -> {
@@ -111,7 +138,7 @@ public class ExchangeServiceImpl implements ExchangeService{
         if (headers.containsKey("origin")) {
             if (headers.get("origin").equals(AppVariables.FRONTEND_APP_URL)) {
                 vipClientRequest = true;
-                System.out.println("Api requestapi by Frontend app client");
+                System.out.println("Api request by Frontend app client");
             }
         }
 
@@ -119,6 +146,7 @@ public class ExchangeServiceImpl implements ExchangeService{
         String apiKeyParsingResult = "";
         ApiKey apiKeyObject;
         User user = null;
+        InvalidRequestBody errorBody = new InvalidRequestBody();
 
         /**
          * Api Key checks
@@ -126,53 +154,99 @@ public class ExchangeServiceImpl implements ExchangeService{
 
         if (vipClientRequest == false) {
             apiKeyParsingResult = apiKeyService.checkApiKey(apiKey);
+
             if (!apiKeyParsingResult.equals(AppVariables.VALID_API_KEY_MESSAGE)) {
-                return apiKeyParsingResult;
+                errorBody.setStatus(403);
+                errorBody.setMessage(apiKeyParsingResult);
+                return ResponseEntity.ok(errorBody);
             }
 
             apiKeyObject = apiKeyRepository.findByValue(apiKey);
 
             user = apiKeyObject.getUser();
             if (apiKeyService.canUseTheApiKey(apiKeyObject, user) == false) {
-                return "Cannot perform API requestapi";
+                errorBody.setStatus(403);
+                errorBody.setMessage("Cannot perform your request. This API key does not belong to user calling the API");
+                return ResponseEntity.ok(errorBody);
             }
         }
+        /**
+         * Convert String Date to LocalDate
+         */
 
+
+        LocalDate beginDate;
+        LocalDate endDate;
+        final LocalDate onesDate = LocalDate.of(1, 1, 1);
 
         /**
          * Nullable fields check
          */
         if (startDate == null) {
-            startDate = "";
+            beginDate = null;
+//            beginDate = onesDate;
+//            startDate = "";
         }
+        else {
+            beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
+        }
+
         if (finishDate == null) {
-            finishDate = "";
+            endDate = null;
+//            endDate = onesDate;
+//            finishDate = "";
         }
+        else {
+            endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+        }
+
         if (currency == null) {
             currency = "";
         }
+        else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)  == false) {
+            errorBody.setStatus(404);
+            errorBody.setMessage("Cannot perform your request. Requested currency is not found");
+            return ResponseEntity.ok(errorBody);
+        }
+
         if (baseCurrency == null) {
             baseCurrency = "";
         }
+        else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency)  == false) {
+            errorBody.setStatus(404);
+            errorBody.setMessage("Cannot perform your request. Base currency is not found");
+            return ResponseEntity.ok(errorBody);
+        }
 
-        /**
-         * Convert String Date to LocalDate
-         */
-        LocalDate beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
-        LocalDate endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
-        LocalDate onesDate = LocalDate.of(1, 1, 1);
 
         /**
          * Check if parameters are empty
          */
 
-        if (beginDate.isEqual(onesDate) && endDate.isEqual(onesDate)) {
-            beginDate = endDate = LocalDate.now();
-            //beginDate = endDate = exchangeRepository.getLatestExchangeDate();
+
+        if (beginDate != null) {
+            if (beginDate.isEqual(onesDate)) {
+                errorBody.setStatus(400);
+                errorBody.setMessage("Cannot perform your request. Invalid start date format");
+                return ResponseEntity.ok(errorBody);
+            }
         }
-        if (beginDate.isEqual(onesDate)) {
+
+        if (finishDate != null) {
+            if (endDate.isEqual(onesDate)) {
+                errorBody.setStatus(400);
+                errorBody.setMessage("Cannot perform your request. Invalid finish date format");
+                return ResponseEntity.ok(errorBody);
+            }
+        }
+
+
+        if (beginDate == null && endDate == null) {
+            beginDate = endDate = LocalDate.now();
+        }
+        if (beginDate == null) {
             beginDate = endDate;
-        } else if (endDate.isEqual(onesDate)) {
+        } else if (endDate == null) {
             endDate = beginDate;
         }
 
@@ -189,26 +263,17 @@ public class ExchangeServiceImpl implements ExchangeService{
         }
 
 
-        Optional<SingleDayExchangeRatesJson> pojo = Optional.empty();
-        String returnedJson = "";
-        List<JsonConvertable> pojoList = new ArrayList<>();
-
         /**
          * Check if requested exchange rates are form a single day, if they, are return exchanges form the day.
          * If the exchange rates are from multiple days, return list of exchanges.
          */
+        List<JsonConvertable> returnList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
 
-        pojoList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
 
-
-        if (pojoList.isEmpty()) {
-            return "Failed to return exchange rates";
-        }
-
-        returnedJson = jsonBuilderService.buildJsonFromPojo(pojoList);
-
-        if (returnedJson.equals("")) {
-            return "Json body is empty";
+        if (returnList.isEmpty()) {
+            errorBody.setStatus(500);
+            errorBody.setMessage("Failed to return exchange rates. There is no data matching your request criteria");
+            return ResponseEntity.ok(errorBody);
         }
 
         if (vipClientRequest == false) {
@@ -216,7 +281,10 @@ public class ExchangeServiceImpl implements ExchangeService{
             userRepository.save(user);
         }
 
-        return returnedJson;
+        ExchangesList exchangesList = new ExchangesList();
+        exchangesList.setExchangeList(returnList);
+
+        return ResponseEntity.ok(exchangesList);
     }
 
     /**
@@ -234,7 +302,9 @@ public class ExchangeServiceImpl implements ExchangeService{
 
         LocalDate currentDate = beginDate;
         while (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) {
-            SingleDayExchangeRatesJson singleDayExchanges = getExchangesFromSingleDay(currentDate, currency, baseCurrency).get();
+//            SingleDayExchangeRatesJson singleDayExchanges = getExchangesFromSingleDay(currentDate, currency, baseCurrency).get();
+            SingleDayExchangeRatesJson singleDayExchanges = (SingleDayExchangeRatesJson)getExchangesFromSingleDay(currentDate, currency, baseCurrency);
+
             if (singleDayExchanges.isSuccess()) {
                 exchangeList.add(singleDayExchanges);
             }
@@ -253,27 +323,17 @@ public class ExchangeServiceImpl implements ExchangeService{
      * @param baseCurrency Base currency
      * @return Object containing exchange rated from single day
      */
-    public Optional<SingleDayExchangeRatesJson> getExchangesFromSingleDay(LocalDate inputDate, String currency, String baseCurrency) {
+    public JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, String currency, String baseCurrency) {
 
 
         SingleDayExchangeRatesJson pojo = new SingleDayExchangeRatesJson();
-
         LocalDate exchangeDate = inputDate;
-//        /**
-//         * Exchange date checks
-//         */
-//        try {
-//            if (DateRangeValidator.isDateInValidRange(inputDate)==false) {
-//                exchangeDate = DateRangeValidator.returnValidRange(inputDate);
-//            }
-//        }
-//        catch (Exception e) {
-//            System.out.println("Could not find valid exchange rate date in the database. Exception: "+e);
-//        }
+        InvalidRequestBody invalidRequestBody = new InvalidRequestBody();
 
         if (exchangeRepository.existsByExchangeDate(exchangeDate) == false) {
-            pojo.setSuccess(false);
-            return Optional.ofNullable(pojo);
+            invalidRequestBody.setStatus(404);
+            invalidRequestBody.setMessage("Failed to fetch exchange rates from the requested date");
+            return invalidRequestBody;
         }
 
         /**
@@ -291,8 +351,10 @@ public class ExchangeServiceImpl implements ExchangeService{
             } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)) {
                 latestExchangesList = exchangeRepository.findAllByExchangeDateAndCurrencyOrderByExchangeDate(exchangeDate, currency);
             } else {
-                pojo.setSuccess(false);
-                return Optional.ofNullable(pojo);
+//                pojo.setSuccess(false);
+                invalidRequestBody.setStatus(400);
+                invalidRequestBody.setMessage("This currency type is unavailable");
+                return invalidRequestBody;
             }
 
 
@@ -302,9 +364,9 @@ public class ExchangeServiceImpl implements ExchangeService{
             if (baseCurrency.equals("")) {
                 pojo.setBase(AppVariables.CURRENCY_BASE);
             } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
-                pojo.setSuccess(false);
-                System.out.println("Could not find base currency in the database");
-                return Optional.ofNullable(pojo);
+                invalidRequestBody.setStatus(404);
+                invalidRequestBody.setMessage("Could not find base currency in the database");
+                return invalidRequestBody;
             } else {
                 pojo.setBase(baseCurrency);
             }
@@ -325,7 +387,9 @@ public class ExchangeServiceImpl implements ExchangeService{
                         rates.put(entry.getCurrency().getIsoName(), entry.getValue() * newRatio);
                     }
                 } else {
-                    pojo.setSuccess(false);
+                    invalidRequestBody.setStatus(404);
+                    invalidRequestBody.setMessage("Could not find exchange rates from specified date and currency type");
+                    return invalidRequestBody;
                 }
 
             }
@@ -336,11 +400,8 @@ public class ExchangeServiceImpl implements ExchangeService{
         } catch (Exception e) {
             System.out.println("Could not acquire latest exchange data: Exception: " + e);
         }
-        return Optional.ofNullable(pojo);
+        return pojo;
     }
-
-
-
 
 
 
@@ -403,6 +464,7 @@ public class ExchangeServiceImpl implements ExchangeService{
         list.add(value);
         return list;
     }
+
 
 
 }

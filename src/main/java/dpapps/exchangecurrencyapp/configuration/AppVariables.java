@@ -1,6 +1,8 @@
 package dpapps.exchangecurrencyapp.configuration;
 
+import java.io.FileOutputStream;
 import java.time.LocalDate;
+import java.time.format.FormatStyle;
 
 /**
  * Class which stores all global variables
@@ -31,5 +33,11 @@ public class AppVariables {
      */
 
     public final static String FRONTEND_APP_URL = "https://dp-exchange-currency-app-ng.onrender.com";
+
+    /**
+     * Server date format
+     */
+
+    public final static String DATE_FORMAT = "yyyy-MM-dd";
 
 }

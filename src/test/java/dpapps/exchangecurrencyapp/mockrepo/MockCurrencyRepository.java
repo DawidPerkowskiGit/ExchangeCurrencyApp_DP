@@ -5,18 +5,17 @@ import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class MockCurrencyRepo implements CurrencyRepository {
+public class MockCurrencyRepository implements CurrencyRepository {
 
-    List<Currency> listOfCurrencies = new ArrayList<>();
-
+    List<Currency> currencyList = new LinkedList<>();
     @NonNull
     @Override
     public Currency save(@NonNull Currency currency) {
-        listOfCurrencies.add(currency);
+        this.currencyList.add(currency);
         return currency;
     }
 
@@ -24,32 +23,27 @@ public class MockCurrencyRepo implements CurrencyRepository {
     public <S extends Currency> Iterable<S> saveAll(Iterable<S> entities) {
         for (S entity: entities
              ) {
-            this.save(entity);
+            save(entity);
         }
-        return entities;
+        return null;
     }
 
     @Override
     public Optional<Currency> findById(Integer integer) {
-
-        Optional<Currency> retVal;
-
-        for (Currency currency: listOfCurrencies
+        for (Currency currency: this.currencyList
              ) {
-            if (currency.getId()==integer) {
-                retVal = Optional.ofNullable(currency);
-                return retVal;
+            if (currency.getId().equals(integer)) {
+                return Optional.of(currency);
             }
         }
-
-        return Optional.empty();
+        return Optional.of(null);
     }
 
     @Override
     public boolean existsById(@NonNull Integer id) {
-        for (Currency currency: listOfCurrencies
-             ) {
-            if (currency.getId()==id) {
+        for (Currency currency: this.currencyList
+        ) {
+            if (currency.getId().equals(id)) {
                 return true;
             }
         }
@@ -58,17 +52,32 @@ public class MockCurrencyRepo implements CurrencyRepository {
 
     @Override
     public Iterable<Currency> findAll() {
-        return null;
+        return this.currencyList;
     }
 
     @Override
     public Iterable<Currency> findAllById(Iterable<Integer> integers) {
-        return null;
+        List<Currency> returnList = new LinkedList<>();
+        for (Currency currency: this.currencyList
+        ) {
+            for (Integer integer: integers
+                 ) {
+                if (currency.getId().equals(integer)) {
+                    returnList.add(currency);
+                }
+            }
+        }
+        return returnList;
     }
 
     @Override
     public long count() {
-        return 0;
+        int counter = 0;
+        for (Currency currency: this.currencyList
+        ) {
+            counter++;
+        }
+        return counter;
     }
 
     @Override
@@ -98,10 +107,10 @@ public class MockCurrencyRepo implements CurrencyRepository {
 
     @Override
     public Currency findCurrencyByIsoName(String name) {
-        for (Currency entry: listOfCurrencies
+        for (Currency currency: this.currencyList
              ) {
-            if (entry.getIsoName().equals(name)) {
-                return entry;
+            if (currency.getIsoName().equals(name)) {
+                return currency;
             }
         }
         return null;
@@ -109,7 +118,7 @@ public class MockCurrencyRepo implements CurrencyRepository {
 
     @Override
     public List<Currency> getAll() {
-        return null;
+        return this.currencyList;
     }
 
     @Override

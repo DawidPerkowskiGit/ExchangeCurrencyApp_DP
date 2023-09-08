@@ -1,7 +1,10 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import dpapps.exchangecurrencyapp.exchange.service.ExchangeService;
+import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyEntityListToMap;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -22,26 +25,26 @@ public class ExchangeApiController {
     }
 
     /**
-     * Currencies List
+     * Fetched available currencies from the database
      *
      * @param date Optional parameter - currencies active at specified date
      * @return Currencies List in JSON format
      */
 
     @GetMapping("/currencies")
-    public String getCurrencies(@RequestParam(required = false) String date) {
+    public ResponseEntity<JsonConvertable> getCurrencies(@RequestParam(required = false) String date) {
         return exchangeService.getCurrencies(date);
 
     }
 
     /**
-     * Currencies and Countries where they can be used
+     * Fetched currencies and countries/other locations where they can be used in.
      *
      * @return Currencies list with all the countries they can be used in returned in JSON format
      */
 
     @GetMapping("/currencies/locations")
-    public String getCurrenciesAndLocations() {
+    public ResponseEntity<List<JsonConvertable>> getCurrenciesAndLocations() {
         return exchangeService.getCurrenciesAndLocations();
     }
 
@@ -58,7 +61,7 @@ public class ExchangeApiController {
     }
 
     /**
-     * Exchange rated endpoints
+     * Fetches exchange rates from the database
      *
      * @param currency     Optional http attribute - Requested currency
      * @param startDate    Optional http attribute - start date for exchange rated from multiple days
@@ -70,7 +73,7 @@ public class ExchangeApiController {
      */
 
     @GetMapping("/exchange")
-    public String getExchangeRates(@RequestParam(required = false) String currency, @RequestParam(required = false) String startDate, @RequestParam(required = false) String finishDate, @RequestParam(required = false) String baseCurrency, @RequestParam(required = false) String apiKey, @RequestHeader Map<String, String> headers) {
-        return exchangeService.getExchanges(currency, startDate, finishDate, baseCurrency, apiKey, headers);
+    public ResponseEntity<JsonConvertable> getExchangeRates(@RequestParam(required = false) String currency, @RequestParam(required = false) String startDate, @RequestParam(required = false) String finishDate, @RequestParam(required = false) String baseCurrency, @RequestParam(required = false) String apiKey, @RequestHeader Map<String, String> headers) {
+        return exchangeService.getExchanges(apiKey, currency, baseCurrency, startDate, finishDate, headers);
     }
 }

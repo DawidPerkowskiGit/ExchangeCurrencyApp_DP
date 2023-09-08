@@ -1,11 +1,18 @@
 package dpapps.exchangecurrencyapp.exchange.tools;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Tool which converts Date in yyyy-MM-dd format to String or vice-versa
  */
-public class LocalDateStringConverter {
+public class LocalDateStringConverter{
+
+    private DateTimeFormatter dateFormat;
+
 
     /**
      * Convert String to Date format
@@ -14,14 +21,25 @@ public class LocalDateStringConverter {
      * @return Date in LocalDate format
      */
     public static LocalDate convertStringToLocalDate(String string) {
-        int[] intDate = new int[3];
-        intDate = putOnesIntoArray(intDate);
+        LocalDate date;
         try {
-            intDate = convertStringDateToInts(string);
-        } catch (Exception e) {
-            System.out.println("Cant convert String do LocalDate. Exception: " + e);
+            date = LocalDate.parse(string);
         }
-        return LocalDate.of(intDate[0], intDate[1], intDate[2]);
+        catch ( Exception e) {
+            return LocalDate.of(1, 1, 1);
+        }
+        return date;
+
+
+
+//        int[] intDate = new int[3];
+//        intDate = putOnesIntoArray(intDate);
+//        try {
+//            intDate = convertStringDateToInts(string);
+//        } catch (Exception e) {
+//            System.out.println("Cant convert String do LocalDate. Exception: " + e);
+//        }
+//        return LocalDate.of(intDate[0], intDate[1], intDate[2]);
     }
 
     /**

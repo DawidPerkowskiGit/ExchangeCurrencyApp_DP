@@ -4,9 +4,7 @@ import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class MockExchangeRepository implements ExchangeRepository {
 
@@ -27,17 +25,29 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public Optional<Exchange> findById(Integer integer) {
-        return Optional.empty();
+        for (Exchange exchange: this.listOfExchanges
+             ) {
+            if (Objects.equals(exchange.getId(), integer)) {
+                return Optional.of(exchange);
+            }
+        }
+        return Optional.of(null);
     }
 
     @Override
     public boolean existsById(Integer integer) {
+        for (Exchange exchange: this.listOfExchanges
+        ) {
+            if (Objects.equals(exchange.getId(), integer)) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public Iterable<Exchange> findAll() {
-        return null;
+        return this.listOfExchanges;
     }
 
     @Override
@@ -89,26 +99,56 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public List<Exchange> findAllByExchangeDateOrderByCurrencyDesc(LocalDate date) {
-        return null;
+        List<Exchange> dateList = new LinkedList<>();
+        for (Exchange exchange: this.listOfExchanges
+             ) {
+            if (exchange.getExchangeDate().isEqual(date)) {
+                dateList.add(exchange);
+            }
+        }
+//        dateList.sort(Comparator.comparing(a -> a.getCurrency().getIsoName()));
+        dateList.sort((a, b) -> a.getCurrency().getIsoName().compareTo(b.getCurrency().getIsoName()));
+        return dateList;
     }
 
     @Override
     public List<Exchange> findAllByExchangeDateAndCurrencyOrderByExchangeDate(LocalDate date, String currency) {
-        return null;
+        List<Exchange> dateList = new LinkedList<>();
+        for (Exchange exchange: this.listOfExchanges
+        ) {
+            if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(currency)) {
+                dateList.add(exchange);
+            }
+        }
+        dateList.sort(Comparator.comparing(Exchange::getExchangeDate));
+        return dateList;
     }
 
     @Override
     public Exchange findByExchangeDateAndCurrency_IsoName(LocalDate date, String currency) {
+        for (Exchange exchange: this.listOfExchanges
+        ) {
+            if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(currency)) {
+                return exchange;
+            }
+        }
         return null;
     }
 
     @Override
     public boolean existsByExchangeDateAndCurrency_IsoName(LocalDate date, String iso_name) {
+        for (Exchange exchange: this.listOfExchanges
+        ) {
+            if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(iso_name)) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public LocalDate getLatestExchangeDate() {
-        return null;
+        this.listOfExchanges.sort((a, b) -> a.getExchangeDate().compareTo(b.getExchangeDate()));
+        return this.listOfExchanges.get(0).getExchangeDate();
     }
 }

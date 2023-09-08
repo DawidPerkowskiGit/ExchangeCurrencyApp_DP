@@ -122,11 +122,11 @@ public class ApiKeyServiceImpl implements ApiKeyService {
      */
     public String checkApiKey(String apiKey) {
         if (apiKey == null) {
-            return "You didnt provide api key";
+            return "You did not provide an API KEY";
         }
 
         if (apiKeyRepository.existsByValue(apiKey) == false) {
-            return "Api key is invalid";
+            return "Provided API KEY is invalid";
         }
 
         return AppVariables.VALID_API_KEY_MESSAGE;

@@ -24,12 +24,6 @@ public class CurrencyJsonTests {
 
     private List<JsonCurrency> jsonCurrencyList = new ArrayList<>();
 
-    @Autowired
-    private JacksonTester<Currency> jacksonCurrency;
-
-    @Autowired
-    private JacksonTester<List<Currency>> jacksonCurrencyList;
-
     private List<Currency> currencyList = new ArrayList<>();
 
     @BeforeEach

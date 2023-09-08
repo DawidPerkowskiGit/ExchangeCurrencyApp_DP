@@ -68,42 +68,113 @@ The user can access this endpoint without providing api key. Returns list of ava
 
 ### /api/exchange
 
-The user can access this enpoint only when providing an api key. Returns exchange rates list in JSON format, for example:
-```json
-{
-    "success": true,
-    "date": "2023-08-09",
-    "base": "EUR",
-    "rates": {
-        "CHF": 0.959352,
-        "HRK": 7.378717,
-         (...)
-        "NZD": 1.807165,
-        "BRL": 5.377004
-    }
-}
-```
-Required URL parameter:
- - apiKey - required key to perform API request
+Returns requested exchange rates.
+
+#### Parameters
+
+Required URL parameters:
+- apiKey - required key to perform API request
 
 Available optional URL parameters:
- - currency - exchange rates of chosen currency type
- - baseCurrency - changing the base currency(default is EUR)
- - startDate - return exchanges starting from the chosen date
- - finishDate - return exchanges finishing at the chosen date
+- currency - exchange rates of chosen currency type
+- baseCurrency - changing the base currency(default is EUR)
+- startDate - return exchanges starting from the chosen date
+- finishDate - return exchanges finishing at the chosen date
 
-Not providing values to these parameters will result in receiving the latest exchange date from all the currencies and Euro as the base.
+#### Valid request
+
+The user can access this endpoint only when providing an api key. Returns exchange rates list in JSON format, for example:
+```json
+{
+  "exchangeList": [
+    {
+      "success": true,
+      "date": "2023-08-30",
+      "base": "EUR",
+      "rates": {
+        "CHF": 0.955214,
+        "HRK": 7.482101,
+        "MXN": 18.257594,
+        (...)
+        "CZK": 24.096473,
+        "SEK": 11.829196,
+        "NZD": 1.821493,
+        "BRL": 5.275342
+      }
+    }
+  ]
+}
+```
+
+#### Invalid requests
+
+You will receive following responses while not providing valid values to requested, optional parameters and when data does not exist in the database.
+
+##### API KEY was not provided
+```json
+{
+  "success": false,
+  "status": 403,
+  "message": "You did not provide an API KEY"
+}
+```
+
+##### API KEY is invalid
+```json
+{
+    "success": false,
+    "status": 403,
+    "message": "Provided API KEY is invalid"
+}
+```
+
+##### Requested currency is unrecognizable
+```json
+{
+    "success": false,
+    "status": 404,
+    "message": "Cannot perform your request. Requested currency is not found"
+}
+```
+
+##### Base currency is not recognizable
+````json
+{
+    "success": false,
+    "status": 404,
+    "message": "Cannot perform your request. Base currency is not found"
+}
+````
+
+##### Start date format is invalid
+```json
+{
+    "success": false,
+    "status": 400,
+    "message": "Cannot perform your request. Invalid start date format"
+}
+```
+
+##### Finish date format is invalid
+```json
+{
+    "success": false,
+    "status": 400,
+    "message": "Cannot perform your request. Invalid finish date format"
+}
+```
+
 ## Application view
 
 Frontend application which displays REST API data: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG.
 
 
-Result of requesting latest exchange rates data using Postman.
+Result of requesting the latest exchange rates data using Postman.
 
 ![img.png](img.png)
 
 
 
-Api key section available to logged in users.
+Api key section available to logged-in users.
 
 ![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
