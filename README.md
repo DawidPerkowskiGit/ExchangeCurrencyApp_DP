@@ -169,9 +169,10 @@ You will receive following responses while not providing valid values to request
 Frontend application which displays REST API data: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG.
 
 
-Result of requesting the latest exchange rates data using Postman.
+Result of requesting the latest exchange rates data.
 
-![img.png](img.png)
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/1e6ca59d-10b7-4080-b04a-9719e8a9ed18)
+
 
 
 
