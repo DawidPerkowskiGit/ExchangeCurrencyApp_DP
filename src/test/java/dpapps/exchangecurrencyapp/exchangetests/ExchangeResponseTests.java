@@ -1,22 +1,13 @@
 package dpapps.exchangecurrencyapp.exchangetests;
 
-import dpapps.exchangecurrencyapp.exchange.model.Currency;
-import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
-import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.exchange.service.ExchangeService;
-import dpapps.exchangecurrencyapp.mockrepo.MockApiKeyRepo;
-import dpapps.exchangecurrencyapp.mockrepo.MockExchangeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +15,6 @@ import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,17 +32,25 @@ public class ExchangeResponseTests {
     final String invalidFinishDate = "finishDate=2023-18-21";
     final String invalidCurrency = "currency=PPP";
     final String invalidBaseCurrency = "baseCurrency=TTT";
-    final String validApiKey = "apiKey=jHZZGOiui3sQfjlsWTS-6lnJuT4dBT_QJnE__DB8iCoKDp9qFskh1QivzeAqP5Fo";
+    final String validApiKey = "apiKey=UAOrRlJZA2GHGiNmGqP65JTD85_Vv7JUivKp-ibClzZ_vAuj2hqlPHFxhU7LfJDy";
     final String validStartDate = "startDate=2023-08-20";
     final String validFinishDate = "finishDate=2023-08-21";
     final String validCurrency = "currency=PLN";
     final String validBaseCurrency = "baseCurrency=EUR";
 
-    List<String> arguments = new LinkedList<>();
+    final String noApiKeyJson = "{\"success\":false,\"status\":403,\"message\":\"You did not provide an API KEY\"}";
 
-    final Map<String, String> headers = new LinkedHashMap<>();
-    @Autowired
-    private ApiKeyRepository apiKeyRepository;
+    final String apiKeyInvalidJson = "{\"success\":false,\"status\":403,\"message\":\"Provided API KEY is invalid\"}";
+
+    final String startDateInvalidJson = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid start date format\"}";
+
+    final String finishDateInvalidJson = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid finish date format\"}";
+
+    final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Base currency is not found\"}";
+
+    final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Requested currency is not found\"}";
+
+    List<String> arguments = new LinkedList<>();
 
     @BeforeEach
     public void emptyArgsList() {
@@ -61,15 +59,57 @@ public class ExchangeResponseTests {
 
     @Test
     public void shouldReturnNoApiKeyProvided() throws Exception {
-        String validResponse = "{\"success\":false,\"status\":403,\"message\":\"You did not provide an API KEY\"}";
+        String validResponse = noApiKeyJson;
 
         this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString(validResponse)));
     }
 
     @Test
+    public void shouldReturnNoApiKeyProvidedVar1() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(invalidStartDate);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+    @Test
+    public void shouldReturnNoApiKeyProvidedVar2() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(invalidFinishDate);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+    @Test
+    public void shouldReturnNoApiKeyProvidedVar3() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(invalidCurrency);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+    @Test
+    public void shouldReturnNoApiKeyProvidedVar4() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(invalidBaseCurrency);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+
+
+    @Test
     public void shouldReturnInvalidApiKeyProvided() throws Exception {
-        String validResponse = "{\"success\":false,\"status\":403,\"message\":\"Provided API KEY is invalid\"}";
+        String validResponse = apiKeyInvalidJson;
 
         arguments.add(invalidApiKey);
 
@@ -79,7 +119,7 @@ public class ExchangeResponseTests {
 
     @Test
     public void shouldReturnInvalidStartDate() throws Exception {
-        String validResponse = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid start date format\"}";
+        String validResponse = startDateInvalidJson;
 
         arguments.add(validApiKey);
         arguments.add(invalidStartDate);
@@ -90,7 +130,7 @@ public class ExchangeResponseTests {
 
     @Test
     public void shouldReturnInvalidFinishDate() throws Exception {
-        String validResponse = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid finish date format\"}";
+        String validResponse = finishDateInvalidJson;
 
         arguments.add(validApiKey);
         arguments.add(invalidFinishDate);
@@ -101,7 +141,7 @@ public class ExchangeResponseTests {
 
     @Test
     public void shouldReturnInvalidBaseCurrency() throws Exception {
-        String validResponse = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Base currency is not found\"}";
+        String validResponse = baseCurrencyInvalidJson;
 
         arguments.add(validApiKey);
         arguments.add(invalidBaseCurrency);
@@ -110,9 +150,11 @@ public class ExchangeResponseTests {
                 .andExpect(content().string(containsString(validResponse)));
     }
 
+
+
     @Test
     public void shouldReturnInvalidRequestedCurrency() throws Exception {
-        String validResponse = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Requested currency is not found\"}";
+        String validResponse = requestedCurrencyInvalidJson;
 
         arguments.add(validApiKey);
         arguments.add(invalidCurrency);
@@ -120,6 +162,7 @@ public class ExchangeResponseTests {
         this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString(validResponse)));
     }
+
 
 
     public String urlBuilder() {
