@@ -105,6 +105,46 @@ public class ExchangeResponseTests {
                 .andExpect(content().string(containsString(validResponse)));
     }
 
+    @Test
+    public void shouldReturnNoApiKeyProvidedVar5() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(validStartDate);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+    @Test
+    public void shouldReturnNoApiKeyProvidedVar6() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(validFinishDate);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+    @Test
+    public void shouldReturnNoApiKeyProvidedVar7() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(validCurrency);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+    @Test
+    public void shouldReturnNoApiKeyProvidedVar8() throws Exception {
+        String validResponse = noApiKeyJson;
+
+        arguments.add(validBaseCurrency);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
 
 
     @Test
