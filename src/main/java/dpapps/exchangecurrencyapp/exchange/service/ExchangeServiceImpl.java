@@ -162,8 +162,8 @@ public class ExchangeServiceImpl implements ExchangeService{
             }
 
             apiKeyObject = apiKeyRepository.findByValue(apiKey);
-
             user = apiKeyObject.getUser();
+
             if (apiKeyService.canUseTheApiKey(apiKeyObject, user) == false) {
                 errorBody.setStatus(403);
                 errorBody.setMessage("Cannot perform your request. This API key does not belong to user calling the API");
@@ -184,8 +184,6 @@ public class ExchangeServiceImpl implements ExchangeService{
          */
         if (startDate == null) {
             beginDate = null;
-//            beginDate = onesDate;
-//            startDate = "";
         }
         else {
             beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
@@ -193,8 +191,6 @@ public class ExchangeServiceImpl implements ExchangeService{
 
         if (finishDate == null) {
             endDate = null;
-//            endDate = onesDate;
-//            finishDate = "";
         }
         else {
             endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
