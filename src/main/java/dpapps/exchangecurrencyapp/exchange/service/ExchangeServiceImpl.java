@@ -343,12 +343,17 @@ public class ExchangeServiceImpl implements ExchangeService{
         LocalDate exchangeDate = inputDate;
         InvalidRequestBody invalidRequestBody = new InvalidRequestBody();
 
+//        if (exchangeRepository.existsByExchangeDate(exchangeDate) == false) {
+//            invalidRequestBody.setStatus(404);
+//            invalidRequestBody.setMessage("Failed to fetch exchange rates from the requested date");
+//            return invalidRequestBody;
+//        }
         if (exchangeRepository.existsByExchangeDate(exchangeDate) == false) {
-            invalidRequestBody.setStatus(404);
-            invalidRequestBody.setMessage("Failed to fetch exchange rates from the requested date");
-            return invalidRequestBody;
+            pojo.setSuccess(false);
+//            invalidRequestBody.setStatus(404);
+//            invalidRequestBody.setMessage("Failed to fetch exchange rates from the requested date");
+            return pojo;
         }
-
         /**
          * Fetch exchanges from database
          */

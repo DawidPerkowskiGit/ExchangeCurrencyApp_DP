@@ -177,6 +177,15 @@ You will receive following responses while not providing valid values to request
 }
 ```
 
+##### Exchange rate from specific date does not exist in the database
+```json
+{
+    "success": false,
+    "status": 500,
+    "message": "Failed to return exchange rates. There is no data matching your request criteria"
+}
+```
+
 ## Application view
 
 Frontend application which displays REST API data: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG.
