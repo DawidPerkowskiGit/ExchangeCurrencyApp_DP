@@ -8,12 +8,10 @@ import dpapps.exchangecurrencyapp.exchange.repositories.*;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
 import dpapps.exchangecurrencyapp.exchange.tools.LocalDateStringConverter;
 import dpapps.exchangecurrencyapp.exchange.tools.DateRangeValidator;
-import dpapps.exchangecurrencyapp.jsonparser.response.CurrenciesWithLocationList;
-import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyEntityListToMap;
+import dpapps.exchangecurrencyapp.exchange.tools.StringToNumericConverter;
+import dpapps.exchangecurrencyapp.jsonparser.response.*;
 //import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyNamesLocationToJsonConverter;
-import dpapps.exchangecurrencyapp.jsonparser.response.ExchangesList;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
-import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -126,7 +124,7 @@ public class ExchangeServiceImpl implements ExchangeService{
      * @param headers      List of http headers
      * @return Exchange rates in JSON format
      */
-    public ResponseEntity<JsonConvertable> getExchanges(String apiKey, String currency, String baseCurrency, String startDate, String finishDate, Map<String, String> headers) {
+    public ResponseEntity<JsonConvertable> getExchanges(String apiKey, String currency, String baseCurrency, String startDate, String finishDate, Map<String, String> headers, String currencyValue) {
         System.out.println("entered exchange");
 
         headers.forEach((key, value) -> {
@@ -214,7 +212,6 @@ public class ExchangeServiceImpl implements ExchangeService{
             return ResponseEntity.ok(errorBody);
         }
 
-
         /**
          * Check if parameters are empty
          */
@@ -246,7 +243,6 @@ public class ExchangeServiceImpl implements ExchangeService{
             endDate = beginDate;
         }
 
-
         /**
          * Check if dates are in valid range, if they are not, return correct date range.
          */
@@ -271,6 +267,27 @@ public class ExchangeServiceImpl implements ExchangeService{
             errorBody.setMessage("Failed to return exchange rates. There is no data matching your request criteria");
             return ResponseEntity.ok(errorBody);
         }
+
+        /**
+         * Check if currency value is defined. If it is, return exchange rate requested value.
+         */
+        if (currencyValue != null && beginDate.equals(endDate)) {
+            if (StringToNumericConverter.isStringValidDouble(currencyValue)) {
+                Double currencyExchangeValue = StringToNumericConverter.convertStringToDouble(currencyValue);
+                RequestedExchangeValue requestedExchangeValue = new RequestedExchangeValue();
+                requestedExchangeValue.setRequestedValue(currencyExchangeValue);
+                requestedExchangeValue.setBaseCurrency(baseCurrency);
+                requestedExchangeValue.setRequestedCurrency(currency);
+                requestedExchangeValue.setExchangeDate(beginDate);
+
+                SingleDayExchangeRatesJson singleDayExchangeRatesJson =(SingleDayExchangeRatesJson) returnList.get(0);
+                requestedExchangeValue.setRate(singleDayExchangeRatesJson.getRates().get(currency));
+                requestedExchangeValue.calculateValue();
+                requestedExchangeValue.composeMessage();
+                return ResponseEntity.ok(requestedExchangeValue);
+            }
+        }
+
 
         if (vipClientRequest == false) {
             user.setCurrentRequestsCount(user.getCurrentRequestsCount() + 1);

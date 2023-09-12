@@ -73,7 +73,7 @@ public class ExchangeApiController {
      */
 
     @GetMapping("/exchange")
-    public ResponseEntity<JsonConvertable> getExchangeRates(@RequestParam(required = false) String currency, @RequestParam(required = false) String startDate, @RequestParam(required = false) String finishDate, @RequestParam(required = false) String baseCurrency, @RequestParam(required = false) String apiKey, @RequestHeader Map<String, String> headers) {
-        return exchangeService.getExchanges(apiKey, currency, baseCurrency, startDate, finishDate, headers);
+    public ResponseEntity<JsonConvertable> getExchangeRates(@RequestParam(required = false) String currency, @RequestParam(required = false) String startDate, @RequestParam(required = false) String finishDate, @RequestParam(required = false) String baseCurrency, @RequestParam(required = false) String apiKey, @RequestHeader Map<String, String> headers, @RequestParam(required = false) String currencyValue) {
+        return exchangeService.getExchanges(apiKey, currency, baseCurrency, startDate, finishDate, headers, currencyValue);
     }
 }

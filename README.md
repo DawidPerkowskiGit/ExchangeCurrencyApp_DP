@@ -80,6 +80,7 @@ Available optional URL parameters:
 - baseCurrency - changing the base currency(default is EUR)
 - startDate - return exchanges starting from the chosen date
 - finishDate - return exchanges finishing at the chosen date
+- currencyValue - calculate and return value of exchange rates of requested currency from a single day
 
 #### Valid request
 
@@ -106,6 +107,18 @@ The user can access this endpoint only when providing an api key. Returns exchan
 }
 ```
 
+When the 'currencyValue' parameter was provided and requesting single day data. Requires both 'currency' and 'baseCurrency' to be valid.
+```json
+{
+    "message": "5.0 EUR = 22.330545 PLN; Date of exchange 2023-08-30",
+    "exchangeDate": "2023-08-30",
+    "requestedValue": 5.0,
+    "rate": 4.466109,
+    "calculatedValue": 22.330545,
+    "baseCurrency": "EUR",
+    "requestedCurrency": "PLN"
+}
+```
 #### Invalid requests
 
 You will receive following responses while not providing valid values to requested, optional parameters and when data does not exist in the database.
