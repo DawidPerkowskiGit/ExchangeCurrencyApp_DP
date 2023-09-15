@@ -4,6 +4,7 @@ import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyEntityListToMap;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 
 import java.time.LocalDate;
 import java.util.Currency;

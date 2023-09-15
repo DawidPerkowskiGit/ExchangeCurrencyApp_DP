@@ -21,6 +21,7 @@ public class MainApplicationController {
     private final MainControllerService controller;
 
 
+
     @Autowired
     public MainApplicationController(MainControllerService controller) {
         this.controller = controller;
@@ -134,5 +135,10 @@ public class MainApplicationController {
     @GetMapping("/profile")
     public String profile(Model model) {
         return controller.getProfile(model);
+    }
+
+    @GetMapping("/log")
+    public String showLogs(Model model) {
+        return controller.getLogs(model);
     }
 }

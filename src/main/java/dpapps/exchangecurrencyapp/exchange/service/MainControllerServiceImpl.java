@@ -5,13 +5,21 @@ import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import dpapps.exchangecurrencyapp.security.UserDto;
 import dpapps.exchangecurrencyapp.security.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class MainControllerServiceImpl implements MainControllerService {
@@ -21,6 +29,8 @@ public class MainControllerServiceImpl implements MainControllerService {
     private final UserRepository userRepository;
 
     private final ApiKeyService apiKeyService;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public MainControllerServiceImpl(UserService userService, UserRepository userRepository, ApiKeyService apiKeyService) {
@@ -125,7 +135,7 @@ public class MainControllerServiceImpl implements MainControllerService {
     public String generateNewApiKey() {
         User user = userService.getCurrentUser();
         String output = apiKeyService.generateNewKey(user);
-        System.out.println(output);
+        logger.info(output);
         return "redirect:/profile";
     }
 
@@ -142,5 +152,25 @@ public class MainControllerServiceImpl implements MainControllerService {
         String apiRequestsString = "" + user.getCurrentRequestsCount() + "/" + AppVariables.DAILY_LIMIT_OF_DAILY_USAGES;
         model.addAttribute("apiRequestString", apiRequestsString);
         return "profile";
+    }
+
+    /**
+     * Returns logs file as a List
+     * @param model model of response, list of logs will be added
+     * @return log view name
+     */
+
+    public String getLogs(Model model) {
+        List<String> result = new ArrayList<>();
+        String fileName="logs/application.log";
+        try (Stream<String> lines = Files.lines(Paths.get(fileName))) {
+            result = lines.collect(Collectors.toList());
+
+        }
+        catch (Exception e) {
+            logger.error("Could not load log file. Exception: "+ e);
+        }
+        model.addAttribute("result", result);
+        return "log";
     }
 }

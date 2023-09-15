@@ -83,4 +83,11 @@ public interface MainControllerService {
     public String getProfile(Model model);
 
 
+    /**
+     * Returns logs file as a List
+     * @param model model of response, list of logs will be added
+     * @return log view name
+     */
+    String getLogs(Model model);
+
 }

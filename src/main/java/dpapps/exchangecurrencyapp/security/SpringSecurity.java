@@ -48,6 +48,7 @@ public class SpringSecurity {
                                 .requestMatchers("/generate").authenticated()
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/health").permitAll()
+                                .requestMatchers("/log").hasRole("ADMIN")
 
         )
                 .formLogin(form -> form

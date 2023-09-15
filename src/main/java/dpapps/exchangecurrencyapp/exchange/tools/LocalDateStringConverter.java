@@ -1,5 +1,7 @@
 package dpapps.exchangecurrencyapp.exchange.tools;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateStringConverter{
 
     private DateTimeFormatter dateFormat;
+
+    private static final Logger logger = LoggerFactory.getLogger(LocalDateStringConverter.class);
 
 
     /**
@@ -53,14 +57,14 @@ public class LocalDateStringConverter{
         int arr[] = new int[3];
         arr = putOnesIntoArray(arr);
         if (strings.length != 3) {
-            System.out.println("Cant convert String date to int date. It was not split into three parts");
+            logger.info("Can't convert String date to int date. It was not split into three parts");
             return arr;
         }
         for (int iterator = 0; iterator < 3; iterator++) {
             try {
                 arr[iterator] = Integer.valueOf(strings[iterator]);
             } catch (Exception e) {
-                System.out.println("Cannot convert String date to int, some of the values cant be converted");
+                logger.warn("Can't convert String date to int, some of the values cant be converted. Exception: "+ e);
                 arr = putOnesIntoArray(arr);
             }
         }
