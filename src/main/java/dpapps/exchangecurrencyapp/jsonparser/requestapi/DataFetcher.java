@@ -1,5 +1,7 @@
 package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -12,6 +14,8 @@ import java.net.http.HttpResponse;
  */
 @Service
 public class DataFetcher {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     public String retrieveApiResponse() {
@@ -33,7 +37,7 @@ public class DataFetcher {
             try {
                 apiUrl = System.getenv("API_IMPORT_CREDS_URL");
             } catch (Exception e) {
-                System.out.printf("Could not retrieve environment variable API_IMPORT_CREDS_URL. Exception: " + e);
+                logger.error("Could not retrieve environment variable API_IMPORT_CREDS_URL. Exception: " + e);
                 return "";
             }
         }
@@ -48,7 +52,7 @@ public class DataFetcher {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             apiResponseBody = response.body();
         } catch (Exception e) {
-            System.out.printf("Could not process API requestapi. Exception " + e);
+            logger.error("Could not process API requestapi. Exception " + e);
             return "";
         }
 

@@ -1,6 +1,8 @@
 package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -15,6 +17,7 @@ public class JsonToDataParser {
 
     private final boolean DEBUG = true;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Performs JSON file deserialization.
@@ -31,7 +34,7 @@ public class JsonToDataParser {
         try {
             jsonInString = readFileAsString(filePath);
         } catch (Exception e) {
-            System.out.println("Could not load file. Exception " + e);
+            logger.error("Could not load file. Exception " + e);
             return Optional.empty();
         }
         return jsonDeserialization(jsonInString);
@@ -50,10 +53,10 @@ public class JsonToDataParser {
             requestDataModel = mapper.readValue(jsonInString, RequestDataModel.class);
             if (DEBUG) {
                 String pojoToString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestDataModel);
-                System.out.println(pojoToString);
+                logger.info("Object converted to String: " + pojoToString);
             }
         } catch (Exception e) {
-            System.out.println("Could not parse JSON body. Exception: " + e);
+            logger.error("Could not parse JSON body. Exception: " + e);
             return Optional.empty();
         }
         return Optional.ofNullable(requestDataModel);

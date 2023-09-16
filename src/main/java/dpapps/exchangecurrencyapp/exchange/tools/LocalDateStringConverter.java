@@ -33,17 +33,6 @@ public class LocalDateStringConverter{
             return LocalDate.of(1, 1, 1);
         }
         return date;
-
-
-
-//        int[] intDate = new int[3];
-//        intDate = putOnesIntoArray(intDate);
-//        try {
-//            intDate = convertStringDateToInts(string);
-//        } catch (Exception e) {
-//            System.out.println("Cant convert String do LocalDate. Exception: " + e);
-//        }
-//        return LocalDate.of(intDate[0], intDate[1], intDate[2]);
     }
 
     /**

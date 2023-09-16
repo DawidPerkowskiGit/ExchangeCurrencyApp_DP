@@ -5,6 +5,8 @@ import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,8 @@ public class CurrencyExchangesScheduler {
     private final CurrencyRepository currencyRepository;
     private final UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     public CurrencyExchangesScheduler(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository, UserRepository userRepository) {
         this.exchangeRepository = exchangeRepository;
@@ -43,8 +47,7 @@ public class CurrencyExchangesScheduler {
      */
     @Scheduled(fixedRate = 14400000, initialDelay = 3600000)
     public String performCurrencyExchangeImport() {
-        System.out.println("Starting automatic currency exchange import");
-
+        logger.info("Starting automatic currency exchange import");
         return performCurrencyExchangeImport("");
     }
 
@@ -81,9 +84,9 @@ public class CurrencyExchangesScheduler {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         } catch (Exception e) {
-            System.out.println("Failed to perform scheduled task. Exception: " + e);
+            logger.error("Failed to perform scheduled task. Exception: " + e);
         }
-        System.out.println("Successfully kept the app from un-allocating resources. Time: " + localDateTime.toString());
+        logger.info("Successfully kept the app from un-allocating resources. Time: " + localDateTime.toString());
     }
 
     /**
@@ -96,7 +99,7 @@ public class CurrencyExchangesScheduler {
             user.setCurrentRequestsCount(0);
             userRepository.save(user);
         }
-        System.out.println("Successfully performed reset number of Api uses for every user. Time: " + LocalDateTime.now().toString());
+        logger.info("Successfully performed reset number of Api uses for every user. Time: " + LocalDateTime.now().toString());
         LocalDateTime.now();
     }
 }

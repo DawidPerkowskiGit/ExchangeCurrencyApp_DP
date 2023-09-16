@@ -4,6 +4,8 @@ import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class DataToDatabaseInserter {
 
     private final CurrencyRepository currencyRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     public DataToDatabaseInserter(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository) {
         this.exchangeRepository = exchangeRepository;
@@ -37,21 +41,21 @@ public class DataToDatabaseInserter {
         List<Exchange> exchanges = new ArrayList<>();
         try {
             if (requestDataModel.doAllNullableFieldsContainData() == false) {
-                System.out.println("Exchange date does not contain information");
+                logger.info("Exchange date does not contain information");
                 return exchanges;
             }
         } catch (Exception e) {
-            System.out.println("Could not extract date from responseBodyPojo. Exception " + e);
+            logger.error("Could not extract date from responseBodyPojo. Exception " + e);
         }
 
 
         try {
             if (exchangeRepository.existsByExchangeDate(requestDataModel.getDate())) {
-                System.out.println("Exchange rates from " + requestDataModel.getDate().toString() + " are already in database");
+                logger.info("Exchange rates from " + requestDataModel.getDate().toString() + " are already in database");
                 return exchanges;
             }
         } catch (Exception e) {
-            System.out.println("Could not find date in Exchanges database");
+            logger.warn("Could not find date in Exchanges database");
         }
 
 
@@ -66,9 +70,9 @@ public class DataToDatabaseInserter {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Could not create exchanges list. Exception " + e);
+            logger.warn("Could not create exchanges list. Exception " + e);
         }
-        System.out.println(exchanges);
+        logger.info("Exchanges inserted to the database : " + exchanges);
         return exchanges;
     }
 
@@ -83,7 +87,7 @@ public class DataToDatabaseInserter {
                 exchangeRepository.save(exchange);
             }
         } catch (Exception e) {
-            System.out.printf("Could not insert Exchanges to database");
+            logger.error("Could not insert Exchanges to database");
         }
     }
 
