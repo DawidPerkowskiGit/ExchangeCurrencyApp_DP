@@ -10,10 +10,7 @@ import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
-import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypesChecker;
-import dpapps.exchangecurrencyapp.exchange.tools.DateRangeValidator;
-import dpapps.exchangecurrencyapp.exchange.tools.LocalDateStringConverter;
-import dpapps.exchangecurrencyapp.exchange.tools.StringToNumericConverter;
+import dpapps.exchangecurrencyapp.exchange.tools.*;
 import dpapps.exchangecurrencyapp.jsonparser.response.*;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
@@ -24,10 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ExchangeServiceImpl implements ExchangeService{
@@ -199,15 +193,43 @@ public class ExchangeServiceImpl implements ExchangeService{
             endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
         }
 
-        if (currency == null) {
-            currency = "";
-        }
-        else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)  == false) {
-            errorBody.setStatus(404);
-            errorBody.setMessage("Cannot perform your request. Requested currency is not found");
-            logger.warn("Cannot perform your request. Requested currency is not found");
-            return ResponseEntity.ok(errorBody);
-        }
+//        if (currency == null) {
+//            currency = "";
+//        }
+//        else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)  == false) {
+//            errorBody.setStatus(404);
+//            errorBody.setMessage("Cannot perform your request. Requested currency is not found");
+//            logger.warn("Cannot perform your request. Requested currency is not found");
+//            return ResponseEntity.ok(errorBody);
+//        }
+
+        List<String> requestedCurernciesList;
+//        if (currency == null) {
+//            currency = "";
+//        }
+//        else {
+            requestedCurernciesList = CurrencyListExtractor.extractCurrencyList(currency);
+            if (requestedCurernciesList.isEmpty()) {
+                errorBody.setStatus(404);
+                errorBody.setMessage("Cannot perform your request. Requested currency is not found");
+                logger.warn("Cannot perform your request. Requested currency is not found");
+                return ResponseEntity.ok(errorBody);
+            }
+
+            if (requestedCurernciesList.size() == 1) {
+                currency = requestedCurernciesList.get(0);
+            }
+            // Temporary
+            else {
+                errorBody.setStatus(404);
+                errorBody.setMessage("Cannot perform your request. Requested currency is not found");
+                logger.warn("Cannot perform your request. Requested currency is not found");
+                return ResponseEntity.ok(errorBody);
+            }
+//        }
+
+
+
 
         if (baseCurrency == null) {
             baseCurrency = "";
