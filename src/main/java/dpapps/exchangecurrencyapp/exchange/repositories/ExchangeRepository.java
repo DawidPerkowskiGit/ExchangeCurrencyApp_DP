@@ -22,6 +22,9 @@ public interface ExchangeRepository extends CrudRepository<Exchange, Integer> {
     @Query("SELECT e FROM Exchange e INNER JOIN Currency c ON e.currency = c WHERE e.exchangeDate = :date AND c.isoName = :currency ORDER BY e.currency.id")
     List<Exchange> findAllByExchangeDateAndCurrencyOrderByExchangeDate(@Param("date") LocalDate date, @Param("currency") String currency);
 
+    @Query("SELECT e FROM Exchange e INNER JOIN Currency c ON e.currency = c WHERE e.exchangeDate = :date AND c.isoName IN :currency ORDER BY e.currency.id")
+    List<Exchange> findAllByExchangeDateAndCurrenciesOrderByExchangeDate(@Param("date") LocalDate date, @Param("currency") List<String> currency);
+
     @Query("SELECT e FROM Exchange e INNER JOIN Currency c ON e.currency = c WHERE e.exchangeDate = :date AND c.isoName = :currency")
     Exchange findByExchangeDateAndCurrency_IsoName(@Param("date") LocalDate date, @Param("currency") String currency);
 

@@ -11,13 +11,11 @@ I created frontend application developed in Angular, which displays requested da
 
 ## Technologies
 
-Java 17, Spring 6, Spring Boot, Spring Web, Spring Data, Spring Security, PostgreSQL 15, Maven, Docker, Git, JUnit, Render, Jackson, Thymeleaf.
+Java 17, Spring 6, Spring Boot, Spring Web, Spring Data, Spring Security, PostgresSQL 15, Maven, Docker, Git, JUnit, Render, Jackson, Thymeleaf.
 
 ## More detailed information about application
 
-The application and its database PostgreSQL is hosted on Render.com. Database stores over 30 different currency types and their exchange rates, first entry is from 1999-01-04. Every four hours application performs automatic REST API request to exchangeratesapi.io in search of new exchange rates. If received exchanges are new, the data is inserted to the database. Users have to create account and use their API key to retrieve data.
-
-All sensitive data like database connection credentials are stored in local machine's environment variables for development and Render's web service secrets for deployment.
+The application and its database PostgresSQL is hosted on Render.com. Database stores over 30 different currency types and their exchange rates, first entry is from 1999-01-04. Every four hours application performs automatic REST API request to exchangeratesapi.io in search of new exchange rates. If received exchanges are new, the data is inserted to the database. Users have to create account and use their API key to retrieve data.
 
 URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
 
@@ -76,12 +74,34 @@ Required URL parameters:
 - apiKey - required key to perform API request
 
 Available optional URL parameters:
-- currency - exchange rates of chosen currency type
+- currency - exchange rates of chosen currency types
 - baseCurrency - changing the base currency(default is EUR)
 - startDate - return exchanges starting from the chosen date
 - finishDate - return exchanges finishing at the chosen date
 - currencyValue - calculate and return value of exchange rates of requested currency from a single day
 
+Available currencies:
+```
+AUD,BGN,BRL,CAD,CHF,CNY,CYP,CZK,DKK,EEK,EUR,GBP,HKD,HRK,HUF,IDR,ILS,INR,ISK,JPY,KRW,LTL,LVL,MTL,MXN,MYR,NOK,NZD,PHP,PLN,ROL,RON,RUB,SEK,SGD,SIT,SKK,THB,TRL,TRY,USD,ZAR
+```
+
+Examples of valid currency or baseCurrency parameters:
+```
+AUD
+```
+```
+EUR,USD
+```
+
+Date format is as follows:
+```
+yyyy-MM-dd
+```
+
+Example of valid date format:
+```
+2020-05-15
+```
 #### Valid request
 
 The user can access this endpoint only when providing an api key. Returns exchange rates list in JSON format, for example:

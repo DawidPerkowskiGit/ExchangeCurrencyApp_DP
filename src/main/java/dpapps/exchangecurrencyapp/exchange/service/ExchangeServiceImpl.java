@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class ExchangeServiceImpl implements ExchangeService{
+public class ExchangeServiceImpl implements ExchangeService {
 
     private final CurrencyRepository currencyRepository;
 
@@ -59,8 +59,7 @@ public class ExchangeServiceImpl implements ExchangeService{
         Iterable<Currency> currencyList;
         if (date != null) {
             LocalDate currenciesDate = LocalDateStringConverter.convertStringToLocalDate(date);
-            LocalDate onesDate = LocalDate.of(1, 1, 1);
-            if (currenciesDate.isEqual(onesDate)) {
+            if (currenciesDate.isEqual(AppVariables.invalidDateCheck)) {
                 currenciesDate = LocalDate.now();
             }
 
@@ -70,8 +69,7 @@ public class ExchangeServiceImpl implements ExchangeService{
             }
             currencyList = currencyRepository.getActivelyUsedCurrenciesAtDate(currenciesDate);
 
-        }
-        else {
+        } else {
             currencyList = currencyRepository.getAll();
         }
         currencyEntityListToMap.convertCurrencyListToJsonCurrency(currencyList);
@@ -167,87 +165,23 @@ public class ExchangeServiceImpl implements ExchangeService{
                 return ResponseEntity.ok(errorBody);
             }
         }
+
         /**
          * Convert String Date to LocalDate
          */
 
-
         LocalDate beginDate;
         LocalDate endDate;
-        final LocalDate onesDate = LocalDate.of(1, 1, 1);
+        LocalDate latestExchangeDate = exchangeRepository.getLatestExchangeDate();
 
         /**
-         * Nullable fields check
+         * Nullable fields check, assign default values to
          */
         if (startDate == null) {
-            beginDate = null;
-        }
-        else {
+            beginDate = latestExchangeDate;
+        } else {
             beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
-        }
-
-        if (finishDate == null) {
-            endDate = null;
-        }
-        else {
-            endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
-        }
-
-//        if (currency == null) {
-//            currency = "";
-//        }
-//        else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)  == false) {
-//            errorBody.setStatus(404);
-//            errorBody.setMessage("Cannot perform your request. Requested currency is not found");
-//            logger.warn("Cannot perform your request. Requested currency is not found");
-//            return ResponseEntity.ok(errorBody);
-//        }
-
-        List<String> requestedCurernciesList;
-//        if (currency == null) {
-//            currency = "";
-//        }
-//        else {
-            requestedCurernciesList = CurrencyListExtractor.extractCurrencyList(currency);
-            if (requestedCurernciesList.isEmpty()) {
-                errorBody.setStatus(404);
-                errorBody.setMessage("Cannot perform your request. Requested currency is not found");
-                logger.warn("Cannot perform your request. Requested currency is not found");
-                return ResponseEntity.ok(errorBody);
-            }
-
-            if (requestedCurernciesList.size() == 1) {
-                currency = requestedCurernciesList.get(0);
-            }
-            // Temporary
-            else {
-                errorBody.setStatus(404);
-                errorBody.setMessage("Cannot perform your request. Requested currency is not found");
-                logger.warn("Cannot perform your request. Requested currency is not found");
-                return ResponseEntity.ok(errorBody);
-            }
-//        }
-
-
-
-
-        if (baseCurrency == null) {
-            baseCurrency = "";
-        }
-        else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency)  == false) {
-            errorBody.setStatus(404);
-            errorBody.setMessage("Cannot perform your request. Base currency is not found");
-            logger.warn("Cannot perform your request. Base currency is not found");
-            return ResponseEntity.ok(errorBody);
-        }
-
-        /**
-         * Check if parameters are empty
-         */
-
-
-        if (beginDate != null) {
-            if (beginDate.isEqual(onesDate)) {
+            if (beginDate.isEqual(AppVariables.invalidDateCheck)) {
                 errorBody.setStatus(400);
                 errorBody.setMessage("Cannot perform your request. Invalid start date format");
                 logger.warn("Cannot perform your request. Invalid start date format");
@@ -255,8 +189,11 @@ public class ExchangeServiceImpl implements ExchangeService{
             }
         }
 
-        if (finishDate != null) {
-            if (endDate.isEqual(onesDate)) {
+        if (finishDate == null) {
+            endDate = latestExchangeDate;
+        } else {
+            endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+            if (endDate.isEqual(AppVariables.invalidDateCheck)) {
                 errorBody.setStatus(400);
                 errorBody.setMessage("Cannot perform your request. Invalid finish date format");
                 logger.warn("Cannot perform your request. Invalid finish date format");
@@ -264,14 +201,27 @@ public class ExchangeServiceImpl implements ExchangeService{
             }
         }
 
+        List<String> requestedCurernciesList = new LinkedList<>();
 
-        if (beginDate == null && endDate == null) {
-            beginDate = endDate = LocalDate.now();
+        if (currency == null) {
+            requestedCurernciesList.add(AppVariables.ALL_CURRENCIES);
+        } else {
+            requestedCurernciesList = CurrencyListExtractor.extractCurrencyList(currency);
+            if (requestedCurernciesList.isEmpty()) {
+                errorBody.setStatus(404);
+                errorBody.setMessage("Cannot perform your request. Requested currency is not found");
+                logger.warn("Cannot perform your request. Requested currency is not found");
+                return ResponseEntity.ok(errorBody);
+            }
         }
-        if (beginDate == null) {
-            beginDate = endDate;
-        } else if (endDate == null) {
-            endDate = beginDate;
+
+        if (baseCurrency == null) {
+            baseCurrency = AppVariables.DEFAULT_BASE_CURRENCY;
+        } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
+            errorBody.setStatus(404);
+            errorBody.setMessage("Cannot perform your request. Base currency is not found");
+            logger.warn("Cannot perform your request. Base currency is not found");
+            return ResponseEntity.ok(errorBody);
         }
 
         /**
@@ -290,7 +240,7 @@ public class ExchangeServiceImpl implements ExchangeService{
          * Check if requested exchange rates are form a single day, if they, are return exchanges form the day.
          * If the exchange rates are from multiple days, return list of exchanges.
          */
-        List<JsonConvertable> returnList = getExchangesFromMultipleDays(beginDate, endDate, currency, baseCurrency);
+        List<JsonConvertable> returnList = getExchangesFromMultipleDays(beginDate, endDate, requestedCurernciesList, baseCurrency);
 
 
         if (returnList.isEmpty()) {
@@ -303,17 +253,17 @@ public class ExchangeServiceImpl implements ExchangeService{
         /**
          * Check if currency value is defined. If it is, return exchange rate requested value.
          */
-        if (currencyValue != null && beginDate.equals(endDate)) {
+        if (currencyValue != null && beginDate.equals(endDate) && requestedCurernciesList.size()==1) {
             if (StringToNumericConverter.isStringValidDouble(currencyValue)) {
                 Double currencyExchangeValue = StringToNumericConverter.convertStringToDouble(currencyValue);
                 RequestedExchangeValue requestedExchangeValue = new RequestedExchangeValue();
                 requestedExchangeValue.setRequestedValue(currencyExchangeValue);
                 requestedExchangeValue.setBaseCurrency(baseCurrency);
-                requestedExchangeValue.setRequestedCurrency(currency);
+                requestedExchangeValue.setRequestedCurrency(requestedCurernciesList.get(0));
                 requestedExchangeValue.setExchangeDate(beginDate);
 
-                SingleDayExchangeRatesJson singleDayExchangeRatesJson =(SingleDayExchangeRatesJson) returnList.get(0);
-                requestedExchangeValue.setRate(singleDayExchangeRatesJson.getRates().get(currency));
+                SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) returnList.get(0);
+                requestedExchangeValue.setRate(singleDayExchangeRatesJson.getRates().get(requestedCurernciesList.get(0)));
                 requestedExchangeValue.calculateValue();
                 requestedExchangeValue.composeMessage();
                 return ResponseEntity.ok(requestedExchangeValue);
@@ -341,14 +291,13 @@ public class ExchangeServiceImpl implements ExchangeService{
      * @param baseCurrency Base currency
      * @return List of exchange rates
      */
-    public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, String currency, String baseCurrency) {
+    public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, List<String> currency, String baseCurrency) {
 
         List<JsonConvertable> exchangeList = new ArrayList<>();
 
         LocalDate currentDate = beginDate;
         while (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) {
-//            SingleDayExchangeRatesJson singleDayExchanges = getExchangesFromSingleDay(currentDate, currency, baseCurrency).get();
-            SingleDayExchangeRatesJson singleDayExchanges = (SingleDayExchangeRatesJson)getExchangesFromSingleDay(currentDate, currency, baseCurrency);
+            SingleDayExchangeRatesJson singleDayExchanges = (SingleDayExchangeRatesJson) getExchangesFromSingleDay(currentDate, currency, baseCurrency);
 
             if (singleDayExchanges.isSuccess()) {
                 exchangeList.add(singleDayExchanges);
@@ -368,44 +317,27 @@ public class ExchangeServiceImpl implements ExchangeService{
      * @param baseCurrency Base currency
      * @return Object containing exchange rated from single day
      */
-    public JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, String currency, String baseCurrency) {
+    public JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, List<String> currency, String baseCurrency) {
 
 
         SingleDayExchangeRatesJson pojo = new SingleDayExchangeRatesJson();
         LocalDate exchangeDate = inputDate;
         InvalidRequestBody invalidRequestBody = new InvalidRequestBody();
 
-//        if (exchangeRepository.existsByExchangeDate(exchangeDate) == false) {
-//            invalidRequestBody.setStatus(404);
-//            invalidRequestBody.setMessage("Failed to fetch exchange rates from the requested date");
-//            return invalidRequestBody;
-//        }
         if (exchangeRepository.existsByExchangeDate(exchangeDate) == false) {
             pojo.setSuccess(false);
-//            invalidRequestBody.setStatus(404);
-//            invalidRequestBody.setMessage("Failed to fetch exchange rates from the requested date");
             return pojo;
         }
         /**
          * Fetch exchanges from database
          */
         try {
-            List<Exchange> latestExchangesList;
+            List<Exchange> latestExchangesList = new LinkedList<>();
 
-
-            /**
-             * Wanted currency checks
-             */
-            if (currency.equals("")) {
+            if (currency.get(0).equals(AppVariables.ALL_CURRENCIES)) {
                 latestExchangesList = exchangeRepository.findAllByExchangeDateOrderByCurrencyDesc(exchangeDate);
-            } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency)) {
-                latestExchangesList = exchangeRepository.findAllByExchangeDateAndCurrencyOrderByExchangeDate(exchangeDate, currency);
             } else {
-//                pojo.setSuccess(false);
-                invalidRequestBody.setStatus(400);
-                invalidRequestBody.setMessage("This currency type is unavailable");
-                logger.warn("This currency type is unavailable");
-                return invalidRequestBody;
+                latestExchangesList = exchangeRepository.findAllByExchangeDateAndCurrenciesOrderByExchangeDate(exchangeDate, currency);
             }
 
 
@@ -413,7 +345,7 @@ public class ExchangeServiceImpl implements ExchangeService{
              * Base currency checks
              */
             if (baseCurrency.equals("")) {
-                pojo.setBase(AppVariables.CURRENCY_BASE);
+                pojo.setBase(AppVariables.DEFAULT_BASE_CURRENCY);
             } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
                 invalidRequestBody.setStatus(404);
                 invalidRequestBody.setMessage("Could not find base currency in the database");
@@ -428,7 +360,7 @@ public class ExchangeServiceImpl implements ExchangeService{
              * Get exchange rates from db
              */
             Map<String, Double> rates = new HashMap<>();
-            if (pojo.getBase().equals(AppVariables.CURRENCY_BASE)) {
+            if (pojo.getBase().equals(AppVariables.DEFAULT_BASE_CURRENCY)) {
                 for (Exchange entry : latestExchangesList) {
                     rates.put(entry.getCurrency().getIsoName(), entry.getValue());
                 }
@@ -455,7 +387,6 @@ public class ExchangeServiceImpl implements ExchangeService{
         }
         return pojo;
     }
-
 
 
     /**

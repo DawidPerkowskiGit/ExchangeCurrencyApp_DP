@@ -125,6 +125,21 @@ public class MockExchangeRepository implements ExchangeRepository {
     }
 
     @Override
+    public List<Exchange> findAllByExchangeDateAndCurrenciesOrderByExchangeDate(LocalDate date, List<String> currency) {
+        List<Exchange> dateList = new LinkedList<>();
+        for (Exchange exchange: this.listOfExchanges
+        ) {
+            for (String singleCurrency : currency) {
+                if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(singleCurrency)) {
+                    dateList.add(exchange);
+                }
+            }
+        }
+        dateList.sort(Comparator.comparing(Exchange::getExchangeDate));
+        return dateList;
+    }
+
+    @Override
     public Exchange findByExchangeDateAndCurrency_IsoName(LocalDate date, String currency) {
         for (Exchange exchange: this.listOfExchanges
         ) {

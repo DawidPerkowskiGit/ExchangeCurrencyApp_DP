@@ -169,87 +169,6 @@ public class ExchangeResponseTests {
         System.out.println("Performed API requests for " + counter + " URL permutations");
     }
 
-    /**
-     * Tests single argument endpoint request where invalid requested currency was provided.
-     * @throws Exception MockMVC Exception
-     */
-
-    @Test
-    public void shouldReturnInvalidRequestedCurrency() throws Exception {
-        String validResponse = requestedCurrencyInvalidJson;
-
-        arguments.add(validApiKey);
-        arguments.add(invalidCurrency);
-
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
-    }
-    /**
-     * Tests all other arguments permutations endpoint request where invalid requested currency was provided.
-     * @throws Exception MockMVC Exception
-     */
-    @Test
-    public void shouldReturnInvalidRequestedCurrencyWithAllOtherArgs() throws Exception {
-        String validResponse = requestedCurrencyInvalidJson;
-
-        List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidCurrency, baseCurrencyArgs, startDateArgs, finishDateArgs);
-
-        int counter = 0;
-
-        for (String url: urlList
-        ) {
-            System.out.println("Testing URL: "+ url);
-            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
-                    .andExpect(content().string(containsString(validResponse)));
-            counter++;
-        }
-
-        System.out.println("Performed API requests for " + counter + " URL permutations");
-    }
-
-    /**
-     * Tests single argument endpoint request where invalid base currency was provided.
-     * Requested currency argument was checked in previous tests. It will not be included in the all following tests.
-     * @throws Exception MockMVC Exception
-     */
-    @Test
-    public void shouldReturnInvalidBaseCurrency() throws Exception {
-        String validResponse = baseCurrencyInvalidJson;
-
-        arguments.add(validApiKey);
-        arguments.add(invalidBaseCurrency);
-
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
-    }
-
-    /**
-     * Tests all other arguments permutations endpoint request where invalid base currency was provided.
-     * @throws Exception MockMVC Exception
-     */
-    @Test
-    public void shouldReturnInvalidBaseCurrencyWithAllOtherArgsPermutations() throws Exception {
-        String validResponse = baseCurrencyInvalidJson;
-
-        List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidBaseCurrency, startDateArgs, finishDateArgs);
-        int counter = 0;
-        for (String url: urlList
-        ) {
-
-            System.out.println("Testing URL: "+ url);
-            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
-                    .andExpect(content().string(containsString(validResponse)));
-            counter++;
-        }
-        System.out.println("Performed API requests for " + counter + " URL permutations");
-    }
-
-
-
-    /**
-     * Tests single argument endpoint request where invalid start date was provided.
-     * @throws Exception MockMVC Exception
-     */
 
     @Test
     public void shouldReturnInvalidStartDate() throws Exception {
@@ -272,7 +191,7 @@ public class ExchangeResponseTests {
     public void shouldReturnInvalidStartDateForArgsPermutations() throws Exception {
         String validResponse = startDateInvalidJson;
 
-        List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidStartDate, finishDateArgs);
+        List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidStartDate, finishDateArgs, baseCurrencyArgs, requestedCurrencyArgs);
         int counter = 0;
         for (String url: urlList
         ) {
@@ -305,15 +224,81 @@ public class ExchangeResponseTests {
      * @throws Exception MockMVC Exception
      */
     @Test
-    public void shouldReturnInvalidFinishDate2() throws Exception {
-        String validResponse = finishDateInvalidJson;
+    public void shouldReturnInvalidFinishDateForArgsPermutations() throws Exception {
+         String validResponse = finishDateInvalidJson;
+
+        List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidFinishDate, baseCurrencyArgs, requestedCurrencyArgs);
+        int counter = 0;
+        for (String url: urlList
+        ) {
+
+            System.out.println("Testing URL: "+ url);
+            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
+                    .andExpect(content().string(containsString(validResponse)));
+            counter++;
+        }
+        System.out.println("Performed API requests for " + counter + " URL permutations");
+    }
+
+
+    /**
+     * Tests single argument endpoint request where invalid requested currency was provided.
+     * @throws Exception MockMVC Exception
+     */
+
+    @Test
+    public void shouldReturnInvalidRequestedCurrency() throws Exception {
+        String validResponse = requestedCurrencyInvalidJson;
 
         arguments.add(validApiKey);
-        arguments.add(emptyFinishDateArg);
+        arguments.add(invalidCurrency);
 
         this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString(validResponse)));
     }
+    /**
+     * Tests all other arguments permutations endpoint request where invalid requested currency was provided.
+     * @throws Exception MockMVC Exception
+     */
+    @Test
+    public void shouldReturnInvalidRequestedCurrencyWithAllOtherArgs() throws Exception {
+        String validResponse = requestedCurrencyInvalidJson;
+
+        List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidCurrency, baseCurrencyArgs);
+
+        int counter = 0;
+
+        for (String url: urlList
+        ) {
+            System.out.println("Testing URL: "+ url);
+            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
+                    .andExpect(content().string(containsString(validResponse)));
+            counter++;
+        }
+
+        System.out.println("Performed API requests for " + counter + " URL permutations");
+    }
+
+    /**
+     * Tests single argument endpoint request where invalid base currency was provided.
+     * Requested currency argument was checked in previous tests. It will not be included in the all following tests.
+     * @throws Exception MockMVC Exception
+     */
+    @Test
+    public void shouldReturnInvalidBaseCurrency() throws Exception {
+        String validResponse = baseCurrencyInvalidJson;
+
+        arguments.add(validApiKey);
+        arguments.add(invalidBaseCurrency);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString(validResponse)));
+    }
+
+    /**
+     * Tests single argument endpoint request where invalid start date was provided.
+     * @throws Exception MockMVC Exception
+     */
 
     /**
      * Returns list with all possible URL permutations for the requested arguments

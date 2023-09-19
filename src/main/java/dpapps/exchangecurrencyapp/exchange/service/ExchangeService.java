@@ -53,9 +53,9 @@ public interface ExchangeService {
      */
     ResponseEntity<JsonConvertable> getExchanges(String apiKey, String currency, String baseCurrency, String startDate, String finishDate, Map<String, String> headers, String currencyValue);
 
-    List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, String currency, String baseCurrency);
+    List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, List<String> currency, String baseCurrency);
 
-    JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, String currency, String baseCurrency);
+    JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, List<String> currency, String baseCurrency);
 
     double calculateNewRatio(LocalDate date, String currency);
 

@@ -1,8 +1,6 @@
 package dpapps.exchangecurrencyapp.configuration;
 
-import java.io.FileOutputStream;
 import java.time.LocalDate;
-import java.time.format.FormatStyle;
 
 /**
  * Class which stores all global variables
@@ -16,7 +14,15 @@ public class AppVariables {
     /**
      * Default currency used as base for returning exchange rates
      */
-    public final static String CURRENCY_BASE = "EUR";
+    public final static String DEFAULT_BASE_CURRENCY = "EUR";
+
+    /**
+     * Default requested currency
+     */
+    public final static String DEFAULT_REQUESTED_CURRENCY = "USD";
+
+
+    public final static String ALL_CURRENCIES = "ALL_CURRENCIES";
 
     /**
      * Daily limit of REST API uses for registered users
@@ -37,6 +43,8 @@ public class AppVariables {
     /**
      * Server date format
      */
+
+    public final static LocalDate invalidDateCheck = LocalDate.of(1, 1 ,1);
 
     public final static String DATE_FORMAT = "yyyy-MM-dd";
 
