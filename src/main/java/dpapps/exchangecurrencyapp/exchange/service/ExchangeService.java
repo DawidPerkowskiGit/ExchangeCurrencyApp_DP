@@ -53,10 +53,34 @@ public interface ExchangeService {
      */
     ResponseEntity<JsonConvertable> getExchanges(String apiKey, String currency, String baseCurrency, String startDate, String finishDate, Map<String, String> headers, String currencyValue);
 
+    /**
+     * Returns exchange rates from multiple days. It is called when accessing "../exchange" endpoint
+     *
+     * @param beginDate    Exchange rates starting from date
+     * @param endDate      Exchange rates ending in date
+     * @param currency     Requested currency
+     * @param baseCurrency Base currency
+     * @return List of exchange rates
+     */
     List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, List<String> currency, String baseCurrency);
 
+    /**
+     * Exchange rates from single day. It is called at least once when returning exchange rates from multiple days
+     *
+     * @param inputDate    Exchange rates date
+     * @param currency     Requested currency
+     * @param baseCurrency Base currency
+     * @return Object containing exchange rated from single day
+     */
     JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, List<String> currency, String baseCurrency);
 
+    /**
+     * Method which returns exchange rate based on non-default currency
+     *
+     * @param date     Exchange rates date
+     * @param currency Currency used as base
+     * @return Exchange rate based on requested currency
+     */
     double calculateNewRatio(LocalDate date, String currency);
 
     /**
