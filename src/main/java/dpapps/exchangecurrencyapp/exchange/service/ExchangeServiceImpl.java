@@ -177,7 +177,10 @@ public class ExchangeServiceImpl implements ExchangeService {
         /**
          * Nullable fields check, assign default values to
          */
-        if (startDate == null) {
+        if (startDate == null && finishDate == null) {
+            beginDate = endDate = latestExchangeDate;
+        }
+/*        if (startDate == null) {
             beginDate = latestExchangeDate;
         } else {
             beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
@@ -193,6 +196,25 @@ public class ExchangeServiceImpl implements ExchangeService {
             endDate = latestExchangeDate;
         } else {
             endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+            if (endDate.isEqual(AppVariables.invalidDateCheck)) {
+                errorBody.setStatus(400);
+                errorBody.setMessage("Cannot perform your request. Invalid finish date format");
+                logger.warn("Cannot perform your request. Invalid finish date format");
+                return ResponseEntity.ok(errorBody);
+            }
+        }*/
+
+        else if (startDate != null) {
+            beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
+            if (beginDate.isEqual(AppVariables.invalidDateCheck)) {
+                errorBody.setStatus(400);
+                errorBody.setMessage("Cannot perform your request. Invalid start date format");
+                logger.warn("Cannot perform your request. Invalid start date format");
+                return ResponseEntity.ok(errorBody);
+            }
+        }
+            else {
+            endDate = beginDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.invalidDateCheck)) {
                 errorBody.setStatus(400);
                 errorBody.setMessage("Cannot perform your request. Invalid finish date format");
