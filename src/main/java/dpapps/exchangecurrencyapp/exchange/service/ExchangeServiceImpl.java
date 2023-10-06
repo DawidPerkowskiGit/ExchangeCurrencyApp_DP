@@ -177,34 +177,43 @@ public class ExchangeServiceImpl implements ExchangeService {
         /**
          * Nullable fields check, assign default values to
          */
+
+//        if (startDate == null) {
+//            beginDate = latestExchangeDate;
+//        } else {
+//            beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
+//            if (beginDate.isEqual(AppVariables.invalidDateCheck)) {
+//                errorBody.setStatus(400);
+//                errorBody.setMessage("Cannot perform your request. Invalid start date format");
+//                logger.warn("Cannot perform your request. Invalid start date format");
+//                return ResponseEntity.ok(errorBody);
+//            }
+//        }
+//
+//        if (finishDate == null) {
+//            endDate = latestExchangeDate;
+//        } else {
+//            endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+//            if (endDate.isEqual(AppVariables.invalidDateCheck)) {
+//                errorBody.setStatus(400);
+//                errorBody.setMessage("Cannot perform your request. Invalid finish date format");
+//                logger.warn("Cannot perform your request. Invalid finish date format");
+//                return ResponseEntity.ok(errorBody);
+//            }
+//        }
         if (startDate == null && finishDate == null) {
             beginDate = endDate = latestExchangeDate;
         }
-/*        if (startDate == null) {
-            beginDate = latestExchangeDate;
-        } else {
-            beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
-            if (beginDate.isEqual(AppVariables.invalidDateCheck)) {
-                errorBody.setStatus(400);
-                errorBody.setMessage("Cannot perform your request. Invalid start date format");
-                logger.warn("Cannot perform your request. Invalid start date format");
-                return ResponseEntity.ok(errorBody);
-            }
-        }
-
-        if (finishDate == null) {
-            endDate = latestExchangeDate;
-        } else {
-            endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+        else if (startDate == null) {
+            beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.invalidDateCheck)) {
                 errorBody.setStatus(400);
                 errorBody.setMessage("Cannot perform your request. Invalid finish date format");
                 logger.warn("Cannot perform your request. Invalid finish date format");
                 return ResponseEntity.ok(errorBody);
             }
-        }*/
-
-        else if (startDate != null) {
+        }
+        else if (finishDate == null) {
             beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
             if (beginDate.isEqual(AppVariables.invalidDateCheck)) {
                 errorBody.setStatus(400);
@@ -213,15 +222,24 @@ public class ExchangeServiceImpl implements ExchangeService {
                 return ResponseEntity.ok(errorBody);
             }
         }
-            else {
-            endDate = beginDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+        else {
+            beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
+            if (beginDate.isEqual(AppVariables.invalidDateCheck)) {
+                errorBody.setStatus(400);
+                errorBody.setMessage("Cannot perform your request. Invalid start date format");
+                logger.warn("Cannot perform your request. Invalid start date format");
+                return ResponseEntity.ok(errorBody);
+            }
+            endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.invalidDateCheck)) {
                 errorBody.setStatus(400);
                 errorBody.setMessage("Cannot perform your request. Invalid finish date format");
                 logger.warn("Cannot perform your request. Invalid finish date format");
                 return ResponseEntity.ok(errorBody);
+
             }
         }
+
 
         List<String> requestedCurernciesList = new LinkedList<>();
 
@@ -315,6 +333,7 @@ public class ExchangeServiceImpl implements ExchangeService {
      */
     public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, List<String> currency, String baseCurrency) {
 
+
         List<JsonConvertable> exchangeList = new ArrayList<>();
 
         LocalDate currentDate = beginDate;
@@ -330,6 +349,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         return exchangeList;
 
     }
+
 
     /**
      * Exchange rates from single day. It is called at least once when returning exchange rates from multiple days
