@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.currencytests;
 
-import dpapps.exchangecurrencyapp.exchange.tools.CurrencyListExtractor;
+import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyListExtractor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

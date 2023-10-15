@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrencyNamesIsoFullLocationDatabaseEntry {
+public class CurrencyIsoNameFullNameSingleLocation {
     private String iso_name;
 
     private String full_name;

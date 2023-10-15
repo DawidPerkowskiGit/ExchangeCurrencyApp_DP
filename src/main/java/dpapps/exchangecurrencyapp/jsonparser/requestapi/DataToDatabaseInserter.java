@@ -3,7 +3,7 @@ package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.exchange.tools.AvailableCurrencyTypes;
+import dpapps.exchangecurrencyapp.exchange.helpers.AvailableCurrencyTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

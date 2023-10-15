@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.model;
 
-import dpapps.exchangecurrencyapp.exchange.tools.ApiKeyGenerator;
+import dpapps.exchangecurrencyapp.exchange.helpers.ApiKeyGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.exchange.tools;
+package dpapps.exchangecurrencyapp.exchange.helpers;
 
 /**
  * The class all the currency types available in this application.

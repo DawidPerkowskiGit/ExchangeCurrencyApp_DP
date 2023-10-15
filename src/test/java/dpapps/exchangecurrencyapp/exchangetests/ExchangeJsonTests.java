@@ -3,7 +3,7 @@ package dpapps.exchangecurrencyapp.exchangetests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
-import dpapps.exchangecurrencyapp.exchange.tools.LocalDateStringConverter;
+import dpapps.exchangecurrencyapp.exchange.helpers.LocalDateStringConverter;
 import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,16 +1,11 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
-import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyEntityListToMap;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
-import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 
 import java.time.LocalDate;
-import java.util.Currency;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public interface ExchangeService {
 
@@ -20,7 +15,7 @@ public interface ExchangeService {
      * @param date Optional parameter - currencies active at specified date
      * @return Currencies List in JSON format
      */
-//    public ResponseEntity<CurrencyEntityListToMap> getCurrencies(String date);
+//    public ResponseEntity<CurrencyIsoNameToFullNameMapper> getCurrencies(String date);
     ResponseEntity<JsonConvertable> getCurrencies(String date);
 
     /**

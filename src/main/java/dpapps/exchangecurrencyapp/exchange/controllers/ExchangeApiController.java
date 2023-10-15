@@ -1,7 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.controllers;
 
 import dpapps.exchangecurrencyapp.exchange.service.ExchangeService;
-import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyEntityListToMap;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

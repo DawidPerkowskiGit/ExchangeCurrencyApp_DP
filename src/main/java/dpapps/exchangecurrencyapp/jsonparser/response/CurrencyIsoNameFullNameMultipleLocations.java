@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrenciesWithLocationList implements JsonConvertable {
+public class CurrencyIsoNameFullNameMultipleLocations implements JsonConvertable {
 
     private String isoName;
 

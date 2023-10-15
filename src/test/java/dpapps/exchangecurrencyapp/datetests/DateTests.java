@@ -2,7 +2,7 @@ package dpapps.exchangecurrencyapp.datetests;
 
 import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
-import dpapps.exchangecurrencyapp.exchange.tools.DateRangeValidator;
+import dpapps.exchangecurrencyapp.exchange.helpers.DateRangeValidator;
 import dpapps.exchangecurrencyapp.mockrepo.MockExchangeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

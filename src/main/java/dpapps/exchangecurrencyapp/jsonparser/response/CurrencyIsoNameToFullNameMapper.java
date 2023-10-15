@@ -18,7 +18,7 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrencyEntityListToMap implements JsonConvertable {
+public class CurrencyIsoNameToFullNameMapper implements JsonConvertable {
     Map<String, String> currencies = new HashMap<>();
 
     /**
@@ -27,7 +27,7 @@ public class CurrencyEntityListToMap implements JsonConvertable {
      * @param currencyList
      * @return
      */
-    public CurrencyEntityListToMap convertCurrencyListToJsonCurrency(Iterable<Currency> currencyList) {
+    public CurrencyIsoNameToFullNameMapper convertCurrencyListToJsonCurrency(Iterable<Currency> currencyList) {
 
         for (Currency currency : currencyList) {
             currencies.put(currency.getIsoName(), currency.getFullName());

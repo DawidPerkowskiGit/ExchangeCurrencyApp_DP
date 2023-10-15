@@ -161,6 +161,15 @@ You will receive following responses while not providing valid values to request
 }
 ```
 
+##### API KEY uses limit reached
+```json
+{
+    "success": false,
+    "status": 403,
+    "message": "You reached API request limit"
+}
+```
+
 ##### Requested currency is unrecognizable
 ```json
 {

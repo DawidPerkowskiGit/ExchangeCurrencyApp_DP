@@ -10,9 +10,9 @@ public interface ApiKeyService {
      *
      * @param apiKey Api key
      * @param user User which uses the ApiKey
-     * @return Boolean result
+     * @return int status code of Api key parsing
      */
-    public boolean canUseTheApiKey(ApiKey apiKey, User user);
+    public int canUseTheApiKey(ApiKey apiKey, User user);
 
     /**
      * Method checks if user has specific role
@@ -50,7 +50,7 @@ public interface ApiKeyService {
      * Method that checks if API key is valid
      *
      * @param apiKey API key
-     * @return result of API key check
+     * @return result code of API key check
      */
-    public String checkApiKey(String apiKey);
+    public int isApiKeyValid(String apiKey);
 }

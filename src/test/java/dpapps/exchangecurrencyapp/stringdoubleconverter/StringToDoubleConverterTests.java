@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.stringdoubleconverter;
 
-import dpapps.exchangecurrencyapp.exchange.tools.StringToNumericConverter;
+import dpapps.exchangecurrencyapp.exchange.helpers.StringToNumericConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

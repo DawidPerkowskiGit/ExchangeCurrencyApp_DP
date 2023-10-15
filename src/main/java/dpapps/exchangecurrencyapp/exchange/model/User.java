@@ -39,18 +39,19 @@ public class User {
     @OneToMany
     private List<ApiKey> apiKeys = new ArrayList<>();
 
+    @Column(name="is_non_locked")
     private boolean isNonLocked = true;
 
     private int currentRequestsCount = 0;
 
     public void increaseNumberOfUsages() {
-        if (currentRequestsCount < AppVariables.DAILY_LIMIT_OF_DAILY_USAGES) {
+        if (currentRequestsCount < AppVariables.DAILY_USE_LIMIT) {
             currentRequestsCount++;
         }
     }
 
     public boolean isRequestLimitIsReached() {
-        if (currentRequestsCount == AppVariables.DAILY_LIMIT_OF_DAILY_USAGES) {
+        if (currentRequestsCount == AppVariables.DAILY_USE_LIMIT) {
             return true;
         }
         return false;

@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.exchange.tools;
+package dpapps.exchangecurrencyapp.exchange.helpers;
 
 /**
  * Tool that checks if currency is available

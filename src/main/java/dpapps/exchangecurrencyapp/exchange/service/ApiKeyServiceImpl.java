@@ -22,26 +22,26 @@ public class ApiKeyServiceImpl implements ApiKeyService {
     }
 
     /**
-     * Method which determines if user can use this API key
+     * Method which determines if user can use existing API key
      *
      * @param apiKey Api key
      * @param user User which uses the ApiKey
      * @return Boolean result
      */
-    public boolean canUseTheApiKey(ApiKey apiKey, User user) {
-        if (doesUserHaveSpecificRole("ROLE_ADMIN", user)) {
-            return true;
+    public int canUseTheApiKey(ApiKey apiKey, User user) {
+        if (doesUserHaveSpecificRole(AppVariables.ROLE_ADMIN, user)) {
+            return AppVariables.API_KEY_ADMIN;
         }
         if (user.isRequestLimitIsReached()) {
-            return false;
+            return AppVariables.API_KEY_USE_LIMIT_REACHED;
         }
         if (apiKey.isActive() == false) {
-            return false;
+            return AppVariables.API_KEY_INACTIVE;
         }
         if (user.isNonLocked() == false) {
-            return false;
+            return AppVariables.API_KEY_USER_NOT_LOCKED;
         }
-        return true;
+        return AppVariables.API_KEY_VALID;
     }
 
     /**
@@ -69,7 +69,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 
     public String generateNewKey(User user) {
         if (user.isNonLocked() == false) {
-            return "Could not generate new API key, account is locked";
+            return AppVariables.USER_IS_LOCKED;
         }
         for (ApiKey singleKey : user.getApiKeys()) {
             if (singleKey.isActive()) {
@@ -115,21 +115,20 @@ public class ApiKeyServiceImpl implements ApiKeyService {
     }
 
     /**
-     * Method that checks if API key is valid
+     * Method that checks if API key exists in the database
      *
      * @param apiKey API key
      * @return result of API key check
      */
-    public String checkApiKey(String apiKey) {
+    public int isApiKeyValid(String apiKey) {
         if (apiKey == null) {
-            return "You did not provide an API KEY";
+            return AppVariables.API_KEY_NOT_PROVIDED;
         }
-
         if (apiKeyRepository.existsByValue(apiKey) == false) {
-            return "Provided API KEY is invalid";
+            return AppVariables.API_KEY_INVALID;
         }
 
-        return AppVariables.VALID_API_KEY_MESSAGE;
+        return AppVariables.API_KEY_VALID;
     }
 
 

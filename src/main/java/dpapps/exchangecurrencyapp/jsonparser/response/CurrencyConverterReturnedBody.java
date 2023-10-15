@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestedExchangeValue implements JsonConvertable {
+public class CurrencyConverterReturnedBody implements JsonConvertable {
     private String message;
 
     private LocalDate exchangeDate;

@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.exchange.tools;
+package dpapps.exchangecurrencyapp.exchange.helpers;
 
 import org.springframework.security.oauth2.common.util.RandomValueStringGenerator;
 
