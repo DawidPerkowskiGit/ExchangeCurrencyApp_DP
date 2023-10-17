@@ -30,7 +30,6 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     private final ExchangeRepository exchangeRepository;
 
-
     private final ApiKeyRepository apiKeyRepository;
 
     private final UserRepository userRepository;
@@ -143,7 +142,7 @@ public class ExchangeServiceImpl implements ExchangeService {
          */
 
         if (vipClientRequest == false) {
-           int apiKeyParsingResult = apiKeyService.isApiKeyValid(apiKey);
+            int apiKeyParsingResult = apiKeyService.isApiKeyValid(apiKey);
 
             if (apiKeyParsingResult == AppVariables.API_KEY_NOT_PROVIDED) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED));
@@ -158,7 +157,7 @@ public class ExchangeServiceImpl implements ExchangeService {
 
             switch (apiKeyService.canUseTheApiKey(apiKeyObject, user)) {
                 case AppVariables.API_KEY_USE_LIMIT_REACHED -> {
-                  return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_USE_LIMIT_REACHED));
+                    return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_USE_LIMIT_REACHED));
                 }
                 case AppVariables.API_KEY_INACTIVE -> {
                     return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_INACTIVE));
@@ -184,20 +183,17 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         if (startDate == null && finishDate == null) {
             beginDate = endDate = latestExchangeDate;
-        }
-        else if (startDate == null) {
+        } else if (startDate == null) {
             beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_FINISH_DATE));
             }
-        }
-        else if (finishDate == null) {
+        } else if (finishDate == null) {
             beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
             if (beginDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_START_DATE));
             }
-        }
-        else {
+        } else {
             beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
             if (beginDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_START_DATE));
@@ -254,7 +250,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         /**
          * Check if currency value is defined. If it is, return exchange rate requested value.
          */
-        if (currencyValue != null && beginDate.equals(endDate) && requestedCurernciesList.size()==1) {
+        if (currencyValue != null && beginDate.equals(endDate) && requestedCurernciesList.size() == 1) {
             if (StringToNumericConverter.isStringValidDouble(currencyValue)) {
                 Double currencyExchangeValue = StringToNumericConverter.convertStringToDouble(currencyValue);
                 CurrencyConverterReturnedBody currencyConverterReturnedBody = new CurrencyConverterReturnedBody();

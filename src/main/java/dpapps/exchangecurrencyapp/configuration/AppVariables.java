@@ -47,7 +47,7 @@ public class AppVariables {
     /**
      * Invalid date checker value
      */
-    public final static LocalDate INVALID_DATE_VALUES = LocalDate.of(1, 1 ,1);
+    public final static LocalDate INVALID_DATE_VALUES = LocalDate.of(1, 1, 1);
 
     /**
      * Status code for API key checker when use limit was reached
@@ -165,7 +165,6 @@ public class AppVariables {
     public final static String ERROR_BODY_EXCHANGE_RATES_DATE_CURRENCY_NOT_FOUND = "Failed to return exchange rates. There is no data matching your request criteria";
 
 
-
     /**
      * Logged message when exchanges endpoint was called
      */
@@ -202,9 +201,6 @@ public class AppVariables {
      * Error message displayed when locked user tries to generate an API key
      */
     public final static String USER_IS_LOCKED = "Could not generate new API key, account is locked";
-
-
-
 
 
 }

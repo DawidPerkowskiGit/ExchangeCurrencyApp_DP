@@ -45,21 +45,12 @@ public class ExchangeResponseTests {
     final String emptyStartDateArg = "startDate=";
     final String emptyFinishDateArg = "finishDate=";
 
-    final String noApiKeyJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_FORBIDDEN+",\"message\":\""+AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED+"\"}";
-    final String apiKeyInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_FORBIDDEN+",\"message\":\""+AppVariables.ERROR_BODY_API_KEY_INVALID+"\"}";
-    final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_NOT_FOUND+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_REQUESTED_CURRENCY+"\"}";
-    final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_NOT_FOUND+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY+"\"}";
-    final String startDateInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_BAD_REQUEST+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_START_DATE+"\"}";
-    final String finishDateInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_BAD_REQUEST+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_FINISH_DATE+"\"}";
-
-/*
-    final String noApiKeyJson = "{\"success\":false,\"status\":403,\"message\":\"You did not provide an API KEY\"}";
-    final String apiKeyInvalidJson = "{\"success\":false,\"status\":403,\"message\":\"Provided API KEY is invalid\"}";
-    final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Requested currency is not found\"}";
-    final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Base currency is not found\"}";
-    final String startDateInvalidJson = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid start date format\"}";
-    final String finishDateInvalidJson = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid finish date format\"}";
-*/
+    final String noApiKeyJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED + "\"}";
+    final String apiKeyInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppVariables.ERROR_BODY_API_KEY_INVALID + "\"}";
+    final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_REQUESTED_CURRENCY + "\"}";
+    final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY + "\"}";
+    final String startDateInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_START_DATE + "\"}";
+    final String finishDateInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_FINISH_DATE + "\"}";
 
     List<String> arguments = new LinkedList<>();
     private final int argsListCount = 4;
@@ -101,7 +92,6 @@ public class ExchangeResponseTests {
     }
 
 
-
     @BeforeEach
     public void emptyArgsList() {
         this.arguments.clear();
@@ -109,18 +99,19 @@ public class ExchangeResponseTests {
 
     /**
      * Tests single argument endpoint request where no API KEY was provided.
+     *
      * @throws Exception MockMVC Exception
      */
     @Test
     public void shouldReturnNoApiKeyProvided() throws Exception {
         String validResponse = noApiKeyJson;
 
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
 
     /**
      * Tests all other arguments permutations endpoint request where no API KEY was provided.
+     *
      * @throws Exception MockMVC Exception
      */
 
@@ -132,11 +123,9 @@ public class ExchangeResponseTests {
 
         int counter = 0;
 
-        for (String url: urlList
-             ) {
-            System.out.println("Testing URL: "+ url);
-            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
-                    .andExpect(content().string(containsString(validResponse)));
+        for (String url : urlList) {
+            System.out.println("Testing URL: " + url);
+            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
             counter++;
         }
         System.out.println("Performed API requests for " + counter + " URL permutations");
@@ -144,6 +133,7 @@ public class ExchangeResponseTests {
 
     /**
      * Tests single argument endpoint request where invalid API KEY was provided.
+     *
      * @throws Exception MockMVC Exception
      */
     @Test
@@ -152,12 +142,12 @@ public class ExchangeResponseTests {
 
         arguments.add(invalidApiKey);
 
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
 
     /**
      * Tests all other arguments permutations endpoint request where invalid API KEY was provided.
+     *
      * @throws Exception MockMVC Exception
      */
 
@@ -169,11 +159,9 @@ public class ExchangeResponseTests {
 
         int counter = 0;
 
-        for (String url: urlList
-        ) {
-            System.out.println("Testing URL: "+ url);
-            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
-                    .andExpect(content().string(containsString(validResponse)));
+        for (String url : urlList) {
+            System.out.println("Testing URL: " + url);
+            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
             counter++;
         }
 
@@ -188,13 +176,13 @@ public class ExchangeResponseTests {
         arguments.add(validApiKey);
         arguments.add(invalidStartDate);
 
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
 
     /**
      * Tests all other arguments permutations endpoint request where invalid start date was provided.
      * Base currency argument was checked in previous tests. It will not be included in the all following tests.
+     *
      * @throws Exception MockMVC Exception
      */
 
@@ -204,12 +192,10 @@ public class ExchangeResponseTests {
 
         List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidStartDate, finishDateArgs, baseCurrencyArgs, requestedCurrencyArgs);
         int counter = 0;
-        for (String url: urlList
-        ) {
+        for (String url : urlList) {
 
-            System.out.println("Testing URL: "+ url);
-            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
-                    .andExpect(content().string(containsString(validResponse)));
+            System.out.println("Testing URL: " + url);
+            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
             counter++;
         }
         System.out.println("Performed API requests for " + counter + " URL permutations");
@@ -217,6 +203,7 @@ public class ExchangeResponseTests {
 
     /**
      * Tests single argument endpoint request where invalid finish date was provided.
+     *
      * @throws Exception MockMVC Exception
      */
     @Test
@@ -226,26 +213,24 @@ public class ExchangeResponseTests {
         arguments.add(validApiKey);
         arguments.add(invalidFinishDate);
 
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
 
     /**
      * Tests single argument endpoint request where no value finish date was provided.
+     *
      * @throws Exception MockMVC Exception
      */
     @Test
     public void shouldReturnInvalidFinishDateForArgsPermutations() throws Exception {
-         String validResponse = finishDateInvalidJson;
+        String validResponse = finishDateInvalidJson;
 
         List<String> urlList = multipleArgsCombinationsBuilder(validApiKey, invalidFinishDate, baseCurrencyArgs, requestedCurrencyArgs);
         int counter = 0;
-        for (String url: urlList
-        ) {
+        for (String url : urlList) {
 
-            System.out.println("Testing URL: "+ url);
-            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
-                    .andExpect(content().string(containsString(validResponse)));
+            System.out.println("Testing URL: " + url);
+            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
             counter++;
         }
         System.out.println("Performed API requests for " + counter + " URL permutations");
@@ -254,6 +239,7 @@ public class ExchangeResponseTests {
 
     /**
      * Tests single argument endpoint request where invalid requested currency was provided.
+     *
      * @throws Exception MockMVC Exception
      */
 
@@ -264,11 +250,12 @@ public class ExchangeResponseTests {
         arguments.add(validApiKey);
         arguments.add(invalidCurrency);
 
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
+
     /**
      * Tests all other arguments permutations endpoint request where invalid requested currency was provided.
+     *
      * @throws Exception MockMVC Exception
      */
     @Test
@@ -279,11 +266,9 @@ public class ExchangeResponseTests {
 
         int counter = 0;
 
-        for (String url: urlList
-        ) {
-            System.out.println("Testing URL: "+ url);
-            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk())
-                    .andExpect(content().string(containsString(validResponse)));
+        for (String url : urlList) {
+            System.out.println("Testing URL: " + url);
+            this.mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
             counter++;
         }
 
@@ -293,6 +278,7 @@ public class ExchangeResponseTests {
     /**
      * Tests single argument endpoint request where invalid base currency was provided.
      * Requested currency argument was checked in previous tests. It will not be included in the all following tests.
+     *
      * @throws Exception MockMVC Exception
      */
     @Test
@@ -302,8 +288,7 @@ public class ExchangeResponseTests {
         arguments.add(validApiKey);
         arguments.add(invalidBaseCurrency);
 
-        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(validResponse)));
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
 
     /**
@@ -313,11 +298,12 @@ public class ExchangeResponseTests {
 
     /**
      * Returns list with all possible URL permutations for the requested arguments
+     *
      * @param baseAttribute1 unchangeable URL attribute
-     * @param argList1 list of possible argument states (valid, invalid, empty, null)
-     * @param argList2 list of possible argument states (valid, invalid, empty, null)
-     * @param argList3 list of possible argument states (valid, invalid, empty, null)
-     * @param argList4 list of possible argument states (valid, invalid, empty, null)
+     * @param argList1       list of possible argument states (valid, invalid, empty, null)
+     * @param argList2       list of possible argument states (valid, invalid, empty, null)
+     * @param argList3       list of possible argument states (valid, invalid, empty, null)
+     * @param argList4       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
     public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String[] argList1, String[] argList2, String[] argList3, String[] argList4) {
@@ -344,11 +330,12 @@ public class ExchangeResponseTests {
 
     /**
      * Builds list with all possible URL permutations for the requested arguments
+     *
      * @param baseAttribute1 unchangeable URL attribute
      * @param baseAttribute2 unchangeable URL attribute
-     * @param argList1 list of possible argument states (valid, invalid, empty, null)
-     * @param argList2 list of possible argument states (valid, invalid, empty, null)
-     * @param argList3 list of possible argument states (valid, invalid, empty, null)
+     * @param argList1       list of possible argument states (valid, invalid, empty, null)
+     * @param argList2       list of possible argument states (valid, invalid, empty, null)
+     * @param argList3       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
     public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1, String[] argList2, String[] argList3) {
@@ -373,10 +360,11 @@ public class ExchangeResponseTests {
 
     /**
      * Builds list with all possible URL permutations for the requested arguments
+     *
      * @param baseAttribute1 unchangeable URL attribute
      * @param baseAttribute2 unchangeable URL attribute
-     * @param argList1 list of possible argument states (valid, invalid, empty, null)
-     * @param argList2 list of possible argument states (valid, invalid, empty, null)
+     * @param argList1       list of possible argument states (valid, invalid, empty, null)
+     * @param argList2       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
     public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1, String[] argList2) {
@@ -385,12 +373,12 @@ public class ExchangeResponseTests {
 
         for (int argListOneIterator = 0; argListOneIterator < argList1.length; argListOneIterator++) {
             for (int argListTwoIterator = 0; argListTwoIterator < argList2.length; argListTwoIterator++) {
-                    arguments.add(baseAttribute1);
-                    arguments.add(baseAttribute2);
-                    arguments.add(argList1[argListOneIterator]);
-                    arguments.add(argList2[argListTwoIterator]);
-                    buildUrlList.add(urlBuilder());
-                    emptyArgsList();
+                arguments.add(baseAttribute1);
+                arguments.add(baseAttribute2);
+                arguments.add(argList1[argListOneIterator]);
+                arguments.add(argList2[argListTwoIterator]);
+                buildUrlList.add(urlBuilder());
+                emptyArgsList();
             }
         }
         return buildUrlList;
@@ -398,9 +386,10 @@ public class ExchangeResponseTests {
 
     /**
      * Builds list with all possible URL permutations for the requested arguments
+     *
      * @param baseAttribute1 unchangeable URL attribute
      * @param baseAttribute2 unchangeable URL attribute
-     * @param argList1 list of possible argument states (valid, invalid, empty, null)
+     * @param argList1       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
     public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1) {
@@ -408,11 +397,11 @@ public class ExchangeResponseTests {
         List<String> buildUrlList = new LinkedList<>();
 
         for (int argListOneIterator = 0; argListOneIterator < argList1.length; argListOneIterator++) {
-                arguments.add(baseAttribute1);
-                arguments.add(baseAttribute2);
-                arguments.add(argList1[argListOneIterator]);
-                buildUrlList.add(urlBuilder());
-                emptyArgsList();
+            arguments.add(baseAttribute1);
+            arguments.add(baseAttribute2);
+            arguments.add(argList1[argListOneIterator]);
+            buildUrlList.add(urlBuilder());
+            emptyArgsList();
         }
         return buildUrlList;
     }
