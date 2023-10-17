@@ -1,5 +1,6 @@
 package dpapps.exchangecurrencyapp.exchangetests;
 
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,21 @@ public class ExchangeResponseTests {
     final String emptyStartDateArg = "startDate=";
     final String emptyFinishDateArg = "finishDate=";
 
+    final String noApiKeyJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_FORBIDDEN+",\"message\":\""+AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED+"\"}";
+    final String apiKeyInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_FORBIDDEN+",\"message\":\""+AppVariables.ERROR_BODY_API_KEY_INVALID+"\"}";
+    final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_NOT_FOUND+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_REQUESTED_CURRENCY+"\"}";
+    final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_NOT_FOUND+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY+"\"}";
+    final String startDateInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_BAD_REQUEST+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_START_DATE+"\"}";
+    final String finishDateInvalidJson = "{\"success\":false,\"status\":"+ AppVariables.RETURNED_JSON_BODY_BAD_REQUEST+",\"message\":\""+AppVariables.ERROR_BODY_INVALID_FINISH_DATE+"\"}";
+
+/*
     final String noApiKeyJson = "{\"success\":false,\"status\":403,\"message\":\"You did not provide an API KEY\"}";
     final String apiKeyInvalidJson = "{\"success\":false,\"status\":403,\"message\":\"Provided API KEY is invalid\"}";
     final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Requested currency is not found\"}";
     final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":404,\"message\":\"Cannot perform your request. Base currency is not found\"}";
     final String startDateInvalidJson = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid start date format\"}";
     final String finishDateInvalidJson = "{\"success\":false,\"status\":400,\"message\":\"Cannot perform your request. Invalid finish date format\"}";
+*/
 
     List<String> arguments = new LinkedList<>();
     private final int argsListCount = 4;
@@ -60,6 +70,8 @@ public class ExchangeResponseTests {
     String[] finishDateArgs = new String[argsListCount];
     String emptyString = "";
     String nullField = null;
+
+    int finalCounter = 0;
 
     ExchangeResponseTests() {
         this.apiKeyArgs[0] = emptyApiKeyArg;
@@ -127,7 +139,6 @@ public class ExchangeResponseTests {
                     .andExpect(content().string(containsString(validResponse)));
             counter++;
         }
-
         System.out.println("Performed API requests for " + counter + " URL permutations");
     }
 

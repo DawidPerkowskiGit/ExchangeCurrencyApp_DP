@@ -134,11 +134,9 @@ public class ExchangeServiceImpl implements ExchangeService {
             }
         }
 
-
-        //String apiKeyParsingResult;
         ApiKey apiKeyObject;
         User user = null;
-        InvalidRequestBody errorBody = new InvalidRequestBody();
+        //InvalidRequestBody errorBody = new InvalidRequestBody();
 
         /**
          * Api Key checks
@@ -148,17 +146,11 @@ public class ExchangeServiceImpl implements ExchangeService {
            int apiKeyParsingResult = apiKeyService.isApiKeyValid(apiKey);
 
             if (apiKeyParsingResult == AppVariables.API_KEY_NOT_PROVIDED) {
-                errorBody.setStatus(AppVariables.RETURNED_JSON_BODY_FORBIDDEN);
-                errorBody.setMessage(AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED);
-                logger.info(AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED);
-                return ResponseEntity.ok(errorBody);
+                return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED));
             }
 
             if (apiKeyParsingResult == AppVariables.API_KEY_INVALID) {
-                errorBody.setStatus(AppVariables.RETURNED_JSON_BODY_FORBIDDEN);
-                errorBody.setMessage(AppVariables.ERROR_BODY_API_KEY_INVALID);
-                logger.info(AppVariables.ERROR_BODY_API_KEY_INVALID);
-                return ResponseEntity.ok(errorBody);
+                return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_INVALID));
             }
 
             apiKeyObject = apiKeyRepository.findByValue(apiKey);
@@ -166,16 +158,10 @@ public class ExchangeServiceImpl implements ExchangeService {
 
             switch (apiKeyService.canUseTheApiKey(apiKeyObject, user)) {
                 case AppVariables.API_KEY_USE_LIMIT_REACHED -> {
-                  errorBody.setStatus(403);
-                  errorBody.setMessage(AppVariables.ERROR_BODY_API_KEY_USE_LIMIT_REACHED);
-                  logger.warn(AppVariables.ERROR_BODY_API_KEY_USE_LIMIT_REACHED);
-                  return ResponseEntity.ok(errorBody);
+                  return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_USE_LIMIT_REACHED));
                 }
                 case AppVariables.API_KEY_INACTIVE -> {
-                    errorBody.setStatus(403);
-                    errorBody.setMessage(AppVariables.ERROR_BODY_API_KEY_INACTIVE);
-                    logger.warn(AppVariables.ERROR_BODY_API_KEY_INACTIVE);
-                    return ResponseEntity.ok(errorBody);
+                    return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_API_KEY_INACTIVE));
                 }
                 case AppVariables.API_KEY_ADMIN -> {
                     vipClientRequest = true;
@@ -202,35 +188,24 @@ public class ExchangeServiceImpl implements ExchangeService {
         else if (startDate == null) {
             beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
-                errorBody.setStatus(400);
-                errorBody.setMessage("Cannot perform your request. Invalid finish date format");
-                logger.warn("Cannot perform your request. Invalid finish date format");
-                return ResponseEntity.ok(errorBody);
+                return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_FINISH_DATE));
             }
         }
         else if (finishDate == null) {
             beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
             if (beginDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
-                errorBody.setStatus(400);
-                errorBody.setMessage("Cannot perform your request. Invalid start date format");
-                logger.warn("Cannot perform your request. Invalid start date format");
-                return ResponseEntity.ok(errorBody);
+                return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_START_DATE));
             }
         }
         else {
             beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
             if (beginDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
-                errorBody.setStatus(400);
-                errorBody.setMessage("Cannot perform your request. Invalid start date format");
-                logger.warn("Cannot perform your request. Invalid start date format");
-                return ResponseEntity.ok(errorBody);
+                return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_START_DATE));
+
             }
             endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
-                errorBody.setStatus(400);
-                errorBody.setMessage("Cannot perform your request. Invalid finish date format");
-                logger.warn("Cannot perform your request. Invalid finish date format");
-                return ResponseEntity.ok(errorBody);
+                return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_FINISH_DATE));
 
             }
         }
@@ -243,20 +218,14 @@ public class ExchangeServiceImpl implements ExchangeService {
         } else {
             requestedCurernciesList = CurrencyListExtractor.extractCurrencyList(currency);
             if (requestedCurernciesList.isEmpty()) {
-                errorBody.setStatus(404);
-                errorBody.setMessage("Cannot perform your request. Requested currency is not found");
-                logger.warn("Cannot perform your request. Requested currency is not found");
-                return ResponseEntity.ok(errorBody);
+                return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_INVALID_REQUESTED_CURRENCY));
             }
         }
 
         if (baseCurrency == null) {
             baseCurrency = AppVariables.DEFAULT_BASE_CURRENCY;
         } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
-            errorBody.setStatus(404);
-            errorBody.setMessage("Cannot perform your request. Base currency is not found");
-            logger.warn("Cannot perform your request. Base currency is not found");
-            return ResponseEntity.ok(errorBody);
+            return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY));
         }
 
         /**
@@ -279,10 +248,7 @@ public class ExchangeServiceImpl implements ExchangeService {
 
 
         if (returnList.isEmpty()) {
-            errorBody.setStatus(500);
-            errorBody.setMessage("Failed to return exchange rates. There is no data matching your request criteria");
-            logger.warn("Failed to return exchange rates. There is no data matching your request criteria");
-            return ResponseEntity.ok(errorBody);
+            return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_INTERNAL_SERVER_ERROR, AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_NOT_FOUND));
         }
 
         /**
@@ -384,10 +350,7 @@ public class ExchangeServiceImpl implements ExchangeService {
             if (baseCurrency.equals("")) {
                 pojo.setBase(AppVariables.DEFAULT_BASE_CURRENCY);
             } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
-                invalidRequestBody.setStatus(404);
-                invalidRequestBody.setMessage("Could not find base currency in the database");
-                logger.warn("Could not find base currency in the database");
-                return invalidRequestBody;
+                return buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY);
             } else {
                 pojo.setBase(baseCurrency);
             }
@@ -408,10 +371,7 @@ public class ExchangeServiceImpl implements ExchangeService {
                         rates.put(entry.getCurrency().getIsoName(), entry.getValue() * newRatio);
                     }
                 } else {
-                    invalidRequestBody.setStatus(404);
-                    invalidRequestBody.setMessage("Could not find exchange rates from specified date and currency type");
-                    logger.warn("Could not find exchange rates from specified date and currency type");
-                    return invalidRequestBody;
+                    return buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_CURRENCY_NOT_FOUND);
                 }
 
             }
@@ -484,6 +444,16 @@ public class ExchangeServiceImpl implements ExchangeService {
     public List<String> addValueReplaceMap(String value, List<String> list) {
         list.add(value);
         return list;
+    }
+
+    private InvalidRequestBody buildInvalidRequestBody(int httpErrorCode, String message) {
+        InvalidRequestBody invalidRequestBody = new InvalidRequestBody();
+        invalidRequestBody.setStatus(httpErrorCode);
+        invalidRequestBody.setMessage(message);
+        invalidRequestBody.setSuccess(false);
+
+        logger.info(message);
+        return invalidRequestBody;
     }
 
 

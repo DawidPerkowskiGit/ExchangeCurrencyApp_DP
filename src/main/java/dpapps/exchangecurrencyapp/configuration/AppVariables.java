@@ -84,8 +84,30 @@ public class AppVariables {
      */
     public final static int API_KEY_NOT_PROVIDED = 6;
 
+    /**
+     * Http error code 400 - Bad request
+     */
+
+    public final static int RETURNED_JSON_BODY_BAD_REQUEST = 400;
+
+    /**
+     * Http error code 403 - Forbidden
+     */
 
     public final static int RETURNED_JSON_BODY_FORBIDDEN = 403;
+
+    /**
+     * Http error code 404 - Not found
+     */
+
+    public final static int RETURNED_JSON_BODY_NOT_FOUND = 404;
+
+
+    /**
+     * Http error code 500 - Internal server error
+     */
+
+    public final static int RETURNED_JSON_BODY_INTERNAL_SERVER_ERROR = 500;
     /**
      * Valid API key message
      */
@@ -111,6 +133,38 @@ public class AppVariables {
      * Error message used in returned JSON body when API key used is inactive
      */
     public final static String ERROR_BODY_API_KEY_INACTIVE = "Provided API KEY is inactive";
+
+    /**
+     * Error message used in returned JSON body when finish date is invalid
+     */
+    public final static String ERROR_BODY_INVALID_FINISH_DATE = "Cannot perform your request. Invalid finish date format";
+
+    /**
+     * Error message used in returned JSON body when start date is invalid
+     */
+    public final static String ERROR_BODY_INVALID_START_DATE = "Cannot perform your request. Invalid start date format";
+
+    /**
+     * Error message used in returned JSON body when requested currency was not found in the database
+     */
+    public final static String ERROR_BODY_INVALID_REQUESTED_CURRENCY = "Cannot perform your request. Requested currency is not found";
+
+    /**
+     * Error message used in returned JSON body when base currency was not found in the database
+     */
+    public final static String ERROR_BODY_INVALID_BASE_CURRENCY = "Cannot perform your request. Base currency is not found";
+
+    /**
+     * Error message used in returned JSON body when exchanges from specified date were not found in the database
+     */
+    public final static String ERROR_BODY_EXCHANGE_RATES_DATE_NOT_FOUND = "Failed to return exchange rates. There is no data matching your request criteria";
+
+    /**
+     * Error message used in returned JSON body when exchanges from specified date and currency were not found in the database
+     */
+    public final static String ERROR_BODY_EXCHANGE_RATES_DATE_CURRENCY_NOT_FOUND = "Failed to return exchange rates. There is no data matching your request criteria";
+
+
 
     /**
      * Logged message when exchanges endpoint was called

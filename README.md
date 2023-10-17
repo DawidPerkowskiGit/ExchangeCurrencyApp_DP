@@ -170,6 +170,15 @@ You will receive following responses while not providing valid values to request
 }
 ```
 
+##### API KEY is not active
+```json
+{
+    "success": false,
+    "status": 403,
+    "message": "Provided API KEY is inactive"
+}
+```
+
 ##### Requested currency is unrecognizable
 ```json
 {
@@ -210,7 +219,7 @@ You will receive following responses while not providing valid values to request
 ```json
 {
     "success": false,
-    "status": 500,
+    "status": 404,
     "message": "Failed to return exchange rates. There is no data matching your request criteria"
 }
 ```
