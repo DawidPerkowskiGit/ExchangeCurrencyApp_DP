@@ -1,11 +1,15 @@
 package dpapps.exchangecurrencyapp.jsonparser.response;
 
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.exchange.helpers.DecimalPlacesFixerDouble;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Getter
@@ -27,6 +31,6 @@ public class CurrencyConverterReturnedBody implements JsonConvertable {
     }
 
     public void calculateValue() {
-        this.calculatedValue = this.rate * this.requestedValue;
+        this.calculatedValue = DecimalPlacesFixerDouble.fix(this.rate * this.requestedValue, AppVariables.DECIMAL_PLACES_CURRENCY_CALCULATION);
     }
 }

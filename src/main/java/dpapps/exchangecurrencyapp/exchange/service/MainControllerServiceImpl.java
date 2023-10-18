@@ -146,10 +146,10 @@ public class MainControllerServiceImpl implements MainControllerService {
      */
     public String getProfile(Model model) {
         User user = userService.getCurrentUser();
-        model.addAttribute("user", user);
-        model.addAttribute("apiKeyManager", apiKeyService);
         String apiRequestsString = "" + user.getCurrentRequestsCount() + "/" + AppVariables.DAILY_USE_LIMIT;
         model.addAttribute("apiRequestString", apiRequestsString);
+        String apiKeyValue = apiKeyService.returnActiveKey(user).getValue();
+        model.addAttribute("apiKeyValue", apiKeyValue);
         return "profile";
     }
 

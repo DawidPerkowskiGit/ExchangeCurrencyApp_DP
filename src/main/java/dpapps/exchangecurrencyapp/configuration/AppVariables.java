@@ -29,7 +29,7 @@ public class AppVariables {
     /**
      * Daily limit of REST API uses for registered users
      */
-    public final static int DAILY_USE_LIMIT = 5;
+    public final static int DAILY_USE_LIMIT = 20;
 
 
     /**
@@ -108,9 +108,24 @@ public class AppVariables {
      */
 
     public final static int RETURNED_JSON_BODY_INTERNAL_SERVER_ERROR = 500;
+
+    /**
+     * Decimal places for currency calculation
+     */
+
+    public final static int DECIMAL_PLACES_CURRENCY_CALCULATION = 2;
+
+    /**
+     * Decimal places for currency conversion
+     */
+
+    public final static int DECIMAL_PLACES_CURRENCY_CONVERSION = 4;
+
+
     /**
      * Valid API key message
      */
+
     public final static String MESSAGE_VALID_API_KEY = "Api key is valid";
 
 

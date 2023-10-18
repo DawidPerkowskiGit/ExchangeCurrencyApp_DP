@@ -202,9 +202,9 @@ public class ExchangeServiceImpl implements ExchangeService {
             endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_FINISH_DATE));
-
             }
         }
+
 
 
         List<String> requestedCurernciesList = new LinkedList<>();
@@ -254,6 +254,7 @@ public class ExchangeServiceImpl implements ExchangeService {
             if (StringToNumericConverter.isStringValidDouble(currencyValue)) {
                 Double currencyExchangeValue = StringToNumericConverter.convertStringToDouble(currencyValue);
                 CurrencyConverterReturnedBody currencyConverterReturnedBody = new CurrencyConverterReturnedBody();
+
                 currencyConverterReturnedBody.setRequestedValue(currencyExchangeValue);
                 currencyConverterReturnedBody.setBaseCurrency(baseCurrency);
                 currencyConverterReturnedBody.setRequestedCurrency(requestedCurernciesList.get(0));
@@ -364,7 +365,7 @@ public class ExchangeServiceImpl implements ExchangeService {
                 if (exchangeRepository.existsByExchangeDateAndCurrency_IsoName(exchangeDate, baseCurrency)) {
                     double newRatio = calculateNewRatio(exchangeDate, baseCurrency);
                     for (Exchange entry : latestExchangesList) {
-                        rates.put(entry.getCurrency().getIsoName(), entry.getValue() * newRatio);
+                        rates.put(entry.getCurrency().getIsoName(), DecimalPlacesFixerDouble.fix(entry.getValue() * newRatio, AppVariables.DECIMAL_PLACES_CURRENCY_CONVERSION));
                     }
                 } else {
                     return buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_CURRENCY_NOT_FOUND);
@@ -392,7 +393,7 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     public double calculateNewRatio(LocalDate date, String currency) {
         Exchange newBaseCurrency = exchangeRepository.findByExchangeDateAndCurrency_IsoName(date, currency);
-        return 1 / newBaseCurrency.getValue();
+        return DecimalPlacesFixerDouble.fix(1 / newBaseCurrency.getValue(), AppVariables.DECIMAL_PLACES_CURRENCY_CONVERSION);
     }
 
     /**

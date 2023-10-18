@@ -5,6 +5,9 @@
 * [Available endpoints](#available-endpoints)
 * [Application view](#application-view)
 ## General info
+
+Live version link : https://exchangecurrencyapp-dp-render.onrender.com
+
 A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process. Hosted on Render's free plan.
 
 I created frontend application developed in Angular, which displays requested data.  https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG

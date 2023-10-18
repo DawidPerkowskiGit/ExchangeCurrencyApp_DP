@@ -10,15 +10,34 @@
 </head>
 <body>
 <div th:replace="~{fragments/header :: navbar}"  th:remove="tag"></div>
-<div class="content well well-lg">
+<div class="content well well-lg text-center">
     <div class="container">
         <div class="jumbotron">
             <h1>        Exchange rates API</h1>
         </div>
     </div>
+    Welcome to Exchange currency app API. Start with crating a new account.
 
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col">
+            <a class="btn btn-primary" th:href="@{/login}">Login</a>
+            <p>Login for testing</p>
+            <p>Login: test</p>
+            <p>Password: test</p>
+        </div>
+        <div class="col">
+
+        </div>
     </div>
-Welcome to Exchange currency app API. Start with crating a new account.
+</div>
+
+
 
 </body>
 </html>
