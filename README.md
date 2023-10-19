@@ -227,6 +227,15 @@ You will receive following responses while not providing valid values to request
 }
 ```
 
+##### Start and end date days difference is greater than 7 days.
+```json
+{
+  "success": false,
+  "status": 403,
+  "message": "Request exceeds maximum date range"
+}
+```
+
 ## Application view
 
 Frontend application which displays REST API data: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG.

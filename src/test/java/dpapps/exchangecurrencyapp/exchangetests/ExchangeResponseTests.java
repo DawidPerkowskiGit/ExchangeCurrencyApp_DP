@@ -34,10 +34,14 @@ public class ExchangeResponseTests {
     final String invalidFinishDate = "finishDate=2023-18-21";
 
     final String validApiKey = "apiKey=UAOrRlJZA2GHGiNmGqP65JTD85_Vv7JUivKp-ibClzZ_vAuj2hqlPHFxhU7LfJDy";
+
+    final String dateRangeApiKey = "apiKey=6Dq1f0l-eEbJkkQUlf7vwO5UOAw7yQYN9lqrPmwXqO7uyA90W-H71qoMIblQ75k6";
     final String validCurrency = "currency=PLN";
     final String validBaseCurrency = "baseCurrency=EUR";
     final String validStartDate = "startDate=2023-08-20";
     final String validFinishDate = "finishDate=2023-08-21";
+    final String startDateWide = "startDate=2023-08-20";
+    final String finishDateWide = "finishDate=2023-09-20";
 
     final String emptyApiKeyArg = "apiKey=";
     final String emptyRequestedCurrencyArg = "baseCurrency=";
@@ -51,7 +55,7 @@ public class ExchangeResponseTests {
     final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY + "\"}";
     final String startDateInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_START_DATE + "\"}";
     final String finishDateInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_FINISH_DATE + "\"}";
-
+    final String dateRangeTooWide = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE + "\"}";
     List<String> arguments = new LinkedList<>();
     private final int argsListCount = 4;
     String[] apiKeyArgs = new String[argsListCount];
@@ -168,6 +172,10 @@ public class ExchangeResponseTests {
         System.out.println("Performed API requests for " + counter + " URL permutations");
     }
 
+    /**
+     * Tests single argument endpoint request where invalid start date was provided.
+     * @throws Exception MockMVC Exception
+     */
 
     @Test
     public void shouldReturnInvalidStartDate() throws Exception {
@@ -244,11 +252,12 @@ public class ExchangeResponseTests {
      */
 
     @Test
-    public void shouldReturnInvalidRequestedCurrency() throws Exception {
-        String validResponse = requestedCurrencyInvalidJson;
+    public void shouldReturnInvalidDateRange() throws Exception {
+        String validResponse = dateRangeTooWide;
 
-        arguments.add(validApiKey);
-        arguments.add(invalidCurrency);
+        arguments.add(dateRangeApiKey);
+        arguments.add(startDateWide);
+        arguments.add(finishDateWide);
 
         this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
@@ -292,9 +301,23 @@ public class ExchangeResponseTests {
     }
 
     /**
-     * Tests single argument endpoint request where invalid start date was provided.
-     * @throws Exception MockMVC Exception
+     * Tests single argument endpoint request where invalid requested currency was provided.
+     * Requested currency argument was checked in previous tests. It will not be included in the all following tests.
+     *
+     * @throws Exception MockMvc exception
      */
+
+    @Test
+    public void shouldReturnInvalidRequestedCurrency() throws Exception {
+        String validResponse = requestedCurrencyInvalidJson;
+
+        arguments.add(validApiKey);
+        arguments.add(invalidCurrency);
+
+        this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
+    }
+
+
 
     /**
      * Returns list with all possible URL permutations for the requested arguments

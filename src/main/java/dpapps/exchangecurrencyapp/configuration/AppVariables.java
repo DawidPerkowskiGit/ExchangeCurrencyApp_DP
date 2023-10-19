@@ -121,6 +121,11 @@ public class AppVariables {
 
     public final static int DECIMAL_PLACES_CURRENCY_CONVERSION = 4;
 
+    /**
+     * Maximum date range in days for public use
+     */
+
+    public final static int MAXIMUM_DATE_RANGE_IN_DAYS = 7;
 
     /**
      * Valid API key message
@@ -178,6 +183,11 @@ public class AppVariables {
      * Error message used in returned JSON body when exchanges from specified date and currency were not found in the database
      */
     public final static String ERROR_BODY_EXCHANGE_RATES_DATE_CURRENCY_NOT_FOUND = "Failed to return exchange rates. There is no data matching your request criteria";
+
+    /**
+     * Error message used in returned JSON body when date range exceeds maximum limit
+     */
+    public final static String ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE = "Request exceeds maximum date range";
 
 
     /**

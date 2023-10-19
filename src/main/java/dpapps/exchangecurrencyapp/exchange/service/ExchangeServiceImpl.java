@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -203,6 +205,18 @@ public class ExchangeServiceImpl implements ExchangeService {
             if (endDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_FINISH_DATE));
             }
+        }
+
+        if (beginDate.isAfter(endDate)) {
+            LocalDate tempDate = endDate;
+            endDate = beginDate;
+            beginDate = tempDate;
+        }
+
+        long diffInDays = ChronoUnit.DAYS.between(beginDate, endDate);
+
+        if (diffInDays > AppVariables.MAXIMUM_DATE_RANGE_IN_DAYS && vipClientRequest == false) {
+            return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE));
         }
 
 
