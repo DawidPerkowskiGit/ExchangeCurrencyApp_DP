@@ -24,7 +24,7 @@ public class ExchangeApiController {
     }
 
     /**
-     * Fetched available currencies from the database
+     * Gets available currencies from the database
      *
      * @param date Optional parameter - currencies active at specified date
      * @return Currencies List in JSON format
@@ -37,7 +37,7 @@ public class ExchangeApiController {
     }
 
     /**
-     * Fetched currencies and countries/other locations where they can be used in.
+     * Gets currencies and countries/other locations where they can be used in.
      *
      * @return Currencies list with all the countries they can be used in returned in JSON format
      */
@@ -48,7 +48,7 @@ public class ExchangeApiController {
     }
 
     /**
-     * Admin only accessible endpoint which performs requested URL requested. It was used to perform currency exchanges import.
+     * Admin only accessible endpoint which performs requested URL call. It was used to perform emergency manual currency exchanges import.
      *
      * @param apiKey     REST APi key
      * @param requestUrl Requested URL
@@ -60,7 +60,7 @@ public class ExchangeApiController {
     }
 
     /**
-     * Fetches exchange rates from the database
+     * Gets exchange rates from the database
      *
      * @param currency     Optional http attribute - Requested currency
      * @param startDate    Optional http attribute - start date for exchange rated from multiple days

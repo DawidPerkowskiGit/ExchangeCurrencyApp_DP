@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -59,7 +58,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         CurrencyIsoNameToFullNameMapper currencyIsoNameToFullNameMapper = new CurrencyIsoNameToFullNameMapper();
         Iterable<Currency> currencyList;
         if (date != null) {
-            LocalDate currenciesDate = LocalDateStringConverter.convertStringToLocalDate(date);
+            LocalDate currenciesDate = DateStringConverter.convertStringToLocalDate(date);
             if (currenciesDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 currenciesDate = LocalDate.now();
             }
@@ -137,7 +136,6 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         ApiKey apiKeyObject;
         User user = null;
-        //InvalidRequestBody errorBody = new InvalidRequestBody();
 
         /**
          * Api Key checks
@@ -186,47 +184,33 @@ public class ExchangeServiceImpl implements ExchangeService {
         if (startDate == null && finishDate == null) {
             beginDate = endDate = latestExchangeDate;
         } else if (startDate == null) {
-            beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+            beginDate = endDate = DateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_FINISH_DATE));
             }
         } else if (finishDate == null) {
-            beginDate = endDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
+            beginDate = endDate = DateStringConverter.convertStringToLocalDate(startDate);
             if (beginDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_START_DATE));
             }
         } else {
-            beginDate = LocalDateStringConverter.convertStringToLocalDate(startDate);
+            beginDate = DateStringConverter.convertStringToLocalDate(startDate);
             if (beginDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_START_DATE));
 
             }
-            endDate = LocalDateStringConverter.convertStringToLocalDate(finishDate);
+            endDate = DateStringConverter.convertStringToLocalDate(finishDate);
             if (endDate.isEqual(AppVariables.INVALID_DATE_VALUES)) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_BAD_REQUEST, AppVariables.ERROR_BODY_INVALID_FINISH_DATE));
             }
         }
-
-        if (beginDate.isAfter(endDate)) {
-            LocalDate tempDate = endDate;
-            endDate = beginDate;
-            beginDate = tempDate;
-        }
-
-        long diffInDays = ChronoUnit.DAYS.between(beginDate, endDate);
-
-        if (diffInDays > AppVariables.MAXIMUM_DATE_RANGE_IN_DAYS && vipClientRequest == false) {
-            return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE));
-        }
-
-
 
         List<String> requestedCurernciesList = new LinkedList<>();
 
         if (currency == null) {
             requestedCurernciesList.add(AppVariables.ALL_CURRENCIES);
         } else {
-            requestedCurernciesList = CurrencyListExtractor.extractCurrencyList(currency);
+            requestedCurernciesList = CurrencyListParser.parseCurrencyList(currency);
             if (requestedCurernciesList.isEmpty()) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_INVALID_REQUESTED_CURRENCY));
             }
@@ -234,7 +218,7 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         if (baseCurrency == null) {
             baseCurrency = AppVariables.DEFAULT_BASE_CURRENCY;
-        } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
+        } else if (CurrencyTypesValidator.isThisCurrencyAvailable(baseCurrency) == false) {
             return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY));
         }
 
@@ -244,15 +228,19 @@ public class ExchangeServiceImpl implements ExchangeService {
         LocalDate latestDate = exchangeRepository.getLatestExchangeDate();
 
         if (DateRangeValidator.isDateInValidRange(beginDate, endDate, latestDate) == false) {
-            LocalDate[] beginEndDate = DateRangeValidator.returnValidRange(beginDate, endDate, latestDate);
-            beginDate = beginEndDate[0];
-            endDate = beginEndDate[1];
+            LocalDate[] validatedDates = DateRangeValidator.returnValidRange(beginDate, endDate, latestDate);
+            beginDate = validatedDates[0];
+            endDate = validatedDates[1];
         }
 
+        long diffInDays = ChronoUnit.DAYS.between(beginDate, endDate);
+
+        if (diffInDays > AppVariables.MAXIMUM_DATE_RANGE_IN_DAYS && vipClientRequest == false) {
+            return ResponseEntity.ok(buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_FORBIDDEN, AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE));
+        }
 
         /**
-         * Check if requested exchange rates are form a single day, if they, are return exchanges form the day.
-         * If the exchange rates are from multiple days, return list of exchanges.
+         * Get exchanges from requested date or rate range
          */
         List<JsonConvertable> returnList = getExchangesFromMultipleDays(beginDate, endDate, requestedCurernciesList, baseCurrency);
 
@@ -265,19 +253,8 @@ public class ExchangeServiceImpl implements ExchangeService {
          * Check if currency value is defined. If it is, return exchange rate requested value.
          */
         if (currencyValue != null && beginDate.equals(endDate) && requestedCurernciesList.size() == 1) {
-            if (StringToNumericConverter.isStringValidDouble(currencyValue)) {
-                Double currencyExchangeValue = StringToNumericConverter.convertStringToDouble(currencyValue);
-                CurrencyConverterReturnedBody currencyConverterReturnedBody = new CurrencyConverterReturnedBody();
-
-                currencyConverterReturnedBody.setRequestedValue(currencyExchangeValue);
-                currencyConverterReturnedBody.setBaseCurrency(baseCurrency);
-                currencyConverterReturnedBody.setRequestedCurrency(requestedCurernciesList.get(0));
-                currencyConverterReturnedBody.setExchangeDate(beginDate);
-
-                SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) returnList.get(0);
-                currencyConverterReturnedBody.setRate(singleDayExchangeRatesJson.getRates().get(requestedCurernciesList.get(0)));
-                currencyConverterReturnedBody.calculateValue();
-                currencyConverterReturnedBody.composeMessage();
+            if (StringIntConverter.isStringValidDouble(currencyValue)) {
+                CurrencyConverterReturnedBody currencyConverterReturnedBody = buildCurrencyConverterBody(baseCurrency, currencyValue, beginDate, requestedCurernciesList, returnList);
                 return ResponseEntity.ok(currencyConverterReturnedBody);
             }
         }
@@ -292,6 +269,31 @@ public class ExchangeServiceImpl implements ExchangeService {
         exchangesList.setExchangeList(returnList);
 
         return ResponseEntity.ok(exchangesList);
+    }
+
+    /**
+     * Builds and returns JSON body when currency conversion is required
+     * @param baseCurrency Convert FROM
+     * @param currencyValue Amount
+     * @param date Exchange date
+     * @param requestedCurrenciesList Convert TO List of currency/currencies
+     * @param exchangesList Exchanges from requested day
+     * @return
+     */
+    private static CurrencyConverterReturnedBody buildCurrencyConverterBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
+        Double currencyExchangeValue = StringIntConverter.convertStringToDouble(currencyValue);
+        CurrencyConverterReturnedBody currencyConverterReturnedBody = new CurrencyConverterReturnedBody();
+
+        currencyConverterReturnedBody.setRequestedValue(currencyExchangeValue);
+        currencyConverterReturnedBody.setBaseCurrency(baseCurrency);
+        currencyConverterReturnedBody.setRequestedCurrency(requestedCurrenciesList.get(0));
+        currencyConverterReturnedBody.setExchangeDate(date);
+
+        SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) exchangesList.get(0);
+        currencyConverterReturnedBody.setRate(singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0)));
+        currencyConverterReturnedBody.calculateValue();
+        currencyConverterReturnedBody.composeMessage();
+        return currencyConverterReturnedBody;
     }
 
     /**
@@ -360,7 +362,7 @@ public class ExchangeServiceImpl implements ExchangeService {
              */
             if (baseCurrency.equals("")) {
                 pojo.setBase(AppVariables.DEFAULT_BASE_CURRENCY);
-            } else if (AvailableCurrencyTypesChecker.isThisCurrencyAvailable(baseCurrency) == false) {
+            } else if (CurrencyTypesValidator.isThisCurrencyAvailable(baseCurrency) == false) {
                 return buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY);
             } else {
                 pojo.setBase(baseCurrency);
@@ -379,7 +381,7 @@ public class ExchangeServiceImpl implements ExchangeService {
                 if (exchangeRepository.existsByExchangeDateAndCurrency_IsoName(exchangeDate, baseCurrency)) {
                     double newRatio = calculateNewRatio(exchangeDate, baseCurrency);
                     for (Exchange entry : latestExchangesList) {
-                        rates.put(entry.getCurrency().getIsoName(), DecimalPlacesFixerDouble.fix(entry.getValue() * newRatio, AppVariables.DECIMAL_PLACES_CURRENCY_CONVERSION));
+                        rates.put(entry.getCurrency().getIsoName(), DecimalPlacesFixer.fix(entry.getValue() * newRatio, AppVariables.DECIMAL_PLACES_CURRENCY_CONVERSION));
                     }
                 } else {
                     return buildInvalidRequestBody(AppVariables.RETURNED_JSON_BODY_NOT_FOUND, AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_CURRENCY_NOT_FOUND);
@@ -407,7 +409,7 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     public double calculateNewRatio(LocalDate date, String currency) {
         Exchange newBaseCurrency = exchangeRepository.findByExchangeDateAndCurrency_IsoName(date, currency);
-        return DecimalPlacesFixerDouble.fix(1 / newBaseCurrency.getValue(), AppVariables.DECIMAL_PLACES_CURRENCY_CONVERSION);
+        return DecimalPlacesFixer.fix(1 / newBaseCurrency.getValue(), AppVariables.DECIMAL_PLACES_CURRENCY_CONVERSION);
     }
 
     /**

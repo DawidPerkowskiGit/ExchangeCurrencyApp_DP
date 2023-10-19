@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.currencytests;
 
-import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyListExtractor;
+import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyListParser;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class CurrencyListExtractorTests {
+public class CurrencyListParserTests {
     final String emptyString ="";
 
     final String singleCurrency = "USD";
@@ -25,14 +25,14 @@ public class CurrencyListExtractorTests {
 
     @Test
     void shouldReturnEmptyList() {
-        assertThat(CurrencyListExtractor.extractCurrencyList(emptyString)).isEmpty();
+        assertThat(CurrencyListParser.parseCurrencyList(emptyString)).isEmpty();
     }
 
     @Test
     void shouldReturnListWithSingleElement() {
         List<String> listOneElement = new LinkedList<>();
         listOneElement.add("USD");
-        assertThat(CurrencyListExtractor.extractCurrencyList(singleCurrency).get(0)).isEqualTo(listOneElement.get(0));
+        assertThat(CurrencyListParser.parseCurrencyList(singleCurrency).get(0)).isEqualTo(listOneElement.get(0));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class CurrencyListExtractorTests {
         listOfMultipleCurrencies.add("PLN");
         listOfMultipleCurrencies.add("USD");
 
-        List<String> extractedList = CurrencyListExtractor.extractCurrencyList(validCurrencies);
+        List<String> extractedList = CurrencyListParser.parseCurrencyList(validCurrencies);
         for (int i = 0; i < listOfMultipleCurrencies.size(); i++) {
             assertThat(listOfMultipleCurrencies.get(i)).isEqualTo(extractedList.get(i));
         }
@@ -54,7 +54,7 @@ public class CurrencyListExtractorTests {
         listOfMultipleCurrencies.add("PLN");
         listOfMultipleCurrencies.add("USD");
 
-        List<String> extractedList = CurrencyListExtractor.extractCurrencyList(oneInvalidCurrencyInList);
+        List<String> extractedList = CurrencyListParser.parseCurrencyList(oneInvalidCurrencyInList);
         for (int i = 0; i < listOfMultipleCurrencies.size(); i++) {
             assertThat(listOfMultipleCurrencies.get(i)).isEqualTo(extractedList.get(i));
         }
@@ -62,12 +62,12 @@ public class CurrencyListExtractorTests {
 
     @Test
     void shouldReturnEmptyListWhenNoCurrencyFound() {
-        assertThat(CurrencyListExtractor.extractCurrencyList(gibberish)).isEmpty();
+        assertThat(CurrencyListParser.parseCurrencyList(gibberish)).isEmpty();
     }
 
     @Test
     void shouldReturnEntryWithEmptyString() {
-        assertThat(CurrencyListExtractor.extractCurrencyList(nullString).get(0)).isEqualTo(emptyString);
+        assertThat(CurrencyListParser.parseCurrencyList(nullString).get(0)).isEqualTo(emptyString);
     }
 
 }

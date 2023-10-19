@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * Repository for Location and Currency pairs
  */
 @Repository
-public interface LocationCurrencyPairRepository extends CrudRepository<LocationCurrencyPair, Integer> {
+public interface LocationCurrencyRepository extends CrudRepository<LocationCurrencyPair, Integer> {
 }

@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.currencytests;
 
-import dpapps.exchangecurrencyapp.exchange.helpers.AvailableCurrencyTypesChecker;
+import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyTypesValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,9 +14,9 @@ public class CurrencyTypesTests {
         String currency2 = "JPY";
         String currency3 = "DKK";
 
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency1)).isTrue();
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency2)).isTrue();
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency3)).isTrue();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency1)).isTrue();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency2)).isTrue();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency3)).isTrue();
     }
 
     @Test
@@ -27,11 +27,11 @@ public class CurrencyTypesTests {
         String currency4 = "BBB";
         String currency5 = "USD, EUR";
 
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency1)).isFalse();
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency2)).isFalse();
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency3)).isFalse();
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency4)).isFalse();
-        assertThat(AvailableCurrencyTypesChecker.isThisCurrencyAvailable(currency5)).isFalse();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency1)).isFalse();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency2)).isFalse();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency3)).isFalse();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency4)).isFalse();
+        assertThat(CurrencyTypesValidator.isThisCurrencyAvailable(currency5)).isFalse();
 
     }
 }

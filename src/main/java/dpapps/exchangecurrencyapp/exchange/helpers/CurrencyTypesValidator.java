@@ -3,7 +3,7 @@ package dpapps.exchangecurrencyapp.exchange.helpers;
 /**
  * Tool that checks if currency is available
  */
-public class AvailableCurrencyTypesChecker {
+public class CurrencyTypesValidator {
 
     /**
      * Method which confirms or denies if currency is available
@@ -12,7 +12,7 @@ public class AvailableCurrencyTypesChecker {
      * @return Boolean result
      */
     public static boolean isThisCurrencyAvailable(String currency) {
-        for (AvailableCurrencyTypes entry : AvailableCurrencyTypes.values()) {
+        for (CurrencyTypes entry : CurrencyTypes.values()) {
             if (currency.equals(entry.toString())) {
                 return true;
             }

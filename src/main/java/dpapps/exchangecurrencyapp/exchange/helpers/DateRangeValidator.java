@@ -45,12 +45,6 @@ public class DateRangeValidator {
         if (right.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
-//        if (left.isAfter(LocalDate.now())) {
-//            return false;
-//        }
-//        if (right.isAfter(LocalDate.now())) {
-//            return false;
-//        }
         if (left.isAfter(latestDate)) {
             return false;
         }

@@ -21,14 +21,14 @@ public class MainApplicationController {
     private final MainControllerService controller;
 
 
-
     @Autowired
     public MainApplicationController(MainControllerService controller) {
         this.controller = controller;
     }
 
     /**
-     * Home mapping endpoint
+     * Homepage mapping endpoint
+     *
      * @return Homepage view
      */
 
@@ -39,6 +39,7 @@ public class MainApplicationController {
 
     /**
      * Homepage mapping endpoint
+     *
      * @return Homepage view
      */
 

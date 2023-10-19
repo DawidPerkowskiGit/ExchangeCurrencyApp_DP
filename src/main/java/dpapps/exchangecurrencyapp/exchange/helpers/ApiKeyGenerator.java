@@ -1,5 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.helpers;
 
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import org.springframework.security.oauth2.common.util.RandomValueStringGenerator;
 
 /**
@@ -13,7 +14,7 @@ public class ApiKeyGenerator {
      * @return API key as a String
      */
     public static String generateApiKey() {
-        String apiKey = new RandomValueStringGenerator(64).generate();
+        String apiKey = new RandomValueStringGenerator(AppVariables.API_KEY_GENERATED_LENGTH).generate();
         return apiKey;
     }
 

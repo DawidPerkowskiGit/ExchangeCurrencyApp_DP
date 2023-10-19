@@ -3,7 +3,7 @@ package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.exchange.helpers.AvailableCurrencyTypes;
+import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class DataToDatabaseInserter {
 
 
         try {
-            for (AvailableCurrencyTypes currencyType : AvailableCurrencyTypes.values()) {
+            for (CurrencyTypes currencyType : CurrencyTypes.values()) {
                 if (requestDataModel.getRates().containsKey(currencyType.toString())) {
                     Exchange exchange = new Exchange();
                     exchange.setCurrency(currencyRepository.findCurrencyByIsoName(currencyType.toString()));

@@ -128,6 +128,12 @@ public class AppVariables {
     public final static int MAXIMUM_DATE_RANGE_IN_DAYS = 7;
 
     /**
+     * Api key generator length
+     */
+
+    public final static int API_KEY_GENERATED_LENGTH = 64;
+
+    /**
      * Valid API key message
      */
 
@@ -227,5 +233,26 @@ public class AppVariables {
      */
     public final static String USER_IS_LOCKED = "Could not generate new API key, account is locked";
 
+    /**
+     * Environmental variable name used in fetching new exchange rates from externam service.
+     */
+    public final static String ENV_VAR_API_IMPORT_CREDS_URL = "API_IMPORT_CREDS_URL";
+
+    /**
+     * Empty string
+     */
+
+    public final static String EMPTY_STRING = "";
+
+    /**
+     * Multiple currencies separator
+     */
+
+    public final static String MULTIPLE_CURRENCIES_SEPARATOR = ",";
+
+    /**
+     * Date separator
+     */
+    public final static String DATE_STRING_SEPARATOR = "-";
 
 }

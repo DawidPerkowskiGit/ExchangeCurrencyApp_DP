@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Model of JSON body returned if an error occurred
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,6 +16,5 @@ import lombok.Setter;
 public class InvalidRequestBody implements JsonConvertable {
     private Boolean success = false;
     private int status;
-
     private String message;
 }

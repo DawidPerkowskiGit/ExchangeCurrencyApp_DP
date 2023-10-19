@@ -1,5 +1,6 @@
 package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 /**
- * This module is responsible for sending API requestapi to exchangeratesapi.io and fetching requestapi body.
+ * This module is responsible for sending API request to exchangeratesapi.io and fetching request body.
  */
 @Service
 public class DataFetcher {
@@ -18,27 +19,27 @@ public class DataFetcher {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public String retrieveApiResponse() {
-        return retrieveApiResponse("");
+    public String fetchApiResponse() {
+        return fetchApiResponse("");
     }
 
 
     /**
-     * Retrieves exchangeratesapi.io requestapi body
+     * Fetches exchangeratesapi.io request body
      *
      * @param url Optional url to the REST API service, default path is stored i environmental variable
-     * @return JSON requestapi
+     * @return JSON request
      */
-    public String retrieveApiResponse(String url) {
+    public String fetchApiResponse(String url) {
 
         String apiUrl = url;
 
-        if (apiUrl.equals("")) {
+        if (apiUrl.equals(AppVariables.EMPTY_STRING)) {
             try {
-                apiUrl = System.getenv("API_IMPORT_CREDS_URL");
+                apiUrl = System.getenv(AppVariables.ENV_VAR_API_IMPORT_CREDS_URL);
             } catch (Exception e) {
                 logger.error("Could not retrieve environment variable API_IMPORT_CREDS_URL. Exception: " + e);
-                return "";
+                return AppVariables.EMPTY_STRING;
             }
         }
 

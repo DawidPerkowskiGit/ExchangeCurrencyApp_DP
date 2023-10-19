@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.stringdoubleconverter;
 
-import dpapps.exchangecurrencyapp.exchange.helpers.StringToNumericConverter;
+import dpapps.exchangecurrencyapp.exchange.helpers.StringIntConverter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -43,7 +43,7 @@ public class StringToDoubleConverterTests {
     public void shouldReturnInvalidString() {
         for (String entry: invalidStringList
              ) {
-            assertThat(StringToNumericConverter.isStringValidDouble(entry)).isFalse();
+            assertThat(StringIntConverter.isStringValidDouble(entry)).isFalse();
         }
     }
 
@@ -51,7 +51,7 @@ public class StringToDoubleConverterTests {
     public void shouldReturnValidString() {
         for (String entry: validStringList
         ) {
-            assertThat(StringToNumericConverter.isStringValidDouble(entry)).isTrue();
+            assertThat(StringIntConverter.isStringValidDouble(entry)).isTrue();
         }
     }
 
@@ -60,7 +60,7 @@ public class StringToDoubleConverterTests {
 
         if (validDoubleList.size() == validDoubleList.size()) {
             for (int i = 0; i < validDoubleList.size(); i++) {
-                assertThat(StringToNumericConverter.convertStringToDouble(validStringList.get(i))).isEqualTo(validDoubleList.get(i));
+                assertThat(StringIntConverter.convertStringToDouble(validStringList.get(i))).isEqualTo(validDoubleList.get(i));
             }
         }
         else {

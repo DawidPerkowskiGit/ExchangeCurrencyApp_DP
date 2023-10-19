@@ -24,7 +24,7 @@ public class ScheduleJobs {
 
         try {
             DataFetcher dataFetcher = new DataFetcher();
-            String apiResponseBody = dataFetcher.retrieveApiResponse(url);
+            String apiResponseBody = dataFetcher.fetchApiResponse(url);
             if (apiResponseBody.equals("")) {
                 logger.info("Failed to import request api body");
                 return "Failed to import request api body";

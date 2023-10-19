@@ -1,5 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.helpers;
 
+import dpapps.exchangecurrencyapp.configuration.AppVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,11 +10,11 @@ import java.time.format.DateTimeFormatter;
 /**
  * Tool which converts Date in yyyy-MM-dd format to String or vice-versa
  */
-public class LocalDateStringConverter{
+public class DateStringConverter {
 
     private DateTimeFormatter dateFormat;
 
-    private static final Logger logger = LoggerFactory.getLogger(LocalDateStringConverter.class);
+    private static final Logger logger = LoggerFactory.getLogger(DateStringConverter.class);
 
 
     /**
@@ -40,7 +41,7 @@ public class LocalDateStringConverter{
      * @return Date converted to Array of three ints
      */
     public static int[] convertStringDateToInts(String date) {
-        String[] strings = date.split("-");
+        String[] strings = date.split(AppVariables.DATE_STRING_SEPARATOR);
         int arr[] = new int[3];
         arr = putOnesIntoArray(arr);
         if (strings.length != 3) {
