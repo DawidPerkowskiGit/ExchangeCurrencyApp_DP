@@ -40,7 +40,7 @@ public class DateStringConverter {
      * @param date Date in String format
      * @return Date converted to Array of three ints
      */
-    public static int[] convertStringDateToInts(String date) {
+    public static int[] convertDateStringToInts(String date) {
         String[] strings = date.split(AppVariables.DATE_STRING_SEPARATOR);
         int arr[] = new int[3];
         arr = putOnesIntoArray(arr);

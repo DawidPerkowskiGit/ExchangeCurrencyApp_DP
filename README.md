@@ -4,13 +4,15 @@
 * [More detailed information about application](#more-detailed-information-about-application)
 * [Available endpoints](#available-endpoints)
 * [Application view](#application-view)
+* [Challenges](#challenges)
 ## General info
 
-Live version link : https://exchangecurrencyapp-dp-render.onrender.com
+Backend live link: https://exchangecurrencyapp-dp-render.onrender.com
+
+Frontend live link: https://dp-exchange-currency-app-ng.onrender.com/
+Frontend repository: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG
 
 A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process. Hosted on Render's free plan.
-
-I created frontend application developed in Angular, which displays requested data.  https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG
 
 ## Technologies
 
@@ -20,13 +22,11 @@ Java 17, Spring 6, Spring Boot, Spring Web, Spring Data, Spring Security, Postgr
 
 The application and its database PostgresSQL is hosted on Render.com. Database stores over 30 different currency types and their exchange rates, first entry is from 1999-01-04. Every four hours application performs automatic REST API request to exchangeratesapi.io in search of new exchange rates. If received exchanges are new, the data is inserted to the database. Users have to create account and use their API key to retrieve data.
 
-URL of the application: https://exchangecurrencyapp-dp-render.onrender.com
-
 ## Available endpoints   
 
 ### /api/currencies
 
-The user can access this endpoint without providing api key. Returns list of all available currencies (including ones no longer used) in JSON format.
+The user can access this endpoint without providing an API key. Returns list of all available currencies (including ones no longer used) in JSON format.
 
 Available optional URL parameters:
 - date - provide date when you want to fetch currencies, which were actively used at specified time
@@ -235,7 +235,7 @@ You will receive following responses while not providing valid values to request
   "message": "Request exceeds maximum date range"
 }
 ```
-
+[README.md](README.md)
 ## Application view
 
 Frontend application which displays REST API data: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG.
@@ -251,3 +251,7 @@ Result of requesting the latest exchange rates data.
 Api key section available to logged-in users.
 
 ![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
+
+## Challenges
+1) Deserialization of external exchange service data needed for importing the newest exchange ratios. I had to use Jackson library to import necessary data
+2) Deploying application with Docker on local Windows machine would still cause errors when deploying with Render's Linux machine. I had to remove newline signs from pom.xmlS
