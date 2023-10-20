@@ -243,6 +243,7 @@ Result of requesting the latest exchange rates data.
 
 
 
+
 Api key section available to logged-in users.
 
 ![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
