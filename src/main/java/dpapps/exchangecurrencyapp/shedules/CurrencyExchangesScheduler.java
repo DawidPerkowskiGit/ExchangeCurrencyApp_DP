@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.shedules;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
@@ -79,7 +79,7 @@ public class CurrencyExchangesScheduler {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            request = HttpRequest.newBuilder().uri(URI.create(AppVariables.FRONTEND_APP_URL)).build();
+            request = HttpRequest.newBuilder().uri(URI.create(AppConstants.FRONTEND_APP_URL)).build();
 
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
 

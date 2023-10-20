@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import dpapps.exchangecurrencyapp.exchange.model.ApiKey;
 import dpapps.exchangecurrencyapp.exchange.model.Role;
 import dpapps.exchangecurrencyapp.exchange.model.User;
@@ -29,19 +29,19 @@ public class ApiKeyServiceImpl implements ApiKeyService {
      * @return Boolean result
      */
     public int canUseTheApiKey(ApiKey apiKey, User user) {
-        if (doesUserHaveSpecificRole(AppVariables.ROLE_ADMIN, user)) {
-            return AppVariables.API_KEY_ADMIN;
+        if (doesUserHaveSpecificRole(AppConstants.ROLE_ADMIN, user)) {
+            return AppConstants.API_KEY_ADMIN;
         }
         if (user.isRequestLimitIsReached()) {
-            return AppVariables.API_KEY_USE_LIMIT_REACHED;
+            return AppConstants.API_KEY_USE_LIMIT_REACHED;
         }
         if (apiKey.isActive() == false) {
-            return AppVariables.API_KEY_INACTIVE;
+            return AppConstants.API_KEY_INACTIVE;
         }
         if (user.isNonLocked() == false) {
-            return AppVariables.API_KEY_USER_NOT_LOCKED;
+            return AppConstants.API_KEY_USER_NOT_LOCKED;
         }
-        return AppVariables.API_KEY_VALID;
+        return AppConstants.API_KEY_VALID;
     }
 
     /**
@@ -69,7 +69,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 
     public String generateNewKey(User user) {
         if (user.isNonLocked() == false) {
-            return AppVariables.USER_IS_LOCKED;
+            return AppConstants.USER_IS_LOCKED;
         }
         for (ApiKey singleKey : user.getApiKeys()) {
             if (singleKey.isActive()) {
@@ -122,13 +122,13 @@ public class ApiKeyServiceImpl implements ApiKeyService {
      */
     public int isApiKeyValid(String apiKey) {
         if (apiKey == null) {
-            return AppVariables.API_KEY_NOT_PROVIDED;
+            return AppConstants.API_KEY_NOT_PROVIDED;
         }
         if (apiKeyRepository.existsByValue(apiKey) == false) {
-            return AppVariables.API_KEY_INVALID;
+            return AppConstants.API_KEY_INVALID;
         }
 
-        return AppVariables.API_KEY_VALID;
+        return AppConstants.API_KEY_VALID;
     }
 
 

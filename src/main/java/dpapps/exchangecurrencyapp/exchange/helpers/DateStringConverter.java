@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.helpers;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class DateStringConverter {
      * @return Date converted to Array of three ints
      */
     public static int[] convertDateStringToInts(String date) {
-        String[] strings = date.split(AppVariables.DATE_STRING_SEPARATOR);
+        String[] strings = date.split(AppConstants.DATE_STRING_SEPARATOR);
         int arr[] = new int[3];
         arr = putOnesIntoArray(arr);
         if (strings.length != 3) {

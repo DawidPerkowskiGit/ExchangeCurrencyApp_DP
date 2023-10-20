@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import dpapps.exchangecurrencyapp.security.UserDto;
@@ -146,7 +146,7 @@ public class MainControllerServiceImpl implements MainControllerService {
      */
     public String getProfile(Model model) {
         User user = userService.getCurrentUser();
-        String apiRequestsString = "" + user.getCurrentRequestsCount() + "/" + AppVariables.DAILY_USE_LIMIT;
+        String apiRequestsString = "" + user.getCurrentRequestsCount() + "/" + AppConstants.DAILY_USE_LIMIT;
         model.addAttribute("apiRequestString", apiRequestsString);
         String apiKeyValue = apiKeyService.returnActiveKey(user).getValue();
         model.addAttribute("apiKeyValue", apiKeyValue);

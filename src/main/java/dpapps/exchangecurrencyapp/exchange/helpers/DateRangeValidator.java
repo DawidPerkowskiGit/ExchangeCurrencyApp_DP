@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.helpers;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 
 import java.time.LocalDate;
 
@@ -13,12 +13,9 @@ public class DateRangeValidator {
 
     /**
      * Method checks if requested date is in valid range.
-     *
-     * @param date Requested date
-     * @return Boolean result
      */
     public static boolean isDateInValidRange(LocalDate date, LocalDate latestDate) {
-        if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
+        if (date.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
         if (date.isAfter(latestDate)) {
@@ -29,20 +26,16 @@ public class DateRangeValidator {
 
     /**
      * Method checks if both dates are in valid range
-     *
-     * @param left  Oldest date
-     * @param right Newest date
-     * @return Boolean result
      */
 
-    public static boolean isDateInValidRange(LocalDate left, LocalDate right, LocalDate latestDate) {
+    public static boolean areDatesInValidRange(LocalDate left, LocalDate right, LocalDate latestDate) {
         if (right.isBefore(left)) {
             return false;
         }
-        if (left.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
+        if (left.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
-        if (right.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
+        if (right.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
         if (left.isAfter(latestDate)) {
@@ -57,14 +50,11 @@ public class DateRangeValidator {
 
     /**
      * Method which puts date in valid range.
-     *
-     * @param date Date to validate
-     * @return Date in valid range
      */
 
     public static LocalDate returnValidRange(LocalDate date, LocalDate latestDate) {
-        if (date.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
-            return AppVariables.EXCHANGE_DATE_OLDEST;
+        if (date.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
+            return AppConstants.EXCHANGE_DATE_OLDEST;
         }
         if (date.isAfter(latestDate)) {
             return latestDate;
@@ -74,10 +64,6 @@ public class DateRangeValidator {
 
     /**
      * Returns date scope in valid range
-     *
-     * @param left  Older date
-     * @param right Newer date
-     * @return Scope of dates in valid range
      */
 
     public static LocalDate[] returnValidRange(LocalDate left, LocalDate right, LocalDate latestDate) {
@@ -88,11 +74,11 @@ public class DateRangeValidator {
             left = temp;
         }
 
-        if (left.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
-            left = AppVariables.EXCHANGE_DATE_OLDEST;
+        if (left.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
+            left = AppConstants.EXCHANGE_DATE_OLDEST;
         }
-        if (right.isBefore(AppVariables.EXCHANGE_DATE_OLDEST)) {
-            right = AppVariables.EXCHANGE_DATE_OLDEST;
+        if (right.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
+            right = AppConstants.EXCHANGE_DATE_OLDEST;
         }
         if (left.isAfter(latestDate)) {
             left = latestDate;

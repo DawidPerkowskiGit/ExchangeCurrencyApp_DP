@@ -93,5 +93,5 @@ public interface ExchangeService {
      * @param list  List of entries
      * @return List with an additional value
      */
-    List<String> addValueReplaceMap(String value, List<String> list);
+    List<String> addValueToList(String value, List<String> list);
 }

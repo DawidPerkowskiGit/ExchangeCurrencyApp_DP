@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,12 +34,12 @@ public class DataFetcher {
 
         String apiUrl = url;
 
-        if (apiUrl.equals(AppVariables.EMPTY_STRING)) {
+        if (apiUrl.equals(AppConstants.EMPTY_STRING)) {
             try {
-                apiUrl = System.getenv(AppVariables.ENV_VAR_API_IMPORT_CREDS_URL);
+                apiUrl = System.getenv(AppConstants.ENV_VAR_API_IMPORT_CREDS_URL);
             } catch (Exception e) {
                 logger.error("Could not retrieve environment variable API_IMPORT_CREDS_URL. Exception: " + e);
-                return AppVariables.EMPTY_STRING;
+                return AppConstants.EMPTY_STRING;
             }
         }
 

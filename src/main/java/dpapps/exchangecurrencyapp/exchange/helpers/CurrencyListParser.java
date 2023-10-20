@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.helpers;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +25,10 @@ public class CurrencyListParser {
         String[] splitResult = new String[0];
         List<String> currenciesList = new LinkedList<>();
         try {
-            splitResult = input.split(AppVariables.MULTIPLE_CURRENCIES_SEPARATOR);
+            splitResult = input.split(AppConstants.MULTIPLE_CURRENCIES_SEPARATOR);
         } catch (Exception e) {
             logger.error("Could not extract currencies from input. Exception: " + e);
-            currenciesList.add(AppVariables.EMPTY_STRING);
+            currenciesList.add(AppConstants.EMPTY_STRING);
             return currenciesList;
         }
 

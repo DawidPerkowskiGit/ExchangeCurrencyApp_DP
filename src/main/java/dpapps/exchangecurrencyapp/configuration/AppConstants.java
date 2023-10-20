@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * Class which stores all global variables
  */
-public class AppVariables {
+public class AppConstants {
     /**
      * Oldest exchange rates entry in the database
      */
@@ -234,7 +234,7 @@ public class AppVariables {
     public final static String USER_IS_LOCKED = "Could not generate new API key, account is locked";
 
     /**
-     * Environmental variable name used in fetching new exchange rates from externam service.
+     * Environmental variable name used in fetching new exchange rates from external service.
      */
     public final static String ENV_VAR_API_IMPORT_CREDS_URL = "API_IMPORT_CREDS_URL";
 

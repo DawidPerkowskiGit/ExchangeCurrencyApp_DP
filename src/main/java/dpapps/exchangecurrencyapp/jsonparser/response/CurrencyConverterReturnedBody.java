@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.jsonparser.response;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import dpapps.exchangecurrencyapp.exchange.helpers.DecimalPlacesFixer;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
@@ -30,6 +30,6 @@ public class CurrencyConverterReturnedBody implements JsonConvertable {
 
     public void calculateValue() {
         double calculated = this.rate * this.requestedValue;
-        this.calculatedValue = DecimalPlacesFixer.fix(calculated, AppVariables.DECIMAL_PLACES_CURRENCY_CALCULATION);
+        this.calculatedValue = DecimalPlacesFixer.fix(calculated, AppConstants.DECIMAL_PLACES_CURRENCY_CALCULATION);
     }
 }

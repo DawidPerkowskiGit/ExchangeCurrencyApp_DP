@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.model;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,13 +45,13 @@ public class User {
     private int currentRequestsCount = 0;
 
     public void increaseNumberOfUsages() {
-        if (currentRequestsCount < AppVariables.DAILY_USE_LIMIT) {
+        if (currentRequestsCount < AppConstants.DAILY_USE_LIMIT) {
             currentRequestsCount++;
         }
     }
 
     public boolean isRequestLimitIsReached() {
-        if (currentRequestsCount == AppVariables.DAILY_USE_LIMIT) {
+        if (currentRequestsCount == AppConstants.DAILY_USE_LIMIT) {
             return true;
         }
         return false;

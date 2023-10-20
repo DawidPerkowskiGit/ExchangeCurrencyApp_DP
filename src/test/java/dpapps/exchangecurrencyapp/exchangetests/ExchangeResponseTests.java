@@ -1,6 +1,6 @@
 package dpapps.exchangecurrencyapp.exchangetests;
 
-import dpapps.exchangecurrencyapp.configuration.AppVariables;
+import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +49,13 @@ public class ExchangeResponseTests {
     final String emptyStartDateArg = "startDate=";
     final String emptyFinishDateArg = "finishDate=";
 
-    final String noApiKeyJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppVariables.ERROR_BODY_API_KEY_NOT_PROVIDED + "\"}";
-    final String apiKeyInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppVariables.ERROR_BODY_API_KEY_INVALID + "\"}";
-    final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_REQUESTED_CURRENCY + "\"}";
-    final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_BASE_CURRENCY + "\"}";
-    final String startDateInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_START_DATE + "\"}";
-    final String finishDateInvalidJson = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppVariables.ERROR_BODY_INVALID_FINISH_DATE + "\"}";
-    final String dateRangeTooWide = "{\"success\":false,\"status\":" + AppVariables.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppVariables.ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE + "\"}";
+    final String noApiKeyJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppConstants.ERROR_BODY_API_KEY_NOT_PROVIDED + "\"}";
+    final String apiKeyInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppConstants.ERROR_BODY_API_KEY_INVALID + "\"}";
+    final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppConstants.ERROR_BODY_INVALID_REQUESTED_CURRENCY + "\"}";
+    final String baseCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppConstants.ERROR_BODY_INVALID_BASE_CURRENCY + "\"}";
+    final String startDateInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppConstants.ERROR_BODY_INVALID_START_DATE + "\"}";
+    final String finishDateInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppConstants.ERROR_BODY_INVALID_FINISH_DATE + "\"}";
+    final String dateRangeTooWide = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppConstants.ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE + "\"}";
     List<String> arguments = new LinkedList<>();
     private final int argsListCount = 4;
     String[] apiKeyArgs = new String[argsListCount];
