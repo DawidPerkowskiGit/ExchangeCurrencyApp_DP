@@ -237,16 +237,19 @@ You will receive following responses while not providing valid values to request
 ```
 [README.md](README.md)
 ## Application view
-Result of requesting the latest exchange rates data.
+Requesting the latest exchange rates data.
 
-![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/1e6ca59d-10b7-4080-b04a-9719e8a9ed18)
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/7c6d1c9f-be5b-4566-bd23-f2a2f6143d9c)
 
+Converting currency to another.
 
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/9384af01-fb44-4aba-b872-61034636799d)
 
 
 Api key section available to logged-in users.
 
-![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/bef9ae4a-0d1c-4144-95ef-db81e4f5c7bd)
+
 
 ## Challenges
 1) Deserialization of external exchange service data needed for importing the newest exchange ratios. I had to use Jackson library to import necessary data
