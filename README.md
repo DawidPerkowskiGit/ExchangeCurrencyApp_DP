@@ -9,7 +9,7 @@
 
 Backend live link: https://exchangecurrencyapp-dp-render.onrender.com
 
-Frontend live link: https://dp-exchange-currency-app-ng.onrender.com/
+Frontend live link: https://dp-exchange-currency-app-ng.onrender.com/   
 Frontend repository: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG
 
 A currency exchange application developed with a CI/CD workflow, providing REST API endpoints that return selected exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using Render. Docker containers are used for the deployment process. Hosted on Render's free plan.
@@ -241,16 +241,20 @@ You will receive following responses while not providing valid values to request
 Frontend application which displays REST API data: https://github.com/DawidPerkowskiGit/DP_Exchange_Currency_App_NG.
 
 
-Result of requesting the latest exchange rates data.
-
-![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/1e6ca59d-10b7-4080-b04a-9719e8a9ed18)
-
-
-
-
 Api key section available to logged-in users.
 
-![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/4db0bdc6-087a-438f-9287-867802ea9b58)
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/aa9cfca9-4148-465e-b5cd-94cc1c7d956b)
+
+
+Result of requesting the latest exchange rates data.
+
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/d26a44a3-eec3-44de-a9ed-6c40a2c1c000)
+
+
+Result of requesting currency conversion
+
+![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/c2da4929-2e6d-4bef-830a-37c08ba40311)
+
 
 ## Challenges
 1) Deserialization of external exchange service data needed for importing the newest exchange ratios. I had to use Jackson library to import necessary data
