@@ -10,10 +10,10 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
- * This class performs exchangeratesapi.io JSON requestapi body deserialization.
+ * Performs external service exchange rates JSON data deserialization. Data from a file or String variable can be deserialized.
  */
 @Service
-public class JsonToDataParser {
+public class ExternalJsonToDataParser {
 
     private final boolean DEBUG = true;
 
@@ -22,13 +22,10 @@ public class JsonToDataParser {
     /**
      * Performs JSON file deserialization.
      * Reads JSON file, converts it to String and converts it to JAVA Object
-     *
-     * @param filePath filepath to the file
-     * @return Java Object of exchangeratesapi.io exchange rates
      */
-    public Optional<RequestDataModel> parseJsonFromFile(String filePath) {
+    public Optional<ExternalDataModel> parseJsonFromFile(String filePath) {
 
-        RequestDataModel requestDataModel = new RequestDataModel();
+        ExternalDataModel externalDataModel = new ExternalDataModel();
         String jsonInString = "";
 
         try {
@@ -41,25 +38,22 @@ public class JsonToDataParser {
     }
 
     /**
-     * Performs JSON requestapi body deserialziation
-     *
-     * @param jsonInString JSON stored in String type variable
-     * @return Java Object of exchangeratesapi.io exchange rates
+     * Performs exchangeratesapi.io JSON body deserialization
      */
-    public Optional<RequestDataModel> jsonDeserialization(String jsonInString) {
-        RequestDataModel requestDataModel;
+    public Optional<ExternalDataModel> jsonDeserialization(String jsonInString) {
+        ExternalDataModel externalDataModel;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            requestDataModel = mapper.readValue(jsonInString, RequestDataModel.class);
+            externalDataModel = mapper.readValue(jsonInString, ExternalDataModel.class);
             if (DEBUG) {
-                String pojoToString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestDataModel);
+                String pojoToString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(externalDataModel);
                 logger.info("Object converted to String: " + pojoToString);
             }
         } catch (Exception e) {
             logger.error("Could not parse JSON body. Exception: " + e);
             return Optional.empty();
         }
-        return Optional.ofNullable(requestDataModel);
+        return Optional.ofNullable(externalDataModel);
     }
 
 

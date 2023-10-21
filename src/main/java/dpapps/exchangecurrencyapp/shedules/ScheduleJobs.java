@@ -3,10 +3,10 @@ package dpapps.exchangecurrencyapp.shedules;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.jsonparser.requestapi.JsonToDataParser;
-import dpapps.exchangecurrencyapp.jsonparser.requestapi.RequestDataModel;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.ExternalJsonToDataParser;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.ExternalDataModel;
 import dpapps.exchangecurrencyapp.jsonparser.requestapi.DataFetcher;
-import dpapps.exchangecurrencyapp.jsonparser.requestapi.DataToDatabaseInserter;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.ExternalObjectToDatabaseCompatibleDataConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +30,8 @@ public class ScheduleJobs {
                 return "Failed to import request api body";
             }
 
-            JsonToDataParser jsonToDataParser = new JsonToDataParser();
-            Optional<RequestDataModel> responseBodyPojo = jsonToDataParser.jsonDeserialization(apiResponseBody);
+            ExternalJsonToDataParser externalJsonToDataParser = new ExternalJsonToDataParser();
+            Optional<ExternalDataModel> responseBodyPojo = externalJsonToDataParser.jsonDeserialization(apiResponseBody);
             if (responseBodyPojo.get().doAllNullableFieldsContainData() == false) {
                 logger.info("Returned request api body is null");
                 return "Returned request api body is null";
@@ -41,14 +41,14 @@ public class ScheduleJobs {
                 return "Could not get requestapi body";
             }
 
-            DataToDatabaseInserter dataToDatabaseInserter = new DataToDatabaseInserter(exchangeRepository, currencyRepository);
-            List<Exchange> exchanges = dataToDatabaseInserter.convertPojoToExchangeList(responseBodyPojo.get());
+            ExternalObjectToDatabaseCompatibleDataConverter externalObjectToDatabaseCompatibleDataConverter = new ExternalObjectToDatabaseCompatibleDataConverter(exchangeRepository, currencyRepository);
+            List<Exchange> exchanges = externalObjectToDatabaseCompatibleDataConverter.convertExternalToLocalData(responseBodyPojo.get());
             if (exchanges.isEmpty()) {
                 logger.info("Exchange list is empty");
                 return "Exchange list is empty";
             }
 
-            dataToDatabaseInserter.insertExchangesToDatabase(exchanges);
+            externalObjectToDatabaseCompatibleDataConverter.saveExternalExchangeDataInDatabase(exchanges);
         } catch (Exception e) {
             logger.info("Could not perform scheduled exchange rates import");
         }

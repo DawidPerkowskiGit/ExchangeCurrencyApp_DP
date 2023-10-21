@@ -14,12 +14,6 @@ public class JsonBuilderServiceImpl implements JsonBuilderService{
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /**
-     * Returns list of JSON-parseable objects in JSON format
-     *
-     * @param pojoList Java List object containing Exchange or Currency data
-     * @return Object list in JSON format
-     */
     public String buildJsonFromPojo(List<JsonConvertable> pojoList) {
         ObjectMapper objectMapper = new ObjectMapper();
         String exchangesToJson = "";
@@ -39,19 +33,5 @@ public class JsonBuilderServiceImpl implements JsonBuilderService{
         }
 
         return exchangesToJson;
-    }
-
-    /**
-     * Returns an Object in JSON format
-     *
-     * @param pojoElement Java object containing Exchange or Currency data
-     * @return Requested data in JSON format
-     */
-
-    public String buildJsonFromPojo(JsonConvertable pojoElement) {
-
-        List<JsonConvertable> list = new ArrayList<>();
-        list.add(pojoElement);
-        return buildJsonFromPojo(list);
     }
 }

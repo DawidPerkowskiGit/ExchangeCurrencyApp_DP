@@ -27,9 +27,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Homepage mapping endpoint
-     *
-     * @return Homepage view
+     * Displays homepage view - GET
      */
 
     @GetMapping("/")
@@ -38,9 +36,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Homepage mapping endpoint
-     *
-     * @return Homepage view
+     * Displays homepage view - GET
      */
 
     @GetMapping("")
@@ -49,9 +45,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Health check endpoint
-     *
-     * @return HTTP status 200 - OK
+     * Displays health check view - GET
      */
 
     @GetMapping("/health")
@@ -60,9 +54,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Page index endpoint
-     *
-     * @return Index page view
+     * Displays index view after logging in - GET
      */
 
     @GetMapping("/index")
@@ -71,10 +63,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Register user endpoint
-     *
-     * @param model User registration fields model
-     * @return register view
+     * Displays user registration view - GET
      */
 
     @GetMapping("/register")
@@ -83,13 +72,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Register user and save its info to database endpoint
-     *
-     * @param userDto User data transfer object
-     * @param result  Attribute that enables checking if login already exists
-     * @param model   Registration data model
-     * @return "/register" view if registration did not result in success
-     * "/index" view if registration was a success
+     * Process user registration and save data in the database - POST
      */
     @PostMapping("/register/save")
     public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
@@ -97,10 +80,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Admin only view that displays list of users
-     *
-     * @param model View model
-     * @return Users view
+     * Display registered users, accessible only by admins - GET
      */
     @GetMapping("/users")
     public String users(Model model) {
@@ -108,9 +88,7 @@ public class MainApplicationController {
     }
 
     /**
-     * User logging in endpoint
-     *
-     * @return Login view
+     * Display user login view - GET
      */
     @GetMapping("/login")
     public String login() {
@@ -118,9 +96,7 @@ public class MainApplicationController {
     }
 
     /**
-     * Accessing this endpoint generates new API key
-     *
-     * @return User profile view
+     * Display user profile view after generating new API key - GET
      */
     @GetMapping("/generate")
     public String generateApiKey() {
@@ -128,16 +104,16 @@ public class MainApplicationController {
     }
 
     /**
-     * Users profile view
-     *
-     * @param model Model which includes user and API key data
-     * @return Profile view
+     * Display user profile view - GET
      */
     @GetMapping("/profile")
     public String profile(Model model) {
         return controller.getProfile(model);
     }
 
+    /**
+     * Display logs view, admin accessible - GET
+     */
     @GetMapping("/log")
     public String showLogs(Model model) {
         return controller.getLogs(model);

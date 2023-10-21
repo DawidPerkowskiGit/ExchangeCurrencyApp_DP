@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class DateRangeValidator {
 
     /**
-     * Method checks if requested date is in valid range.
+     * Checks if requested date is in valid range.
      */
     public static boolean isDateInValidRange(LocalDate date, LocalDate latestDate) {
         if (date.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
@@ -25,7 +25,7 @@ public class DateRangeValidator {
     }
 
     /**
-     * Method checks if both dates are in valid range
+     * Checks if both dates are in valid range
      */
 
     public static boolean areDatesInValidRange(LocalDate left, LocalDate right, LocalDate latestDate) {
@@ -49,7 +49,7 @@ public class DateRangeValidator {
     }
 
     /**
-     * Method which puts date in valid range.
+     * Corrects the date to be in correct range
      */
 
     public static LocalDate returnValidRange(LocalDate date, LocalDate latestDate) {
@@ -63,7 +63,7 @@ public class DateRangeValidator {
     }
 
     /**
-     * Returns date scope in valid range
+     * Corrects both dates to be on correct range
      */
 
     public static LocalDate[] returnValidRange(LocalDate left, LocalDate right, LocalDate latestDate) {

@@ -21,13 +21,6 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         this.apiKeyRepository = apiKeyRepository;
     }
 
-    /**
-     * Method which determines if user can use existing API key
-     *
-     * @param apiKey Api key
-     * @param user User which uses the ApiKey
-     * @return Boolean result
-     */
     public int canUseTheApiKey(ApiKey apiKey, User user) {
         if (doesUserHaveSpecificRole(AppConstants.ROLE_ADMIN, user)) {
             return AppConstants.API_KEY_ADMIN;
@@ -44,13 +37,6 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         return AppConstants.API_KEY_VALID;
     }
 
-    /**
-     * Method checks if user has specific role
-     *
-     * @param role Check for this role
-     * @param user User which needs the role checked
-     * @return Boolean result
-     */
     public boolean doesUserHaveSpecificRole(String role, User user) {
         for (Role singleRole : user.getRoles()) {
             if (singleRole.getName().equals(role)) {
@@ -61,13 +47,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
     }
 
 
-    /**
-     * Generates new Api key for the user and deactivates all other active keys
-     * @param user User who receives the ApiKey
-     * @return String result of generating new API key
-     */
-
-    public String generateNewKey(User user) {
+    public String addNewKey(User user) {
         if (user.isNonLocked() == false) {
             return AppConstants.USER_IS_LOCKED;
         }
@@ -88,12 +68,6 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         return "Generated new API key: " + apiKey.getValue();
     }
 
-    /**
-     * Returns this users active API key
-     *
-     * @param user User
-     * @return active API key
-     */
     public ApiKey returnActiveKey(User user) {
         for (ApiKey key : user.getApiKeys()) {
             if (key.isActive()) {
@@ -103,24 +77,11 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         return new ApiKey();
     }
 
-    /**
-     * Add this API key to users account
-     *
-     * @param apiKey API key
-     * @param user User
-     */
-
     public void addApiKey(ApiKey apiKey, User user) {
         user.getApiKeys().add(apiKey);
     }
 
-    /**
-     * Method that checks if API key exists in the database
-     *
-     * @param apiKey API key
-     * @return result of API key check
-     */
-    public int isApiKeyValid(String apiKey) {
+    public int doesKeyExist(String apiKey) {
         if (apiKey == null) {
             return AppConstants.API_KEY_NOT_PROVIDED;
         }

@@ -6,51 +6,32 @@ import dpapps.exchangecurrencyapp.exchange.model.User;
 public interface ApiKeyService {
 
     /**
-     * Method which determines if user can use this API key
-     *
-     * @param apiKey Api key
-     * @param user User which uses the ApiKey
-     * @return int status code of Api key parsing
+     * Determines if the user can use this API key
      */
-    public int canUseTheApiKey(ApiKey apiKey, User user);
+    int canUseTheApiKey(ApiKey apiKey, User user);
 
     /**
-     * Method checks if user has specific role
-     *
-     * @param role Check for this role
-     * @param user User which needs the role checked
-     * @return Boolean result
+     * Determines if the user has specific a role
      */
-    public boolean doesUserHaveSpecificRole(String role, User user);
+    boolean doesUserHaveSpecificRole(String role, User user);
 
     /**
-     * Generates new Api key for the user and deactivates all other active keys
-     * @param user User who receives the ApiKey
-     * @return String result of generating new API key
+     * User receives new active API key. This also means deactivating other keys
      */
-    public String generateNewKey(User user);
+    String addNewKey(User user);
 
     /**
-     * Returns this users active API key
-     *
-     * @param user User
-     * @return active API key
+     * Returns users active API key
      */
-    public ApiKey returnActiveKey(User user);
+    ApiKey returnActiveKey(User user);
 
     /**
      * Add this API key to users account
-     *
-     * @param apiKey API key
-     * @param user User
      */
-    public void addApiKey(ApiKey apiKey, User user);
+    void addApiKey(ApiKey apiKey, User user);
 
     /**
-     * Method that checks if API key is valid
-     *
-     * @param apiKey API key
-     * @return result code of API key check
+     * Method checks if key exists in the database
      */
-    public int isApiKeyValid(String apiKey);
+    int doesKeyExist(String apiKey);
 }

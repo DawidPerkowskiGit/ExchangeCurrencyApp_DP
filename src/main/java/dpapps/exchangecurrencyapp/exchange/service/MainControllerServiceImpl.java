@@ -38,54 +38,24 @@ public class MainControllerServiceImpl implements MainControllerService {
         this.apiKeyService = apiKeyService;
     }
 
-    /**
-     * Home mapping display service
-     *
-     * @return Homepage view
-     */
     public String getHomePage() {
         return "homePage";
     }
 
-    /**
-     * Health check return service
-     *
-     * @return HTTP status 200 - OK
-     */
     public ResponseEntity<Void> getHealthStatus() {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Page index display service
-     *
-     * @return Index page view
-     */
     public String getIndex() {
         return "index";
     }
 
-    /**
-     * Register user service
-     *
-     * @param model User registration fields model
-     * @return registration view
-     */
     public String register(Model model) {
         UserDto user = new UserDto();
         model.addAttribute("user", user);
         return "register";
     }
 
-    /**
-     * Register user and save its info to database service
-     *
-     * @param userDto User data transfer object
-     * @param result  Attribute that enables checking if login already exists
-     * @param model   Registration data model
-     * @return "/register" view if registration did not result in success
-     * "/index" view if registration was a success
-     */
     public String processRegister(UserDto userDto, BindingResult result, Model model) {
         User existingUser = userService.findUserByEmail(userDto.getLogin());
 
@@ -103,47 +73,23 @@ public class MainControllerServiceImpl implements MainControllerService {
         return "redirect:/index";
     }
 
-    /**
-     * Admin only service which list of users
-     *
-     * @param model View model
-     * @return Users view
-     */
     public String getUsers(Model model) {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "users";
     }
 
-    /**
-     * Handler method for logging in
-     *
-     * @return Login view
-     */
-
     public String processLogin() {
         return "login";
     }
 
-    /**
-     * Service that generates new API key
-     *
-     * @return User profile view
-     */
-
     public String generateNewApiKey() {
         User user = userService.getCurrentUser();
-        String output = apiKeyService.generateNewKey(user);
+        String output = apiKeyService.addNewKey(user);
         logger.info(output);
         return "redirect:/profile";
     }
 
-    /**
-     * Users profile service
-     *
-     * @param model Model which includes user and API key data
-     * @return Profile view
-     */
     public String getProfile(Model model) {
         User user = userService.getCurrentUser();
         String apiRequestsString = "" + user.getCurrentRequestsCount() + "/" + AppConstants.DAILY_USE_LIMIT;
@@ -152,12 +98,6 @@ public class MainControllerServiceImpl implements MainControllerService {
         model.addAttribute("apiKeyValue", apiKeyValue);
         return "profile";
     }
-
-    /**
-     * Returns logs file as a List
-     * @param model model of response, list of logs will be added
-     * @return log view name
-     */
 
     public String getLogs(Model model) {
         List<String> result = new ArrayList<>();

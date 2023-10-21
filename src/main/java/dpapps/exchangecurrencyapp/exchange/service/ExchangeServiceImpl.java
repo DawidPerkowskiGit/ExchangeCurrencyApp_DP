@@ -47,11 +47,6 @@ public class ExchangeServiceImpl implements ExchangeService {
         this.apiKeyService = apiKeyService;
     }
 
-    /**
-     * Fetches available currencies from the database
-     *
-     * @param date Optional parameter - currencies active at specified date
-     */
     public ResponseEntity<JsonConvertable> getCurrencies(String date) {
         logger.info(AppConstants.LOGGER_CURRENCIES_ENDPOINT_CALLED);
         CurrencyIsoNameToFullNameMapper currencyIsoNameToFullNameMapper = new CurrencyIsoNameToFullNameMapper();
@@ -76,9 +71,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         return ResponseEntity.ok(currencyIsoNameToFullNameMapper);
     }
 
-    /**
-     * Fetches currencies with countries and other locations where they can be used in.
-     */
+
     public ResponseEntity<List<JsonConvertable>> getCurrenciesAndLocations() {
         logger.info(AppConstants.LOGGER_CURRENCIES_LOCATIONS_ENDPOINT_CALLED);
         List<String[]> pojo = currencyRepository.getCurrenciesAndLocations();
@@ -87,11 +80,9 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
 
-    /**
-     * Admin only accessible endpoint which performs requested URL requested. It can be used to perform currency exchanges import.
-     */
+
     public String manualRequestUrl(String apiKey, String requestUrl) {
-        int apiKeyParsingResult = apiKeyService.isApiKeyValid(apiKey);
+        int apiKeyParsingResult = apiKeyService.doesKeyExist(apiKey);
         if (apiKeyParsingResult == AppConstants.API_KEY_INVALID) {
             return AppConstants.ERROR_BODY_API_KEY_INVALID;
         }
@@ -105,17 +96,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         return scheduleJobs.performDailyDatabaseImport(requestUrl, this.currencyRepository, this.exchangeRepository);
     }
 
-    /**
-     * Fetches exchange rates from the database
-     *
-     * @param currency      Optional attribute
-     * @param startDate     Optional attribute
-     * @param finishDate    Optional attribute
-     * @param baseCurrency  Optional attribute
-     * @param apiKey        Required attribute
-     * @param currencyValue Optional attribute
-     * @param headers       List of http headers
-     */
+
     public ResponseEntity<JsonConvertable> getExchanges(String apiKey, String currency, String baseCurrency, String startDate, String finishDate, Map<String, String> headers, String currencyValue) {
         logger.info(AppConstants.LOGGER_EXCHANGE_ENDPOINT_CALLED);
         boolean vipClientRequest = false;
@@ -132,7 +113,7 @@ public class ExchangeServiceImpl implements ExchangeService {
 
 
         if (vipClientRequest == false) {
-            int apiKeyParsingResult = apiKeyService.isApiKeyValid(apiKey);
+            int apiKeyParsingResult = apiKeyService.doesKeyExist(apiKey);
 
             if (apiKeyParsingResult == AppConstants.API_KEY_NOT_PROVIDED) {
                 return ResponseEntity.ok(buildInvalidRequestBody(AppConstants.RETURNED_JSON_BODY_FORBIDDEN, AppConstants.ERROR_BODY_API_KEY_NOT_PROVIDED));
@@ -271,7 +252,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     /**
      * Returns exchange rates from multiple days.
      */
-    public List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, List<String> currency, String baseCurrency) {
+    private List<JsonConvertable> getExchangesFromMultipleDays(LocalDate beginDate, LocalDate endDate, List<String> currency, String baseCurrency) {
 
 
         List<JsonConvertable> exchangeList = new ArrayList<>();
@@ -292,9 +273,9 @@ public class ExchangeServiceImpl implements ExchangeService {
 
 
     /**
-     * Fetches exchange rates from single day.
+     * Returns exchange rates from a single day.
      */
-    public JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, List<String> currency, String baseCurrency) {
+    private JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, List<String> currency, String baseCurrency) {
 
 
         SingleDayExchangeRatesJson pojo = new SingleDayExchangeRatesJson();
@@ -332,7 +313,7 @@ public class ExchangeServiceImpl implements ExchangeService {
                 if (exchangeRepository.existsByExchangeDateAndCurrency_IsoName(inputDate, baseCurrency)) {
                     double newRatio = calculateNewRatio(inputDate, baseCurrency);
                     for (Exchange entry : latestExchangesList) {
-                        rates.put(entry.getCurrency().getIsoName(), DecimalPlacesFixer.fix(entry.getValue() * newRatio, AppConstants.DECIMAL_PLACES_CURRENCY_CONVERSION));
+                        rates.put(entry.getCurrency().getIsoName(), DecimalPlacesFixer.modifyNumberOfDecimalPlaces(entry.getValue() * newRatio, AppConstants.DECIMAL_PLACES_CURRENCY_CONVERSION));
                     }
                 } else {
                     return buildInvalidRequestBody(AppConstants.RETURNED_JSON_BODY_NOT_FOUND, AppConstants.ERROR_BODY_EXCHANGE_RATES_DATE_CURRENCY_NOT_FOUND);
@@ -354,15 +335,15 @@ public class ExchangeServiceImpl implements ExchangeService {
      * Returns exchange rate based on non-default currency
      */
 
-    public double calculateNewRatio(LocalDate date, String currency) {
+    private double calculateNewRatio(LocalDate date, String currency) {
         Exchange newBaseCurrency = exchangeRepository.findByExchangeDateAndCurrency_IsoName(date, currency);
-        return DecimalPlacesFixer.fix(1 / newBaseCurrency.getValue(), AppConstants.DECIMAL_PLACES_CURRENCY_CONVERSION);
+        return DecimalPlacesFixer.modifyNumberOfDecimalPlaces(1 / newBaseCurrency.getValue(), AppConstants.DECIMAL_PLACES_CURRENCY_CONVERSION);
     }
 
     /**
      * Converts returned database rows each containing single currency name entry and single location entry to Object containing single currency name and List of locations
      */
-    public List<JsonConvertable> convertDbCurrencyNameLocationToObjectList(Iterable<String[]> databaseEntries) {
+    private List<JsonConvertable> convertDbCurrencyNameLocationToObjectList(Iterable<String[]> databaseEntries) {
 
         Map<String, String> isoNameFullName = new HashMap();
         Map<String, List<String>> isoNameLocation = new HashMap();
@@ -394,7 +375,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     /**
      * Adds entry to List property of a HashMap
      */
-    public List<String> addValueToList(String value, List<String> list) {
+    private List<String> addValueToList(String value, List<String> list) {
         list.add(value);
         return list;
     }

@@ -6,10 +6,7 @@ package dpapps.exchangecurrencyapp.exchange.helpers;
 public class CurrencyTypesValidator {
 
     /**
-     * Method which confirms or denies if currency is available
-     *
-     * @param currency Requested currency
-     * @return Boolean result
+     * Checks if specified currency is available
      */
     public static boolean isThisCurrencyAvailable(String currency) {
         for (CurrencyTypes entry : CurrencyTypes.values()) {

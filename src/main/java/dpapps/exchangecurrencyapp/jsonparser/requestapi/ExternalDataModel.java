@@ -20,7 +20,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestDataModel {
+public class ExternalDataModel {
 
     private boolean success;
 

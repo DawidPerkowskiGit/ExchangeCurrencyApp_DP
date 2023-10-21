@@ -19,9 +19,6 @@ public class DateStringConverter {
 
     /**
      * Convert String to Date format
-     *
-     * @param string Date in string format
-     * @return Date in LocalDate format
      */
     public static LocalDate convertStringToLocalDate(String string) {
         LocalDate date;
@@ -35,10 +32,9 @@ public class DateStringConverter {
     }
 
     /**
-     * Convert String to three ints format
+     * Convert String  to three ints.
      *
-     * @param date Date in String format
-     * @return Date converted to Array of three ints
+     * @param date date separated by minuses, for example 2020-10-10
      */
     public static int[] convertDateStringToInts(String date) {
         String[] strings = date.split(AppConstants.DATE_STRING_SEPARATOR);
@@ -61,9 +57,6 @@ public class DateStringConverter {
 
     /**
      * Fill array with ones
-     *
-     * @param array Input array
-     * @return Array with values of 1
      */
 
     public static int[] putOnesIntoArray(int[] array) {

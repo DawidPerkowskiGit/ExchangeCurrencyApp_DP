@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @Service
-public class DataToDatabaseInserter {
+public class ExternalObjectToDatabaseCompatibleDataConverter {
 
     private final ExchangeRepository exchangeRepository;
 
@@ -26,21 +26,18 @@ public class DataToDatabaseInserter {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public DataToDatabaseInserter(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository) {
+    public ExternalObjectToDatabaseCompatibleDataConverter(ExchangeRepository exchangeRepository, CurrencyRepository currencyRepository) {
         this.exchangeRepository = exchangeRepository;
         this.currencyRepository = currencyRepository;
     }
 
     /**
-     * Converts RequestDataModel[] to model Exchange list
-     *
-     * @param requestDataModel input Objects
-     * @return model Exchange
+     * Converts external currency exchange service data to object compatible with current database, ready to be inserted.
      */
-    public List<Exchange> convertPojoToExchangeList(RequestDataModel requestDataModel) {
+    public List<Exchange> convertExternalToLocalData(ExternalDataModel externalDataModel) {
         List<Exchange> exchanges = new ArrayList<>();
         try {
-            if (requestDataModel.doAllNullableFieldsContainData() == false) {
+            if (externalDataModel.doAllNullableFieldsContainData() == false) {
                 logger.info("Exchange date does not contain information");
                 return exchanges;
             }
@@ -50,8 +47,8 @@ public class DataToDatabaseInserter {
 
 
         try {
-            if (exchangeRepository.existsByExchangeDate(requestDataModel.getDate())) {
-                logger.info("Exchange rates from " + requestDataModel.getDate().toString() + " are already in database");
+            if (exchangeRepository.existsByExchangeDate(externalDataModel.getDate())) {
+                logger.info("Exchange rates from " + externalDataModel.getDate().toString() + " are already in database");
                 return exchanges;
             }
         } catch (Exception e) {
@@ -61,11 +58,11 @@ public class DataToDatabaseInserter {
 
         try {
             for (CurrencyTypes currencyType : CurrencyTypes.values()) {
-                if (requestDataModel.getRates().containsKey(currencyType.toString())) {
+                if (externalDataModel.getRates().containsKey(currencyType.toString())) {
                     Exchange exchange = new Exchange();
                     exchange.setCurrency(currencyRepository.findCurrencyByIsoName(currencyType.toString()));
-                    exchange.setExchangeDate(requestDataModel.getDate());
-                    exchange.setValue(requestDataModel.getRates().get(currencyType.toString()));
+                    exchange.setExchangeDate(externalDataModel.getDate());
+                    exchange.setValue(externalDataModel.getRates().get(currencyType.toString()));
                     exchanges.add(exchange);
                 }
             }
@@ -77,11 +74,9 @@ public class DataToDatabaseInserter {
     }
 
     /**
-     * Saves model Exchange data to the database
-     *
-     * @param exchanges model Exchange data
+     * Saves converted Exchange data in the database.
      */
-    public void insertExchangesToDatabase(List<Exchange> exchanges) {
+    public void saveExternalExchangeDataInDatabase(List<Exchange> exchanges) {
         try {
             for (Exchange exchange : exchanges) {
                 exchangeRepository.save(exchange);

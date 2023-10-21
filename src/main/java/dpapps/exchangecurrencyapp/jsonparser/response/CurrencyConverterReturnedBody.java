@@ -30,6 +30,6 @@ public class CurrencyConverterReturnedBody implements JsonConvertable {
 
     public void calculateValue() {
         double calculated = this.rate * this.requestedValue;
-        this.calculatedValue = DecimalPlacesFixer.fix(calculated, AppConstants.DECIMAL_PLACES_CURRENCY_CALCULATION);
+        this.calculatedValue = DecimalPlacesFixer.modifyNumberOfDecimalPlaces(calculated, AppConstants.DECIMAL_PLACES_CURRENCY_CALCULATION);
     }
 }
