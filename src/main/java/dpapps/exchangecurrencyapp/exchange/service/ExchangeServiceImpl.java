@@ -11,9 +11,8 @@ import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import dpapps.exchangecurrencyapp.exchange.helpers.*;
-import dpapps.exchangecurrencyapp.jsonparser.response.*;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
-import dpapps.exchangecurrencyapp.shedules.ScheduleJobs;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.*;
+import dpapps.exchangecurrencyapp.shedules.ScheduledJobs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +91,8 @@ public class ExchangeServiceImpl implements ExchangeService {
             return AppConstants.LOGGER_MANUAL_REQUEST_URL_EMPTY;
         }
 
-        ScheduleJobs scheduleJobs = new ScheduleJobs();
-        return scheduleJobs.performDailyDatabaseImport(requestUrl, this.currencyRepository, this.exchangeRepository);
+        ScheduledJobs scheduledJobs = new ScheduledJobs();
+        return scheduledJobs.performDailyDatabaseImport(requestUrl, this.currencyRepository, this.exchangeRepository);
     }
 
 
@@ -213,8 +212,8 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         if (currencyValue != null && beginDate.equals(endDate) && requestedCurernciesList.size() == 1) {
             if (StringIntConverter.isStringValidDouble(currencyValue)) {
-                CurrencyConverterReturnedBody currencyConverterReturnedBody = buildCurrencyConverterBody(baseCurrency, currencyValue, beginDate, requestedCurernciesList, returnList);
-                return ResponseEntity.ok(currencyConverterReturnedBody);
+                ConvertedCurrencyReturnedObject convertedCurrencyReturnedObject = buildCurrencyConverterBody(baseCurrency, currencyValue, beginDate, requestedCurernciesList, returnList);
+                return ResponseEntity.ok(convertedCurrencyReturnedObject);
             }
         }
 
@@ -233,20 +232,20 @@ public class ExchangeServiceImpl implements ExchangeService {
     /**
      * Builds and returns JSON body when currency conversion is required
      */
-    private static CurrencyConverterReturnedBody buildCurrencyConverterBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
+    private static ConvertedCurrencyReturnedObject buildCurrencyConverterBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
         Double currencyExchangeValue = StringIntConverter.convertStringToDouble(currencyValue);
-        CurrencyConverterReturnedBody currencyConverterReturnedBody = new CurrencyConverterReturnedBody();
+        ConvertedCurrencyReturnedObject convertedCurrencyReturnedObject = new ConvertedCurrencyReturnedObject();
 
-        currencyConverterReturnedBody.setRequestedValue(currencyExchangeValue);
-        currencyConverterReturnedBody.setBaseCurrency(baseCurrency);
-        currencyConverterReturnedBody.setRequestedCurrency(requestedCurrenciesList.get(0));
-        currencyConverterReturnedBody.setExchangeDate(date);
+        convertedCurrencyReturnedObject.setRequestedValue(currencyExchangeValue);
+        convertedCurrencyReturnedObject.setBaseCurrency(baseCurrency);
+        convertedCurrencyReturnedObject.setRequestedCurrency(requestedCurrenciesList.get(0));
+        convertedCurrencyReturnedObject.setExchangeDate(date);
 
         SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) exchangesList.get(0);
-        currencyConverterReturnedBody.setRate(singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0)));
-        currencyConverterReturnedBody.calculateValue();
-        currencyConverterReturnedBody.composeMessage();
-        return currencyConverterReturnedBody;
+        convertedCurrencyReturnedObject.setRate(singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0)));
+        convertedCurrencyReturnedObject.calculateValue();
+        convertedCurrencyReturnedObject.composeMessage();
+        return convertedCurrencyReturnedObject;
     }
 
     /**

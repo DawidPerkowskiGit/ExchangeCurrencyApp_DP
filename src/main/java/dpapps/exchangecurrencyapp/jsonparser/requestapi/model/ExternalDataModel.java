@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.requestapi;
+package dpapps.exchangecurrencyapp.jsonparser.requestapi.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

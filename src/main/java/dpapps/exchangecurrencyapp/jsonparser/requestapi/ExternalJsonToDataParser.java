@@ -1,6 +1,7 @@
 package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.model.ExternalDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

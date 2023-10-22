@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.response;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 /**
- * Holds Exchange model data, which is ready to be converted to JSON
+ * Stores exchange rates from a single day. For example requesting the latest exchange rates returns Object of this class.
  */
 public class SingleDayExchangeRatesJson implements JsonConvertable {
     private boolean success = false;

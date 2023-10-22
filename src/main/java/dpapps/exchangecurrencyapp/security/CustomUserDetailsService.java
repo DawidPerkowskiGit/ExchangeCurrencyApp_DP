@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * Service which manages user data
+ * Manages user data
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -28,11 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     /**
-     * Gets user data based on username
-     *
-     * @param username User's username
-     * @return User data wrapped is UserDetails
-     * @throws UsernameNotFoundException
+     * Returns user data based on username
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,9 +43,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * Returns list of user's roles
-     *
-     * @param roles List of available roles
-     * @return User's roles
      */
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         Collection<? extends GrantedAuthority> mapRoles = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());

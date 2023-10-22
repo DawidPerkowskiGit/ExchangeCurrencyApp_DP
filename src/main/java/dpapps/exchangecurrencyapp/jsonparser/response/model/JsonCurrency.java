@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Stores and converts Currency model data to JSON format
+ * Converts database Currency entry to currency object returned by REST API
  */
 @Getter
 @Setter
@@ -25,12 +25,6 @@ public class JsonCurrency {
         this.fullName = fullName;
     }
 
-    /**
-     * Converts Currency to JsonCurrency
-     *
-     * @param currency Currency model object
-     * @return Currency object prepared to be converted to JSON
-     */
     public JsonCurrency convertCurrencyToJsonCurrency(Currency currency) {
         setIsoName(currency.getIsoName());
         setFullName(currency.getFullName());

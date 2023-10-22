@@ -4,6 +4,7 @@ import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyTypes;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.model.ExternalDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

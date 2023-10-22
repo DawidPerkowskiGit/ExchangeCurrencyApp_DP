@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * User registration for data
+ * User registration template data
  */
 @Getter
 @Setter

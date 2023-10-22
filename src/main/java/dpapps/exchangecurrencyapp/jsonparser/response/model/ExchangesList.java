@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.response;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Stores exchanges from a single or multiple days. Object of this class is returned when /api/exchange endpoint is called.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

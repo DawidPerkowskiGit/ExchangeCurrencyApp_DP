@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
- * Module responsible for granting or rejecting users access to specified endpoints, based on roles and authorization
+ * Module responsible for granting or rejecting users access to specified endpoints, password encoding, filters.
  */
 @Configuration
 @EnableWebSecurity

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Stores and converts Location model data to JSON format
+ * Converts database Location entry to exchange loaction returned by REST API
  */
 @Getter
 @Setter
@@ -26,12 +26,6 @@ public class JsonLocation {
         this.name = name;
     }
 
-    /**
-     * Method converts Location object to JSON conversion ready object
-     *
-     * @param location Location object
-     * @return JSON ready location object
-     */
     public JsonLocation convertLocationToJsonLocation(Location location) {
         setName(location.getName());
         return this;

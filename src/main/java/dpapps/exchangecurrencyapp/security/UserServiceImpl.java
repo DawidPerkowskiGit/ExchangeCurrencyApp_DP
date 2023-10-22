@@ -41,14 +41,11 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Saves user in the database
-     *
-     * @param userDto User data from registration form
      */
     @Override
     public void saveUser(UserDto userDto) {
         User user = new User();
         user.setLogin(userDto.getLogin());
-        // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         Role role = roleRepository.findByName("ROLE_USER");
@@ -64,9 +61,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Finds user based on username
-     *
-     * @param username Users login/username
-     * @return Requested user
      */
     @Override
     public User findUserByEmail(String username) {
@@ -75,8 +69,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Gets all the users from the database
-     *
-     * @return List of all users
      */
     @Override
     public List<UserDto> findAllUsers() {
@@ -86,9 +78,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Converts User model data to registration/login data
-     *
-     * @param user User model data
-     * @return UserDTO data
      */
 
     private UserDto mapToUserDto(User user) {
@@ -99,8 +88,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Checks if role exists, if not adds it to the database. Grants user the role.
-     *
-     * @return Role added to the user
      */
 
     private Role checkRoleExist() {
@@ -115,8 +102,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Method which returns currently authenticated user
-     *
-     * @return Authenticated user
      */
     public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

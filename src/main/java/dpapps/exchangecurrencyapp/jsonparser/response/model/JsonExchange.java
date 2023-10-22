@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Stores and converts Exchange model data to JSON format
+ * Converts database Exchange entry to exchange object returned by REST API
  */
 @Service
 @Getter
@@ -43,12 +43,6 @@ public class JsonExchange {
         this.exchangeDate = exchangeDate;
     }
 
-    /**
-     * Converts Exchange object to JSON conversion ready object
-     *
-     * @param exchange Exchange object
-     * @return JSON conversion ready Object
-     */
     public JsonExchange convertBaseToJson(Exchange exchange) {
         setCurrency(exchange.getCurrency().toString());
         setValue(exchange.getValue());

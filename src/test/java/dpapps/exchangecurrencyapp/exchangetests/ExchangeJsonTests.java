@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.helpers.DateStringConverter;
-import dpapps.exchangecurrencyapp.jsonparser.response.SingleDayExchangeRatesJson;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.SingleDayExchangeRatesJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

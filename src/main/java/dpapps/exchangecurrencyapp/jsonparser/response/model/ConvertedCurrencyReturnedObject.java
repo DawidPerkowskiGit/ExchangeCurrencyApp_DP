@@ -1,4 +1,4 @@
-package dpapps.exchangecurrencyapp.jsonparser.response;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import dpapps.exchangecurrencyapp.exchange.helpers.DecimalPlacesFixer;
@@ -10,11 +10,14 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Model
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrencyConverterReturnedBody implements JsonConvertable {
+public class ConvertedCurrencyReturnedObject implements JsonConvertable {
     private String message;
 
     private LocalDate exchangeDate;
