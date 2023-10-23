@@ -23,9 +23,9 @@ public class LocationJsonTests {
     @Autowired
     private JacksonTester<List<JsonLocation>> jacksonJsonLocationList;
 
-    private List<JsonLocation> jsonLocationList = new ArrayList<>();
+    private final List<JsonLocation> jsonLocationList = new ArrayList<>();
 
-    private List<Location> locationList = new ArrayList<>();
+    private final List<Location> locationList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -47,6 +47,7 @@ public class LocationJsonTests {
         assertThat(jacksonJsonLocation.write(location)).hasJsonPathValue("@.name");
         assertThat(jacksonJsonLocation.write(location)).extractingJsonPathValue("@.name").isEqualTo("Germany");
     }
+
     @Test
     public void locationDeserializationTest() throws IOException {
         String expected = """

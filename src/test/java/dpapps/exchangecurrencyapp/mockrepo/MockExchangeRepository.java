@@ -11,7 +11,6 @@ public class MockExchangeRepository implements ExchangeRepository {
     List<Exchange> listOfExchanges = new ArrayList<>();
 
 
-
     @Override
     public <S extends Exchange> S save(S entity) {
         listOfExchanges.add(entity);
@@ -25,8 +24,8 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public Optional<Exchange> findById(Integer integer) {
-        for (Exchange exchange: this.listOfExchanges
-             ) {
+        for (Exchange exchange : this.listOfExchanges
+        ) {
             if (Objects.equals(exchange.getId(), integer)) {
                 return Optional.of(exchange);
             }
@@ -36,7 +35,7 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public boolean existsById(Integer integer) {
-        for (Exchange exchange: this.listOfExchanges
+        for (Exchange exchange : this.listOfExchanges
         ) {
             if (Objects.equals(exchange.getId(), integer)) {
                 return true;
@@ -88,8 +87,8 @@ public class MockExchangeRepository implements ExchangeRepository {
     @Override
     public boolean existsByExchangeDate(LocalDate date) {
 
-        for (Exchange entry: listOfExchanges
-             ) {
+        for (Exchange entry : listOfExchanges
+        ) {
             if (entry.getExchangeDate().isEqual(date)) {
                 return true;
             }
@@ -100,8 +99,8 @@ public class MockExchangeRepository implements ExchangeRepository {
     @Override
     public List<Exchange> findAllByExchangeDateOrderByCurrencyDesc(LocalDate date) {
         List<Exchange> dateList = new LinkedList<>();
-        for (Exchange exchange: this.listOfExchanges
-             ) {
+        for (Exchange exchange : this.listOfExchanges
+        ) {
             if (exchange.getExchangeDate().isEqual(date)) {
                 dateList.add(exchange);
             }
@@ -114,7 +113,7 @@ public class MockExchangeRepository implements ExchangeRepository {
     @Override
     public List<Exchange> findAllByExchangeDateAndCurrencyOrderByExchangeDate(LocalDate date, String currency) {
         List<Exchange> dateList = new LinkedList<>();
-        for (Exchange exchange: this.listOfExchanges
+        for (Exchange exchange : this.listOfExchanges
         ) {
             if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(currency)) {
                 dateList.add(exchange);
@@ -127,7 +126,7 @@ public class MockExchangeRepository implements ExchangeRepository {
     @Override
     public List<Exchange> findAllByExchangeDateAndCurrenciesOrderByExchangeDate(LocalDate date, List<String> currency) {
         List<Exchange> dateList = new LinkedList<>();
-        for (Exchange exchange: this.listOfExchanges
+        for (Exchange exchange : this.listOfExchanges
         ) {
             for (String singleCurrency : currency) {
                 if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(singleCurrency)) {
@@ -141,7 +140,7 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public Exchange findByExchangeDateAndCurrency_IsoName(LocalDate date, String currency) {
-        for (Exchange exchange: this.listOfExchanges
+        for (Exchange exchange : this.listOfExchanges
         ) {
             if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(currency)) {
                 return exchange;
@@ -152,7 +151,7 @@ public class MockExchangeRepository implements ExchangeRepository {
 
     @Override
     public boolean existsByExchangeDateAndCurrency_IsoName(LocalDate date, String iso_name) {
-        for (Exchange exchange: this.listOfExchanges
+        for (Exchange exchange : this.listOfExchanges
         ) {
             if (exchange.getExchangeDate().isEqual(date) && exchange.getCurrency().getIsoName().equals(iso_name)) {
                 return true;

@@ -25,6 +25,15 @@ public class Currency {
     @Column(length = 30, name = "full_name")
     private String fullName;
 
+    public Currency() {
+    }
+
+    public Currency(Integer id, String isoName, String fullName) {
+        this.id = id;
+        this.isoName = isoName;
+        this.fullName = fullName;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -52,14 +61,5 @@ public class Currency {
     @Override
     public String toString() {
         return getIsoName();
-    }
-
-    public Currency() {
-    }
-
-    public Currency(Integer id, String isoName, String fullName) {
-        this.id = id;
-        this.isoName = isoName;
-        this.fullName = fullName;
     }
 }

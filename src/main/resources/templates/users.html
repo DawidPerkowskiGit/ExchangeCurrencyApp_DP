@@ -3,33 +3,33 @@
       xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-  <meta charset="UTF-8">
-  <title>ExchangeCurrencyAPI</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>ExchangeCurrencyAPI</title>
+    <link crossorigin="anonymous"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{fragments/header :: navbar}"  th:remove="tag"></div>
+<div th:remove="tag" th:replace="~{fragments/header :: navbar}"></div>
 <div class="container">
-  <div class="row col-md-10">
-    <h2>List of Registered Users</h2>
-  </div>
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
-    <tr>
-      <th>ID</th>
-      <th>User</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each = "user : ${users}">
-      <td th:text = "${user.getId()}"></td>
-      <td th:text = "${user.getLogin}"></td>
-    </tr>
-    </tbody>
-  </table>
+    <div class="row col-md-10">
+        <h2>List of Registered Users</h2>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getLogin}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 <!--<footer class="footer">-->
 <!--  <div class="container">-->

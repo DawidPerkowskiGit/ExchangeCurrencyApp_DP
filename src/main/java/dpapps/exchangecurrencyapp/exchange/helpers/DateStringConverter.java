@@ -12,10 +12,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class DateStringConverter {
 
-    private DateTimeFormatter dateFormat;
-
     private static final Logger logger = LoggerFactory.getLogger(DateStringConverter.class);
-
+    private DateTimeFormatter dateFormat;
 
     /**
      * Convert String to Date format
@@ -24,8 +22,7 @@ public class DateStringConverter {
         LocalDate date;
         try {
             date = LocalDate.parse(string);
-        }
-        catch ( Exception e) {
+        } catch (Exception e) {
             return LocalDate.of(1, 1, 1);
         }
         return date;
@@ -38,7 +35,7 @@ public class DateStringConverter {
      */
     public static int[] convertDateStringToInts(String date) {
         String[] strings = date.split(AppConstants.DATE_STRING_SEPARATOR);
-        int arr[] = new int[3];
+        int[] arr = new int[3];
         arr = putOnesIntoArray(arr);
         if (strings.length != 3) {
             logger.info("Can't convert String date to int date. It was not split into three parts");
@@ -48,7 +45,7 @@ public class DateStringConverter {
             try {
                 arr[iterator] = Integer.valueOf(strings[iterator]);
             } catch (Exception e) {
-                logger.warn("Can't convert String date to int, some of the values cant be converted. Exception: "+ e);
+                logger.warn("Can't convert String date to int, some of the values cant be converted. Exception: " + e);
                 arr = putOnesIntoArray(arr);
             }
         }

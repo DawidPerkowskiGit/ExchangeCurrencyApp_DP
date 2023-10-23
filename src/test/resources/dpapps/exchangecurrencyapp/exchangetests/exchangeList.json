@@ -1,5 +1,17 @@
 [
-  {"exchangeDate": "2023-06-08", "value": 7.6541, "currency": "EUR"},
-  {"exchangeDate": "2023-06-10", "value": 37.408, "currency": "USD"},
-  {"exchangeDate": "2023-06-12", "value": 1.6061, "currency": "JPY"}
+  {
+    "exchangeDate": "2023-06-08",
+    "value": 7.6541,
+    "currency": "EUR"
+  },
+  {
+    "exchangeDate": "2023-06-10",
+    "value": 37.408,
+    "currency": "USD"
+  },
+  {
+    "exchangeDate": "2023-06-12",
+    "value": 1.6061,
+    "currency": "JPY"
+  }
 ]

@@ -6,10 +6,10 @@ import dpapps.exchangecurrencyapp.exchange.model.User;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
-import dpapps.exchangecurrencyapp.jsonparser.requestapi.ExternalJsonToDataParser;
-import dpapps.exchangecurrencyapp.jsonparser.requestapi.model.ExternalDataModel;
 import dpapps.exchangecurrencyapp.jsonparser.requestapi.DataFetcher;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.ExternalJsonToDataParser;
 import dpapps.exchangecurrencyapp.jsonparser.requestapi.ExternalObjectToDatabaseCompatibleDataConverter;
+import dpapps.exchangecurrencyapp.jsonparser.requestapi.model.ExternalDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,11 +44,11 @@ public class ScheduledJobs {
 
             ExternalJsonToDataParser externalJsonToDataParser = new ExternalJsonToDataParser();
             Optional<ExternalDataModel> responseBodyPojo = externalJsonToDataParser.jsonDeserialization(apiResponseBody);
-            if (responseBodyPojo.get().doAllNullableFieldsContainData() == false) {
+            if (!responseBodyPojo.get().doAllNullableFieldsContainData()) {
                 logger.info("Returned request api body is null");
                 return "Returned request api body is null";
             }
-            if (responseBodyPojo.get().getSuccess() == false) {
+            if (!responseBodyPojo.get().getSuccess()) {
                 logger.info("Could not get request api body");
                 return "Could not get requestapi body";
             }
@@ -87,7 +87,7 @@ public class ScheduledJobs {
         } catch (Exception e) {
             logger.error("Failed to perform scheduled task. Exception: " + e);
         }
-        logger.info("Successfully kept the app from un-allocating resources. Time: " + localDateTime.toString());
+        logger.info("Successfully kept the app from un-allocating resources. Time: " + localDateTime);
     }
 
     /**
@@ -99,7 +99,7 @@ public class ScheduledJobs {
             user.setCurrentRequestsCount(0);
             userRepository.save(user);
         }
-        logger.info("Successfully performed reset number of Api uses for every user. Time: " + LocalDateTime.now().toString());
+        logger.info("Successfully performed reset number of Api uses for every user. Time: " + LocalDateTime.now());
         LocalDateTime.now();
     }
 }

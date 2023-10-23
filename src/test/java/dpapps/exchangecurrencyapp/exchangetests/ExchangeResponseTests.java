@@ -23,18 +23,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ExchangeResponseTests {
-    @Autowired
-    private MockMvc mockMvc;
-
     final String baseUrl = "/api/exchange";
     final String invalidApiKey = "apiKey=1234";
     final String invalidCurrency = "currency=PPP";
     final String invalidBaseCurrency = "baseCurrency=TTT";
     final String invalidStartDate = "startDate=2023-18-20";
     final String invalidFinishDate = "finishDate=2023-18-21";
-
     final String validApiKey = "apiKey=UAOrRlJZA2GHGiNmGqP65JTD85_Vv7JUivKp-ibClzZ_vAuj2hqlPHFxhU7LfJDy";
-
     final String dateRangeApiKey = "apiKey=6Dq1f0l-eEbJkkQUlf7vwO5UOAw7yQYN9lqrPmwXqO7uyA90W-H71qoMIblQ75k6";
     final String validCurrency = "currency=PLN";
     final String validBaseCurrency = "baseCurrency=EUR";
@@ -42,13 +37,11 @@ public class ExchangeResponseTests {
     final String validFinishDate = "finishDate=2023-08-21";
     final String startDateWide = "startDate=2023-08-20";
     final String finishDateWide = "finishDate=2023-09-20";
-
     final String emptyApiKeyArg = "apiKey=";
     final String emptyRequestedCurrencyArg = "baseCurrency=";
     final String emptyBaseCurrencyArg = "currency=";
     final String emptyStartDateArg = "startDate=";
     final String emptyFinishDateArg = "finishDate=";
-
     final String noApiKeyJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppConstants.ERROR_BODY_API_KEY_NOT_PROVIDED + "\"}";
     final String apiKeyInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppConstants.ERROR_BODY_API_KEY_INVALID + "\"}";
     final String requestedCurrencyInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_NOT_FOUND + ",\"message\":\"" + AppConstants.ERROR_BODY_INVALID_REQUESTED_CURRENCY + "\"}";
@@ -56,8 +49,8 @@ public class ExchangeResponseTests {
     final String startDateInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppConstants.ERROR_BODY_INVALID_START_DATE + "\"}";
     final String finishDateInvalidJson = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_BAD_REQUEST + ",\"message\":\"" + AppConstants.ERROR_BODY_INVALID_FINISH_DATE + "\"}";
     final String dateRangeTooWide = "{\"success\":false,\"status\":" + AppConstants.RETURNED_JSON_BODY_FORBIDDEN + ",\"message\":\"" + AppConstants.ERROR_BODY_EXCHANGE_RATES_DATE_RANGE_TOO_WIDE + "\"}";
-    List<String> arguments = new LinkedList<>();
     private final int argsListCount = 4;
+    List<String> arguments = new LinkedList<>();
     String[] apiKeyArgs = new String[argsListCount];
     String[] requestedCurrencyArgs = new String[argsListCount];
     String[] baseCurrencyArgs = new String[argsListCount];
@@ -65,8 +58,9 @@ public class ExchangeResponseTests {
     String[] finishDateArgs = new String[argsListCount];
     String emptyString = "";
     String nullField = null;
-
     int finalCounter = 0;
+    @Autowired
+    private MockMvc mockMvc;
 
     ExchangeResponseTests() {
         this.apiKeyArgs[0] = emptyApiKeyArg;
@@ -174,6 +168,7 @@ public class ExchangeResponseTests {
 
     /**
      * Tests single argument endpoint request where invalid start date was provided.
+     *
      * @throws Exception MockMVC Exception
      */
 
@@ -316,7 +311,6 @@ public class ExchangeResponseTests {
 
         this.mockMvc.perform(get(urlBuilder())).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString(validResponse)));
     }
-
 
 
     /**

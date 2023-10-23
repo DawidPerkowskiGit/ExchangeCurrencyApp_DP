@@ -1,8 +1,8 @@
 package dpapps.exchangecurrencyapp.datetests;
 
 import dpapps.exchangecurrencyapp.configuration.AppConstants;
-import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.helpers.DateRangeValidator;
+import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.mockrepo.MockExchangeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -134,9 +134,9 @@ public class DateTests {
 
         assertThat(
                 DateRangeValidator.areDatesInValidRange(
-                    DateRangeValidator.returnValidRange(beforeLeft, latestDate),
-                    right,
-                    latestDate
+                        DateRangeValidator.returnValidRange(beforeLeft, latestDate),
+                        right,
+                        latestDate
                 )
         ).isTrue();
 
@@ -354,16 +354,13 @@ public class DateTests {
     }
 
     public boolean compareTwoPairsOfDates(LocalDate[] pair1, LocalDate[] pair2) {
-        if (pair1[0].isEqual(pair2[0]) || pair1[1].isEqual(pair2[1])) {
-            return true;
-        }
-        return false;
+        return pair1[0].isEqual(pair2[0]) || pair1[1].isEqual(pair2[1]);
     }
 
     public LocalDate returnExchangeDateThatExistsInDb(LocalDate date) {
 
         while (DateRangeValidator.isDateInValidRange(date, latestDate)) {
-            if (exchangeRepository.existsByExchangeDate(date) == false) {
+            if (!exchangeRepository.existsByExchangeDate(date)) {
                 date = date.minusDays(1);
             } else {
                 return date;

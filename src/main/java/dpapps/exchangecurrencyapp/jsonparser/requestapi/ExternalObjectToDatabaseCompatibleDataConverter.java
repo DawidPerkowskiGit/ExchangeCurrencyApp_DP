@@ -1,9 +1,9 @@
 package dpapps.exchangecurrencyapp.jsonparser.requestapi;
 
+import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyTypes;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
-import dpapps.exchangecurrencyapp.exchange.helpers.CurrencyTypes;
 import dpapps.exchangecurrencyapp.jsonparser.requestapi.model.ExternalDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class ExternalObjectToDatabaseCompatibleDataConverter {
     public List<Exchange> convertExternalToLocalData(ExternalDataModel externalDataModel) {
         List<Exchange> exchanges = new ArrayList<>();
         try {
-            if (externalDataModel.doAllNullableFieldsContainData() == false) {
+            if (!externalDataModel.doAllNullableFieldsContainData()) {
                 logger.info("Exchange date does not contain information");
                 return exchanges;
             }

@@ -27,6 +27,16 @@ public class Exchange {
     @Column(name = "exchange_date")
     private LocalDate exchangeDate;
 
+    public Exchange(Integer id, double value, Currency currency, LocalDate exchangeDate) {
+        this.id = id;
+        this.value = value;
+        this.currency = currency;
+        this.exchangeDate = exchangeDate;
+    }
+
+    public Exchange() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -63,17 +73,7 @@ public class Exchange {
 
     @Override
     public String toString() {
-        return getCurrency().getIsoName() + ", " + getExchangeDate().toString() + ", " + getValue();
-    }
-
-    public Exchange(Integer id, double value, Currency currency, LocalDate exchangeDate) {
-        this.id = id;
-        this.value = value;
-        this.currency = currency;
-        this.exchangeDate = exchangeDate;
-    }
-
-    public Exchange() {
+        return getCurrency().getIsoName() + ", " + getExchangeDate() + ", " + getValue();
     }
 
     public boolean doNonIdFieldsContainData() {
@@ -83,9 +83,6 @@ public class Exchange {
         if (getValue() == 0.0d) {
             return false;
         }
-        if (getExchangeDate() == null) {
-            return false;
-        }
-        return true;
+        return getExchangeDate() != null;
     }
 }

@@ -18,10 +18,7 @@ public class DateRangeValidator {
         if (date.isBefore(AppConstants.EXCHANGE_DATE_OLDEST)) {
             return false;
         }
-        if (date.isAfter(latestDate)) {
-            return false;
-        }
-        return true;
+        return !date.isAfter(latestDate);
     }
 
     /**
@@ -41,11 +38,7 @@ public class DateRangeValidator {
         if (left.isAfter(latestDate)) {
             return false;
         }
-        if (right.isAfter(latestDate)) {
-            return false;
-        }
-
-        return true;
+        return !right.isAfter(latestDate);
     }
 
     /**

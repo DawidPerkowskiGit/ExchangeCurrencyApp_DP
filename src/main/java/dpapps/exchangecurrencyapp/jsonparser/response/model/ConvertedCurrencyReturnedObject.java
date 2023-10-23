@@ -2,7 +2,6 @@ package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import dpapps.exchangecurrencyapp.exchange.helpers.DecimalPlacesFixer;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,7 @@ public class ConvertedCurrencyReturnedObject implements JsonConvertable {
     private String requestedCurrency;
 
     public void composeMessage() {
-        this.message = this.requestedValue + " " + this.baseCurrency + " = " + this.calculatedValue + " " + this.requestedCurrency + "; Date of exchange "+ this.exchangeDate;
+        this.message = this.requestedValue + " " + this.baseCurrency + " = " + this.calculatedValue + " " + this.requestedCurrency + "; Date of exchange " + this.exchangeDate;
     }
 
     public void calculateValue() {

@@ -18,6 +18,14 @@ public class Location {
     @Column(length = 50)
     private String name;
 
+    public Location(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Location() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -32,13 +40,5 @@ public class Location {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Location(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Location() {
     }
 }

@@ -14,5 +14,5 @@ public interface UserService {
 
     List<UserDto> findAllUsers();
 
-    public User getCurrentUser();
+    User getCurrentUser();
 }

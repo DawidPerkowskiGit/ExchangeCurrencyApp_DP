@@ -22,9 +22,9 @@ public class CurrencyJsonTests {
     @Autowired
     private JacksonTester<List<JsonCurrency>> jacksonJsonCurrencyList;
 
-    private List<JsonCurrency> jsonCurrencyList = new ArrayList<>();
+    private final List<JsonCurrency> jsonCurrencyList = new ArrayList<>();
 
-    private List<Currency> currencyList = new ArrayList<>();
+    private final List<Currency> currencyList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {

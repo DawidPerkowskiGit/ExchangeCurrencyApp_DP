@@ -73,10 +73,7 @@ public class ExternalDataModel {
         if (getDate() == null) {
             return false;
         }
-        if (getBase() == null) {
-            return false;
-        }
-        return true;
+        return getBase() != null;
     }
 
     public Boolean getHistorical() {

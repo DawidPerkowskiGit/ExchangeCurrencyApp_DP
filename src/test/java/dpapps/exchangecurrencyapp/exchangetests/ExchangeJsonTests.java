@@ -1,9 +1,9 @@
 package dpapps.exchangecurrencyapp.exchangetests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dpapps.exchangecurrencyapp.exchange.helpers.DateStringConverter;
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
-import dpapps.exchangecurrencyapp.exchange.helpers.DateStringConverter;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.SingleDayExchangeRatesJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,11 +23,11 @@ public class ExchangeJsonTests {
     private JacksonTester<SingleDayExchangeRatesJson> json;
 
 
-    private List<Exchange> exchanges = new ArrayList<>();
+    private final List<Exchange> exchanges = new ArrayList<>();
 
-    private List<Currency> currencies = new ArrayList<>();
+    private final List<Currency> currencies = new ArrayList<>();
 
-    private SingleDayExchangeRatesJson jsonExchanges = new SingleDayExchangeRatesJson();
+    private final SingleDayExchangeRatesJson jsonExchanges = new SingleDayExchangeRatesJson();
 
 
     @BeforeEach
@@ -36,9 +36,9 @@ public class ExchangeJsonTests {
         currencies.add(new Currency(2, "USD", "United States dollar"));
         currencies.add(new Currency(3, "JPY", "Japanese yen"));
 
-        exchanges.add(new Exchange(6, 7.6541 ,  currencies.get(0), DateStringConverter.convertStringToLocalDate("2023-06-08")));
-        exchanges.add(new Exchange(7, 37.408 ,  currencies.get(1), DateStringConverter.convertStringToLocalDate("2023-06-08")));
-        exchanges.add(new Exchange(8, 1.6061 ,  currencies.get(2), DateStringConverter.convertStringToLocalDate("2023-06-08")));
+        exchanges.add(new Exchange(6, 7.6541, currencies.get(0), DateStringConverter.convertStringToLocalDate("2023-06-08")));
+        exchanges.add(new Exchange(7, 37.408, currencies.get(1), DateStringConverter.convertStringToLocalDate("2023-06-08")));
+        exchanges.add(new Exchange(8, 1.6061, currencies.get(2), DateStringConverter.convertStringToLocalDate("2023-06-08")));
 
         jsonExchanges.setSuccess(true);
         jsonExchanges.setDate(exchanges.get(0).getExchangeDate());
@@ -46,8 +46,8 @@ public class ExchangeJsonTests {
 
         Map<String, Double> exchangesMap = new LinkedHashMap<>();
 
-        for (Exchange exchange: exchanges
-             ) {
+        for (Exchange exchange : exchanges
+        ) {
             exchangesMap.put(exchange.getCurrency().getIsoName(), exchange.getValue());
         }
 
@@ -58,6 +58,7 @@ public class ExchangeJsonTests {
     public void exchangeSerializationTest() throws IOException {
         assertThat(json.write(jsonExchanges)).isStrictlyEqualToJson("exchangeSingle.json");
     }
+
     @Test
     public void exchangeDeserializationTest() throws IOException {
         String expected = """

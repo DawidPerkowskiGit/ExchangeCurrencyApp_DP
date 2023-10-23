@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -24,6 +23,16 @@ public class SingleDayExchangeRatesJson implements JsonConvertable {
     private String base;
 
     private Map<String, Double> rates;
+
+    public SingleDayExchangeRatesJson(boolean success, LocalDate date, Map<String, Double> rates, String base) {
+        this.success = success;
+        this.date = date;
+        this.rates = rates;
+        this.base = base;
+    }
+
+    public SingleDayExchangeRatesJson() {
+    }
 
     public boolean isSuccess() {
         return success;
@@ -55,15 +64,5 @@ public class SingleDayExchangeRatesJson implements JsonConvertable {
 
     public void setBase(String base) {
         this.base = base;
-    }
-
-    public SingleDayExchangeRatesJson(boolean success, LocalDate date, Map<String, Double> rates, String base) {
-        this.success = success;
-        this.date = date;
-        this.rates = rates;
-        this.base = base;
-    }
-
-    public SingleDayExchangeRatesJson() {
     }
 }

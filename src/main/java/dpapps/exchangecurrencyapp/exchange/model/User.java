@@ -39,7 +39,7 @@ public class User {
     @OneToMany
     private List<ApiKey> apiKeys = new ArrayList<>();
 
-    @Column(name="is_non_locked")
+    @Column(name = "is_non_locked")
     private boolean isNonLocked = true;
 
     private int currentRequestsCount = 0;
@@ -51,10 +51,7 @@ public class User {
     }
 
     public boolean isRequestLimitIsReached() {
-        if (currentRequestsCount == AppConstants.DAILY_USE_LIMIT) {
-            return true;
-        }
-        return false;
+        return currentRequestsCount == AppConstants.DAILY_USE_LIMIT;
     }
 
 

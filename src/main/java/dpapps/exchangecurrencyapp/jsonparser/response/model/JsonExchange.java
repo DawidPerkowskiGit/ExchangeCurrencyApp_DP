@@ -1,12 +1,10 @@
 package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
-import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**

@@ -101,13 +101,12 @@ public class MainControllerServiceImpl implements MainControllerService {
 
     public String getLogs(Model model) {
         List<String> result = new ArrayList<>();
-        String fileName="logs/application.log";
+        String fileName = "logs/application.log";
         try (Stream<String> lines = Files.lines(Paths.get(fileName))) {
             result = lines.collect(Collectors.toList());
 
-        }
-        catch (Exception e) {
-            logger.error("Could not load log file. Exception: "+ e);
+        } catch (Exception e) {
+            logger.error("Could not load log file. Exception: " + e);
         }
         model.addAttribute("result", result);
         return "log";

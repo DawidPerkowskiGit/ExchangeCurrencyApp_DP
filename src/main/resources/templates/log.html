@@ -5,15 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <title>ExchangeCurrencyAPI</title>
-    <div th:replace="~{fragments/header :: navbar}"  th:remove="tag"></div>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
+    <div th:remove="tag" th:replace="~{fragments/header :: navbar}"></div>
+    <link crossorigin="anonymous"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossorigin="anonymous">
+          rel="stylesheet">
 </head>
 <body>
 
-<br /><br />
+<br/><br/>
 <div class="container">
     <div class="row">
         <h1 class="text-center"> Logs </h1>
@@ -29,14 +29,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each = "logline : ${result}">
-                <td th:text = "${logline}"></td>
+            <tr th:each="logline : ${result}">
+                <td th:text="${logline}"></td>
             </tr>
             </tbody>
         </table>
-<!--        <tr th:each = "logline : ${result}">-->
-<!--            <td th:text = "${logline}"></td>-->
-<!--        </tr>-->
+        <!--        <tr th:each = "logline : ${result}">-->
+        <!--            <td th:text = "${logline}"></td>-->
+        <!--        </tr>-->
     </div>
 
 </div>

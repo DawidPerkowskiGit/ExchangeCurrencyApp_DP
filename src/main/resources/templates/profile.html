@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>User profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
+    <link crossorigin="anonymous"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossorigin="anonymous">
-    <div th:replace="~{fragments/header :: navbar}" th:remove="tag"></div>
+          rel="stylesheet">
+    <div th:remove="tag" th:replace="~{fragments/header :: navbar}"></div>
 </head>
 <body>
 <div class="container">
@@ -27,7 +27,7 @@
                     <span>Api calls remaining <b th:text="${apiRequestString}"></b></span>
                     <!--          <p class="details" th:text="${apiRequestString}"></p>-->
                     <p></p>
-                    <a type="submit" th:href="@{/generate}" class="btn btn-primary">Generate new API key </a>
+                    <a class="btn btn-primary" th:href="@{/generate}" type="submit">Generate new API key </a>
                 </div>
             </div>
         </div>
@@ -43,51 +43,51 @@
                     </div>
 
                     <!--            <p class="flex-box" th:text="/api/exchange" th:href="@{/api/exchange(apiKey=${apiKeyValue})}"></p>-->
-                    <a ></a>
+                    <a></a>
                     <table class="table">
                         <thead>
-                            <tr class="table-dark">
-                                <th>Data fetched</th>
-                                <th>API key required</th>
-                                <th>Link</th>
-                            </tr>
+                        <tr class="table-dark">
+                            <th>Data fetched</th>
+                            <th>API key required</th>
+                            <th>Link</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Latest exchange rates</td>
-                                <td>Yes</td>
-                                <td>
-                                    <a th:href="@{/api/exchange(apiKey=${apiKeyValue})}">Link</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Currencies available</td>
-                                <td>No</td>
-                                <td>
-                                    <a th:href="@{/api/currencies}">Link</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Places where currencies can be used</td>
-                                <td>No</td>
-                                <td>
-                                    <a th:href="@{/api/currencies/locations}">Link</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>USD rates compared to EUR from the first seven days of August 2023</td>
-                                <td>Yes</td>
-                                <td>
-                                    <a th:href="@{/api/exchange(apiKey=${apiKeyValue},baseCurrency='EUR',currency='USD',startDate='2023-08-01',finishDate='2023-08-07')}">Link</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Convert 1200 EUR to GBP, exchange from 2001-06-12</td>
-                                <td>Yes</td>
-                                <td>
-                                    <a th:href="@{/api/exchange(apiKey=${apiKeyValue},baseCurrency='EUR',currency='GBP',startDate='2001-06-21',currencyValue='1200')}">Link</a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>Latest exchange rates</td>
+                            <td>Yes</td>
+                            <td>
+                                <a th:href="@{/api/exchange(apiKey=${apiKeyValue})}">Link</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Currencies available</td>
+                            <td>No</td>
+                            <td>
+                                <a th:href="@{/api/currencies}">Link</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Places where currencies can be used</td>
+                            <td>No</td>
+                            <td>
+                                <a th:href="@{/api/currencies/locations}">Link</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>USD rates compared to EUR from the first seven days of August 2023</td>
+                            <td>Yes</td>
+                            <td>
+                                <a th:href="@{/api/exchange(apiKey=${apiKeyValue},baseCurrency='EUR',currency='USD',startDate='2023-08-01',finishDate='2023-08-07')}">Link</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Convert 1200 EUR to GBP, exchange from 2001-06-12</td>
+                            <td>Yes</td>
+                            <td>
+                                <a th:href="@{/api/exchange(apiKey=${apiKeyValue},baseCurrency='EUR',currency='GBP',startDate='2001-06-21',currencyValue='1200')}">Link</a>
+                            </td>
+                        </tr>
 
                         </tbody>
 

@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class CurrencyListParserTests {
-    final String emptyString ="";
+    final String emptyString = "";
 
     final String singleCurrency = "USD";
 

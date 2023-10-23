@@ -12,6 +12,7 @@ import java.util.Optional;
 public class MockCurrencyRepository implements CurrencyRepository {
 
     List<Currency> currencyList = new LinkedList<>();
+
     @NonNull
     @Override
     public Currency save(@NonNull Currency currency) {
@@ -21,8 +22,8 @@ public class MockCurrencyRepository implements CurrencyRepository {
 
     @Override
     public <S extends Currency> Iterable<S> saveAll(Iterable<S> entities) {
-        for (S entity: entities
-             ) {
+        for (S entity : entities
+        ) {
             save(entity);
         }
         return null;
@@ -30,8 +31,8 @@ public class MockCurrencyRepository implements CurrencyRepository {
 
     @Override
     public Optional<Currency> findById(Integer integer) {
-        for (Currency currency: this.currencyList
-             ) {
+        for (Currency currency : this.currencyList
+        ) {
             if (currency.getId().equals(integer)) {
                 return Optional.of(currency);
             }
@@ -41,7 +42,7 @@ public class MockCurrencyRepository implements CurrencyRepository {
 
     @Override
     public boolean existsById(@NonNull Integer id) {
-        for (Currency currency: this.currencyList
+        for (Currency currency : this.currencyList
         ) {
             if (currency.getId().equals(id)) {
                 return true;
@@ -58,10 +59,10 @@ public class MockCurrencyRepository implements CurrencyRepository {
     @Override
     public Iterable<Currency> findAllById(Iterable<Integer> integers) {
         List<Currency> returnList = new LinkedList<>();
-        for (Currency currency: this.currencyList
+        for (Currency currency : this.currencyList
         ) {
-            for (Integer integer: integers
-                 ) {
+            for (Integer integer : integers
+            ) {
                 if (currency.getId().equals(integer)) {
                     returnList.add(currency);
                 }
@@ -73,7 +74,7 @@ public class MockCurrencyRepository implements CurrencyRepository {
     @Override
     public long count() {
         int counter = 0;
-        for (Currency currency: this.currencyList
+        for (Currency currency : this.currencyList
         ) {
             counter++;
         }
@@ -107,8 +108,8 @@ public class MockCurrencyRepository implements CurrencyRepository {
 
     @Override
     public Currency findCurrencyByIsoName(String name) {
-        for (Currency currency: this.currencyList
-             ) {
+        for (Currency currency : this.currencyList
+        ) {
             if (currency.getIsoName().equals(name)) {
                 return currency;
             }

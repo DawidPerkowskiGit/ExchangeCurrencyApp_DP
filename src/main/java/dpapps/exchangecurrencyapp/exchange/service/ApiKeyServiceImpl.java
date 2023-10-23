@@ -28,10 +28,10 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         if (user.isRequestLimitIsReached()) {
             return AppConstants.API_KEY_USE_LIMIT_REACHED;
         }
-        if (apiKey.isActive() == false) {
+        if (!apiKey.isActive()) {
             return AppConstants.API_KEY_INACTIVE;
         }
-        if (user.isNonLocked() == false) {
+        if (!user.isNonLocked()) {
             return AppConstants.API_KEY_USER_NOT_LOCKED;
         }
         return AppConstants.API_KEY_VALID;
@@ -48,7 +48,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
 
 
     public String addNewKey(User user) {
-        if (user.isNonLocked() == false) {
+        if (!user.isNonLocked()) {
             return AppConstants.USER_IS_LOCKED;
         }
         for (ApiKey singleKey : user.getApiKeys()) {
@@ -85,7 +85,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         if (apiKey == null) {
             return AppConstants.API_KEY_NOT_PROVIDED;
         }
-        if (apiKeyRepository.existsByValue(apiKey) == false) {
+        if (!apiKeyRepository.existsByValue(apiKey)) {
             return AppConstants.API_KEY_INVALID;
         }
 

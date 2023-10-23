@@ -14,7 +14,7 @@ public class StringToDoubleConverterTests {
     final List<String> invalidStringList = new LinkedList<>();
 
     final List<String> validStringList = new LinkedList<>();
-    
+
     final List<Double> validDoubleList = new LinkedList<>();
 
     StringToDoubleConverterTests() {
@@ -39,17 +39,18 @@ public class StringToDoubleConverterTests {
         validDoubleList.add(1d);
         validDoubleList.add(12.1234);
     }
+
     @Test
     public void shouldReturnInvalidString() {
-        for (String entry: invalidStringList
-             ) {
+        for (String entry : invalidStringList
+        ) {
             assertThat(StringIntConverter.isStringValidDouble(entry)).isFalse();
         }
     }
 
     @Test
     public void shouldReturnValidString() {
-        for (String entry: validStringList
+        for (String entry : validStringList
         ) {
             assertThat(StringIntConverter.isStringValidDouble(entry)).isTrue();
         }
@@ -62,8 +63,7 @@ public class StringToDoubleConverterTests {
             for (int i = 0; i < validDoubleList.size(); i++) {
                 assertThat(StringIntConverter.convertStringToDouble(validStringList.get(i))).isEqualTo(validDoubleList.get(i));
             }
-        }
-        else {
+        } else {
             throw new Exception("Invalid list size");
         }
     }

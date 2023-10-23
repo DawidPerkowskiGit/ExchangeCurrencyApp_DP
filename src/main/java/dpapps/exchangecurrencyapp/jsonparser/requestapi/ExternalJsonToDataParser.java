@@ -58,7 +58,6 @@ public class ExternalJsonToDataParser {
     }
 
 
-
     /**
      * Reads file and returns its JSON content as String
      *

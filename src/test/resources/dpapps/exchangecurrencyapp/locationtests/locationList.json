@@ -1,5 +1,11 @@
 [
-  {"name": "Germany"},
-  {"name": "United States"},
-  {"name": "Japan"}
+  {
+    "name": "Germany"
+  },
+  {
+    "name": "United States"
+  },
+  {
+    "name": "Japan"
+  }
 ]

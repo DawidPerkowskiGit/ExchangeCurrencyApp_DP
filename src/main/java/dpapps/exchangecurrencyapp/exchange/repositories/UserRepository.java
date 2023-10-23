@@ -15,10 +15,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByLogin(String login);
 
     @Query("SELECT u.currentRequestsCount FROM User u WHERE u.id = :id")
-    public int howManyUsages(@Param("id") Long id);
+    int howManyUsages(@Param("id") Long id);
 
     @Modifying
     @Query("UPDATE User u SET u.currentRequestsCount = :usages WHERE u.id = :id")
-    public int increaseNumberOfUsages(@Param("id") Long id, @Param("usages") int usages);
+    int increaseNumberOfUsages(@Param("id") Long id, @Param("usages") int usages);
 
 }

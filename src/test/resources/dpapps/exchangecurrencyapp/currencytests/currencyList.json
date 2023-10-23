@@ -1,5 +1,14 @@
 [
-  {"isoName": "EUR", "fullName": "Euro"},
-  {"isoName": "USD", "fullName": "United States dollar"},
-  {"isoName": "JPY", "fullName": "Japanese yen"}
+  {
+    "isoName": "EUR",
+    "fullName": "Euro"
+  },
+  {
+    "isoName": "USD",
+    "fullName": "United States dollar"
+  },
+  {
+    "isoName": "JPY",
+    "fullName": "Japanese yen"
+  }
 ]

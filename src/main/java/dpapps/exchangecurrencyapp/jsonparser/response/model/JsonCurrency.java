@@ -17,6 +17,10 @@ public class JsonCurrency {
     private String isoName;
     private String fullName;
 
+    public JsonCurrency(Currency currency) {
+        convertCurrencyToJsonCurrency(currency);
+    }
+
     public void setIsoName(String isoName) {
         this.isoName = isoName;
     }
@@ -29,9 +33,5 @@ public class JsonCurrency {
         setIsoName(currency.getIsoName());
         setFullName(currency.getFullName());
         return this;
-    }
-
-    public JsonCurrency(Currency currency) {
-        convertCurrencyToJsonCurrency(currency);
     }
 }

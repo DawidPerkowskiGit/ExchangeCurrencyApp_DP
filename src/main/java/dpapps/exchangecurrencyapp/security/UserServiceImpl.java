@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         if (role == null) {
             role = checkRoleExist();
         }
-        user.setRoles(Arrays.asList(role));
+        user.setRoles(List.of(role));
 
         userRepository.save(user);
 
