@@ -48,17 +48,6 @@ public class ExchangeApiController {
         return exchangeService.getCurrenciesAndLocations();
     }
 
-    /**
-     * Admin only accessible endpoint which performs requested URL call. It was used to perform emergency manual currency exchanges import.
-     *
-     * @param apiKey     REST APi key
-     * @param requestUrl Requested URL
-     * @return status result of currency import requestapi from the scheduler
-     */
-    @GetMapping("/manualRequestUrl")
-    public String forceRequestUrl(@RequestParam(required = false) String apiKey, @RequestParam(required = false) String requestUrl) {
-        return exchangeService.manualRequestUrl(apiKey, requestUrl);
-    }
 
     /**
      * Gets exchange rates from the database

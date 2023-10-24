@@ -22,12 +22,6 @@ public interface ExchangeService {
     ResponseEntity<List<JsonConvertable>> getCurrenciesAndLocations();
 
     /**
-     * Admin only accessible endpoint which performs requested URL call. It can be used to perform currency exchanges import.
-     */
-    String manualRequestUrl(String apiKey, String requestUrl);
-
-
-    /**
      * Fetches exchange rates from the database
      *
      * @param apiKey        Required attribute

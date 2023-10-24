@@ -13,7 +13,6 @@ import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyIsoNameToFullNameMapper;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.*;
-import dpapps.exchangecurrencyapp.shedules.ScheduledJobs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,24 +91,51 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     public ResponseEntity<List<JsonConvertable>> getCurrenciesAndLocations() {
         logger.info(AppConstants.LOGGER_CURRENCIES_LOCATIONS_ENDPOINT_CALLED);
-        List<String[]> pojo = currencyRepository.getCurrenciesAndLocations();
-        List<JsonConvertable> jsonReadyObject = convertDbCurrencyNameLocationToObjectList(pojo);
+        List<String[]> currenciesAndLocations = currencyRepository.getCurrenciesAndLocations();
+        List<JsonConvertable> jsonReadyObject = prepareCurrencyLocationsResponseBody(currenciesAndLocations);
         return ResponseEntity.ok(jsonReadyObject);
     }
 
-    public String manualRequestUrl(String apiKey, String requestUrl) {
-        int apiKeyParsingResult = apiKeyService.doesKeyExist(apiKey);
-        if (apiKeyParsingResult == AppConstants.API_KEY_INVALID) {
-            return AppConstants.ERROR_BODY_API_KEY_INVALID;
+
+    /**
+     * Converts returned database rows each containing single currency name entry and single location entry to Object containing single currency name and List of locations
+     */
+    private List<JsonConvertable> prepareCurrencyLocationsResponseBody(Iterable<String[]> databaseEntries) {
+
+        Map<String, String> isoNameFullName = new HashMap();
+        Map<String, List<String>> isoNameLocation = new HashMap();
+
+        for (String[] singleEntry : databaseEntries) {
+            if (!isoNameFullName.containsKey(singleEntry[0])) {
+                isoNameFullName.put(singleEntry[0], singleEntry[1]);
+            }
+            if (!isoNameLocation.containsKey(singleEntry[0])) {
+                isoNameLocation.put(singleEntry[0], new ArrayList<>());
+            }
+            isoNameLocation.put(singleEntry[0], addValueToList(singleEntry[2], isoNameLocation.get(singleEntry[0])));
+
         }
 
-        if (requestUrl == null) {
-            logger.info(AppConstants.LOGGER_MANUAL_REQUEST_URL_EMPTY);
-            return AppConstants.LOGGER_MANUAL_REQUEST_URL_EMPTY;
+        List<JsonConvertable> pojoToSerialize = new ArrayList<>();
+
+        for (String entry : isoNameLocation.keySet()) {
+            CurrencyIsoNameFullNameMultipleLocations singleObject = new CurrencyIsoNameFullNameMultipleLocations();
+            singleObject.setIsoName(entry);
+            singleObject.setFullName(isoNameFullName.get(entry));
+            singleObject.setLocationList(isoNameLocation.get(entry));
+            pojoToSerialize.add(singleObject);
         }
 
-        ScheduledJobs scheduledJobs = new ScheduledJobs();
-        return scheduledJobs.performDailyDatabaseImport(requestUrl, this.currencyRepository, this.exchangeRepository);
+        return pojoToSerialize;
+    }
+
+
+    /**
+     * Adds entry to List
+     */
+    private List<String> addValueToList(String value, List<String> list) {
+        list.add(value);
+        return list;
     }
 
     public ResponseEntity<JsonConvertable> getExchanges(String apiKey, String currency, String baseCurrency, String startDate, String finishDate, Map<String, String> headers, String currencyValue) {
@@ -336,45 +362,6 @@ public class ExchangeServiceImpl implements ExchangeService {
         return DecimalPlacesFixer.modifyNumberOfDecimalPlaces(1 / newBaseCurrency.getValue(), AppConstants.DECIMAL_PLACES_CURRENCY_CONVERSION);
     }
 
-    /**
-     * Converts returned database rows each containing single currency name entry and single location entry to Object containing single currency name and List of locations
-     */
-    private List<JsonConvertable> convertDbCurrencyNameLocationToObjectList(Iterable<String[]> databaseEntries) {
-
-        Map<String, String> isoNameFullName = new HashMap();
-        Map<String, List<String>> isoNameLocation = new HashMap();
-
-        for (String[] singleEntry : databaseEntries) {
-            if (!isoNameFullName.containsKey(singleEntry[0])) {
-                isoNameFullName.put(singleEntry[0], singleEntry[1]);
-            }
-            if (!isoNameLocation.containsKey(singleEntry[0])) {
-                isoNameLocation.put(singleEntry[0], new ArrayList<>());
-            }
-            isoNameLocation.put(singleEntry[0], addValueToList(singleEntry[2], isoNameLocation.get(singleEntry[0])));
-
-        }
-
-        List<JsonConvertable> pojoToSerialize = new ArrayList<>();
-
-        for (String entry : isoNameLocation.keySet()) {
-            CurrencyIsoNameFullNameMultipleLocations singleObject = new CurrencyIsoNameFullNameMultipleLocations();
-            singleObject.setIsoName(entry);
-            singleObject.setFullName(isoNameFullName.get(entry));
-            singleObject.setLocationList(isoNameLocation.get(entry));
-            pojoToSerialize.add(singleObject);
-        }
-
-        return pojoToSerialize;
-    }
-
-    /**
-     * Adds entry to List property of a HashMap
-     */
-    private List<String> addValueToList(String value, List<String> list) {
-        list.add(value);
-        return list;
-    }
 
     /**
      * Builds invalid request object
