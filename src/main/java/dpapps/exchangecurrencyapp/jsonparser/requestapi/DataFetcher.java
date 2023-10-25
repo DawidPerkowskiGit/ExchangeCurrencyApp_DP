@@ -53,7 +53,7 @@ public class DataFetcher {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             apiResponseBody = response.body();
         } catch (Exception e) {
-            logger.error("Could not process API requestapi. Exception " + e);
+            logger.error("Could not process API request. Exception " + e);
             return "";
         }
 

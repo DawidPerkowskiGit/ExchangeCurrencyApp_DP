@@ -16,15 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
 public class CurrencyJsonTests {
+    private final List<JsonCurrency> jsonCurrencyList = new ArrayList<>();
+    private final List<Currency> currencyList = new ArrayList<>();
     @Autowired
     private JacksonTester<JsonCurrency> jacksonJsonCurrency;
-
     @Autowired
     private JacksonTester<List<JsonCurrency>> jacksonJsonCurrencyList;
-
-    private final List<JsonCurrency> jsonCurrencyList = new ArrayList<>();
-
-    private final List<Currency> currencyList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {

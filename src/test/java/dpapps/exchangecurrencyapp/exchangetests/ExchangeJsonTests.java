@@ -19,16 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @JsonTest
 public class ExchangeJsonTests {
 
+    private final List<Exchange> exchanges = new ArrayList<>();
+    private final List<Currency> currencies = new ArrayList<>();
+    private final SingleDayExchangeRatesJson jsonExchanges = new SingleDayExchangeRatesJson();
     @Autowired
     private JacksonTester<SingleDayExchangeRatesJson> json;
-
-
-    private final List<Exchange> exchanges = new ArrayList<>();
-
-    private final List<Currency> currencies = new ArrayList<>();
-
-    private final SingleDayExchangeRatesJson jsonExchanges = new SingleDayExchangeRatesJson();
-
 
     @BeforeEach
     void setUp() {

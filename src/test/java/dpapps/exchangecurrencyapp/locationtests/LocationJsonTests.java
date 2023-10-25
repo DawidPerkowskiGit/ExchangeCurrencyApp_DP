@@ -17,15 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @JsonTest
 public class LocationJsonTests {
 
+    private final List<JsonLocation> jsonLocationList = new ArrayList<>();
+    private final List<Location> locationList = new ArrayList<>();
     @Autowired
     private JacksonTester<JsonLocation> jacksonJsonLocation;
-
     @Autowired
     private JacksonTester<List<JsonLocation>> jacksonJsonLocationList;
-
-    private final List<JsonLocation> jsonLocationList = new ArrayList<>();
-
-    private final List<Location> locationList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {

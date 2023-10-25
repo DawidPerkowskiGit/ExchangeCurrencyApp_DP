@@ -96,14 +96,13 @@ public class ExchangeServiceImpl implements ExchangeService {
         return ResponseEntity.ok(jsonReadyObject);
     }
 
-
     /**
      * Converts returned database rows each containing single currency name entry and single location entry to Object containing single currency name and List of locations
      */
     private List<JsonConvertable> prepareCurrencyLocationsResponseBody(Iterable<String[]> databaseEntries) {
 
-        Map<String, String> isoNameFullName = new HashMap();
-        Map<String, List<String>> isoNameLocation = new HashMap();
+        Map<String, String> isoNameFullName = new HashMap<>();
+        Map<String, List<String>> isoNameLocation = new HashMap<>();
 
         for (String[] singleEntry : databaseEntries) {
             if (!isoNameFullName.containsKey(singleEntry[0])) {
@@ -128,7 +127,6 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         return pojoToSerialize;
     }
-
 
     /**
      * Adds entry to List
@@ -300,41 +298,41 @@ public class ExchangeServiceImpl implements ExchangeService {
     private JsonConvertable getExchangesFromSingleDay(LocalDate inputDate, List<String> currency, String baseCurrency) {
 
 
-        SingleDayExchangeRatesJson pojo = new SingleDayExchangeRatesJson();
+        SingleDayExchangeRatesJson exchangeObject = new SingleDayExchangeRatesJson();
 
         if (!exchangeRepository.existsByExchangeDate(inputDate)) {
-            pojo.setSuccess(false);
-            return pojo;
+            exchangeObject.setSuccess(false);
+            return exchangeObject;
         }
 
         try {
-            List<Exchange> latestExchangesList;
+            List<Exchange> exchangesList;
 
             if (currency.get(0).equals(AppConstants.ALL_CURRENCIES)) {
-                latestExchangesList = exchangeRepository.findAllByExchangeDateOrderByCurrencyDesc(inputDate);
+                exchangesList = exchangeRepository.findAllByExchangeDateOrderByCurrencyDesc(inputDate);
             } else {
-                latestExchangesList = exchangeRepository.findAllByExchangeDateAndCurrenciesOrderByExchangeDate(inputDate, currency);
+                exchangesList = exchangeRepository.findAllByExchangeDateAndCurrenciesOrderByExchangeDate(inputDate, currency);
             }
 
 
             if (baseCurrency.equals(AppConstants.EMPTY_STRING)) {
-                pojo.setBase(AppConstants.DEFAULT_BASE_CURRENCY);
+                exchangeObject.setBase(AppConstants.DEFAULT_BASE_CURRENCY);
             } else if (!CurrencyTypesValidator.isThisCurrencyAvailable(baseCurrency)) {
                 return buildInvalidRequestBody(AppConstants.RETURNED_JSON_BODY_NOT_FOUND, AppConstants.ERROR_BODY_INVALID_BASE_CURRENCY);
             } else {
-                pojo.setBase(baseCurrency);
+                exchangeObject.setBase(baseCurrency);
             }
 
 
             Map<String, Double> rates = new HashMap<>();
-            if (pojo.getBase().equals(AppConstants.DEFAULT_BASE_CURRENCY)) {
-                for (Exchange entry : latestExchangesList) {
+            if (exchangeObject.getBase().equals(AppConstants.DEFAULT_BASE_CURRENCY)) {
+                for (Exchange entry : exchangesList) {
                     rates.put(entry.getCurrency().getIsoName(), entry.getValue());
                 }
             } else {
                 if (exchangeRepository.existsByExchangeDateAndCurrency_IsoName(inputDate, baseCurrency)) {
                     double newRatio = calculateNewRatio(inputDate, baseCurrency);
-                    for (Exchange entry : latestExchangesList) {
+                    for (Exchange entry : exchangesList) {
                         rates.put(entry.getCurrency().getIsoName(), DecimalPlacesFixer.modifyNumberOfDecimalPlaces(entry.getValue() * newRatio, AppConstants.DECIMAL_PLACES_CURRENCY_CONVERSION));
                     }
                 } else {
@@ -343,13 +341,13 @@ public class ExchangeServiceImpl implements ExchangeService {
 
             }
 
-            pojo.setDate(inputDate);
-            pojo.setRates(rates);
-            pojo.setSuccess(true);
+            exchangeObject.setDate(inputDate);
+            exchangeObject.setRates(rates);
+            exchangeObject.setSuccess(true);
         } catch (Exception e) {
             logger.error("Could not acquire latest exchange data: Exception: " + e);
         }
-        return pojo;
+        return exchangeObject;
     }
 
 

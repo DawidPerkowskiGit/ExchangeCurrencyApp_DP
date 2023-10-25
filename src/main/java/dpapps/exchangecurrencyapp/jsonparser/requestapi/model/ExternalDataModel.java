@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 /**
- * The class represents data structure of exchangeratesapi.io JSON requestapi body.
+ * The class represents data structure of exchangeratesapi.io JSON request body.
  */
 @Getter
 @Setter

@@ -27,7 +27,7 @@ public class ExchangeApiController {
     /**
      * Gets available currencies from the database
      *
-     * @param date Optional parameter - currencies active at specified date
+     * @param date Optional parameter - currencies usable at specified date (some countries migrated to other currencies, previous one is not usable anymore)
      * @return Currencies List in JSON format
      */
 
@@ -52,12 +52,15 @@ public class ExchangeApiController {
     /**
      * Gets exchange rates from the database
      *
-     * @param currency     Optional http attribute - Requested currency
-     * @param startDate    Optional http attribute - start date for exchange rated from multiple days
-     * @param finishDate   Optional http attribute - finish date for exchange rated from multiple days
-     * @param baseCurrency Optional http attribute - http attribute Base currency
-     * @param apiKey       Required http attribute - User's API key
-     * @param headers      List of http headers
+     * @param apiKey        Required attribute - User's API key
+     * @param currency      Optional attribute - Convert TO currency, if none specified all currencies will be returned
+     * @param baseCurrency  Optional attribute - Convert FROM currency, if none specified EUR will be used as default
+     * @param startDate     Optional attribute - Start date of exchanges
+     * @param finishDate    Optional attribute - Finish date of exchanges.
+     *                      If neither of the dates was provided, the latest exchanges will be returned.
+     *                      If only one date was provided, exchanges will be fetched from the single (provided) date
+     * @param currencyValue Optional attribute - Used to specify the currency conversion value
+     * @param headers       List of http headers
      * @return Exchange rates in JSON format
      */
 

@@ -37,35 +37,40 @@ public class ScheduledJobs {
         try {
             DataFetcher dataFetcher = new DataFetcher();
             String apiResponseBody = dataFetcher.fetchApiResponse(url);
-            if (apiResponseBody.equals("")) {
-                logger.info("Failed to import request api body");
-                return "Failed to import request api body";
+            if (apiResponseBody.equals(AppConstants.EMPTY_STRING)) {
+                String info = "Failed to import request body";
+                logger.info(info);
+                return info;
             }
 
             ExternalJsonToDataParser externalJsonToDataParser = new ExternalJsonToDataParser();
             Optional<ExternalDataModel> responseBodyPojo = externalJsonToDataParser.jsonDeserialization(apiResponseBody);
             if (!responseBodyPojo.get().doAllNullableFieldsContainData()) {
-                logger.info("Returned request api body is null");
-                return "Returned request api body is null";
+                String info = "Returned request body is null";
+                logger.info(info);
+                return info;
             }
             if (!responseBodyPojo.get().getSuccess()) {
-                logger.info("Could not get request api body");
-                return "Could not get requestapi body";
+                String info = "Could not get request body";
+                logger.info(info);
+                return info;
             }
 
             ExternalObjectToDatabaseCompatibleDataConverter externalObjectToDatabaseCompatibleDataConverter = new ExternalObjectToDatabaseCompatibleDataConverter(exchangeRepository, currencyRepository);
             List<Exchange> exchanges = externalObjectToDatabaseCompatibleDataConverter.convertExternalToLocalData(responseBodyPojo.get());
             if (exchanges.isEmpty()) {
-                logger.info("Exchange list is empty");
-                return "Exchange list is empty";
+                String info = "Exchange list is empty";
+                logger.info(info);
+                return info;
             }
 
             externalObjectToDatabaseCompatibleDataConverter.saveExternalExchangeDataInDatabase(exchanges);
         } catch (Exception e) {
             logger.info("Could not perform scheduled exchange rates import");
         }
-        logger.info("Exchange rates imported successfully");
-        return "Exchange rates imported successfully";
+        String info = "Exchange rates imported successfully";
+        logger.info(info);
+        return info;
     }
 
     /**

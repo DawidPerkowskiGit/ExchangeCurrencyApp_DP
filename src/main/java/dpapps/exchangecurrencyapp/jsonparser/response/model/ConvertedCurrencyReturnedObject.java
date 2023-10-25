@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ConvertedCurrencyReturnedObject implements JsonConvertable {
     private String message;
-
     private LocalDate exchangeDate;
     private Double requestedValue;
     private Double rate;
