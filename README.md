@@ -4,7 +4,7 @@
 * [More detailed information about application](#more-detailed-information-about-application)
 * [Available endpoints](#available-endpoints)
 * [Application view](#application-view)
-* [Challenges](#challenges)
+* [Encountered challenges](#encountered-challenges)
 ## General info
 
 Backend live link: https://exchangecurrencyapp-dp-render.onrender.com
@@ -251,6 +251,6 @@ Api key section available to logged-in users.
 ![obraz](https://github.com/DawidPerkowskiGit/ExchangeCurrencyApp_DP/assets/87314459/bef9ae4a-0d1c-4144-95ef-db81e4f5c7bd)
 
 
-## Challenges
+## Encountered challenges
 1) Deserialization of external exchange service data needed for importing the newest exchange ratios. I had to use Jackson library to import necessary data
 2) Deploying application with Docker on local Windows machine would still cause errors when deploying with Render's Linux machine. I had to remove newline signs from pom.xmlS
