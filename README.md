@@ -252,5 +252,5 @@ Api key section available to logged-in users.
 
 
 ## Encountered challenges
-1) Deserialization of external exchange service data needed for importing the newest exchange ratios. I had to use Jackson library to import necessary data
-2) Deploying application with Docker on local Windows machine would still cause errors when deploying with Render's Linux machine. I had to remove newline signs from pom.xmlS
+1) Deserialization of external exchange rates data. I used Jackson library and by defining class field getters, only necessery data was imported.
+2) Deploying application with Docker on local Windows machine would still cause errors when deploying with Render's Linux machine. I removed newline signs from pom.xml which were causing this issue.
