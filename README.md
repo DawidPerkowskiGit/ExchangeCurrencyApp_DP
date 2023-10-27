@@ -1,6 +1,7 @@
 # Content of Project
 
 * [General info](#general-info)
+* [Key features](#key-features)
 * [Technologies](#technologies)
 * [More detailed information about application](#more-detailed-information-about-application)
 * [Available endpoints](#available-endpoints)
@@ -18,6 +19,16 @@ A currency exchange application developed with a CI/CD workflow, providing REST 
 exchange rates in JSON format. The application automatically builds and deploys with every push to the repository using
 Render. Docker containers are used for the deployment process. Hosted on Render's free plan.
 
+## Key features
+
+- REST API JSON backend application for currency exchange
+- Users have to register an account to get API KEY
+- Limit of 20 API calls per day
+- Fetching latest currency exchange rates of all currencies
+- Currency conversion
+- Fetching historical exchange rates reaching as far to 1999-01-04
+- Fetching currencies and countries/other locations where tey can be used in
+
 ## Technologies
 
 Java 17, Spring 6, Spring Boot, Spring Web, Spring Data, Spring Security, PostgresSQL 15, Maven, Docker, Git, JUnit,
@@ -27,14 +38,14 @@ Render, Jackson, Thymeleaf.
 
 The application and its database PostgresSQL is hosted on Render.com. Database stores over 30 different currency types
 and their exchange rates, first entry is from 1999-01-04. Every four hours application performs automatic REST API
-request to exchangeratesapi.io in search of new exchange rates. If received exchanges are new, the data is inserted to
-the database. Users have to create account and use their API key to retrieve data.
+request to exchangeratesapi.io to import the newest exchange rates. Users have to create an account and use their API
+key to fetch data.
 
 ## Available endpoints
 
 ### /api/currencies
 
-The user can access this endpoint without providing an API key. Returns list of all available currencies (including ones
+Endpoint accessible without providing an API key. Returns list of all available currencies (including ones
 no longer used) in JSON format.
 
 Available optional URL parameters:
