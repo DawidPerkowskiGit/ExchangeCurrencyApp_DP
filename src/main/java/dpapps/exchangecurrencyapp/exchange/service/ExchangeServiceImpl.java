@@ -49,20 +49,13 @@ public class ExchangeServiceImpl implements ExchangeService {
     /**
      * Builds and returns JSON body when currency conversion is required
      */
-    private static ConvertedCurrencyReturnedObject buildCurrencyConverterBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
-        Double currencyExchangeValue = StringIntConverter.convertStringToDouble(currencyValue);
-        ConvertedCurrencyReturnedObject convertedCurrencyReturnedObject = new ConvertedCurrencyReturnedObject();
-
-        convertedCurrencyReturnedObject.setRequestedValue(currencyExchangeValue);
-        convertedCurrencyReturnedObject.setBaseCurrency(baseCurrency);
-        convertedCurrencyReturnedObject.setRequestedCurrency(requestedCurrenciesList.get(0));
-        convertedCurrencyReturnedObject.setExchangeDate(date);
-
+    private static ConvertedCurrencyReturnedObject buildCurrencyConversionBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
+        Double requestedValueAsDouble = StringIntConverter.convertStringToDouble(currencyValue);
         SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) exchangesList.get(0);
-        convertedCurrencyReturnedObject.setRate(singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0)));
-        convertedCurrencyReturnedObject.calculateValue();
-        convertedCurrencyReturnedObject.composeMessage();
-        return convertedCurrencyReturnedObject;
+        Double rate = singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0));
+        String requestedCurrency = requestedCurrenciesList.get(0);
+
+        return new ConvertedCurrencyReturnedObject(date, requestedValueAsDouble, rate, baseCurrency, requestedCurrency);
     }
 
     public ResponseEntity<JsonConvertable> getCurrencies(String date) {
@@ -252,8 +245,8 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         if (currencyValue != null && beginDate.equals(endDate) && requestedCurernciesList.size() == 1) {
             if (StringIntConverter.isStringValidDouble(currencyValue)) {
-                ConvertedCurrencyReturnedObject convertedCurrencyReturnedObject = buildCurrencyConverterBody(baseCurrency, currencyValue, beginDate, requestedCurernciesList, returnList);
-                return ResponseEntity.ok(convertedCurrencyReturnedObject);
+                ConvertedCurrencyReturnedObject convertedCurrencyReturnedObject = buildCurrencyConversionBody(baseCurrency, currencyValue, beginDate, requestedCurernciesList, returnList);
+                return ResponseEntity.ok(convertedCurrencyReturnedObject.getBody());
             }
         }
 
