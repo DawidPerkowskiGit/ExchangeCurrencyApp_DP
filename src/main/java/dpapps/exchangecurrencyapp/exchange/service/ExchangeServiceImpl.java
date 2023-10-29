@@ -11,8 +11,12 @@ import dpapps.exchangecurrencyapp.exchange.repositories.ApiKeyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.CurrencyRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
-import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyIsoNameToFullNameMapper;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.*;
+import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyConversionReturnedObject;
+import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyIsoFullNamesReturnedObject;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.CurrencyIsoNameFullNameMultipleLocations;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.ExchangesList;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.SingleDayExchangeRatesJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,18 +53,18 @@ public class ExchangeServiceImpl implements ExchangeService {
     /**
      * Builds and returns JSON body when currency conversion is required
      */
-    private static ConvertedCurrencyReturnedObject buildCurrencyConversionBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
+    private static CurrencyConversionReturnedObject buildCurrencyConversionBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
         Double requestedValueAsDouble = StringIntConverter.convertStringToDouble(currencyValue);
         SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) exchangesList.get(0);
         Double rate = singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0));
         String requestedCurrency = requestedCurrenciesList.get(0);
 
-        return new ConvertedCurrencyReturnedObject(date, requestedValueAsDouble, rate, baseCurrency, requestedCurrency);
+        return new CurrencyConversionReturnedObject(date, requestedValueAsDouble, rate, baseCurrency, requestedCurrency);
     }
 
     public ResponseEntity<JsonConvertable> getCurrencies(String date) {
         logger.info(AppConstants.LOGGER_CURRENCIES_ENDPOINT_CALLED);
-        CurrencyIsoNameToFullNameMapper currencyIsoNameToFullNameMapper = new CurrencyIsoNameToFullNameMapper();
+        CurrencyIsoFullNamesReturnedObject currencyIsoFullNamesReturnedObject = new CurrencyIsoFullNamesReturnedObject();
         Iterable<Currency> currencyList;
         if (date != null) {
             LocalDate currenciesDate = DateStringConverter.convertStringToLocalDate(date);
@@ -77,9 +81,9 @@ public class ExchangeServiceImpl implements ExchangeService {
         } else {
             currencyList = currencyRepository.getAll();
         }
-        currencyIsoNameToFullNameMapper.convertCurrencyListToJsonCurrency(currencyList);
+        currencyIsoFullNamesReturnedObject.convertCurrencyListToJsonCurrency(currencyList);
 
-        return ResponseEntity.ok(currencyIsoNameToFullNameMapper);
+        return ResponseEntity.ok(currencyIsoFullNamesReturnedObject.getCurrenciesMap());
     }
 
     public ResponseEntity<List<JsonConvertable>> getCurrenciesAndLocations() {
@@ -245,8 +249,8 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         if (currencyValue != null && beginDate.equals(endDate) && requestedCurernciesList.size() == 1) {
             if (StringIntConverter.isStringValidDouble(currencyValue)) {
-                ConvertedCurrencyReturnedObject convertedCurrencyReturnedObject = buildCurrencyConversionBody(baseCurrency, currencyValue, beginDate, requestedCurernciesList, returnList);
-                return ResponseEntity.ok(convertedCurrencyReturnedObject.getBody());
+                CurrencyConversionReturnedObject currencyConversionReturnedObject = buildCurrencyConversionBody(baseCurrency, currencyValue, beginDate, requestedCurernciesList, returnList);
+                return ResponseEntity.ok(currencyConversionReturnedObject.getBody());
             }
         }
 

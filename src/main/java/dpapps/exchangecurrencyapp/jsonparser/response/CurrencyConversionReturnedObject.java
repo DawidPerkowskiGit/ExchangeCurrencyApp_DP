@@ -1,7 +1,8 @@
-package dpapps.exchangecurrencyapp.jsonparser.response.model;
+package dpapps.exchangecurrencyapp.jsonparser.response;
 
 import dpapps.exchangecurrencyapp.configuration.AppConstants;
 import dpapps.exchangecurrencyapp.exchange.helpers.DecimalPlacesFixer;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
@@ -10,11 +11,11 @@ import java.time.LocalDate;
  * Model
  */
 @AllArgsConstructor
-public class ConvertedCurrencyReturnedObject implements JsonConvertable {
+public class CurrencyConversionReturnedObject implements JsonConvertable {
 
     ConversionBody conversionBody;
 
-    public ConvertedCurrencyReturnedObject(LocalDate date, Double requestedValue, Double rate, String baseCurrency, String requestedCurrency) {
+    public CurrencyConversionReturnedObject(LocalDate date, Double requestedValue, Double rate, String baseCurrency, String requestedCurrency) {
         conversionBody = new ConversionBody();
         conversionBody.setExchangeDate(date);
         conversionBody.setRequestedValue(requestedValue);
