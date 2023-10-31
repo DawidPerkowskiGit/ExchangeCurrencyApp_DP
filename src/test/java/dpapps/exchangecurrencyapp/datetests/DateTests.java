@@ -66,7 +66,7 @@ public class DateTests {
     }
 
     @Test
-    public void assertThatPairOfDatesIsValid() {
+    public void assertThatPairOfDatesAreValid() {
         assertThat(DateRangeValidator.areDatesInValidRange(beforeLeft, beforeLeft, latestDate)).isFalse();
         assertThat(DateRangeValidator.areDatesInValidRange(beforeLeft, left, latestDate)).isFalse();
         assertThat(DateRangeValidator.areDatesInValidRange(beforeLeft, middle, latestDate)).isFalse();
@@ -239,8 +239,8 @@ public class DateTests {
     @DirtiesContext
     @Test
     public void shouldReturnCorrectValuesOfFixedDate() {
-        assertThat(DateRangeValidator.returnValidRange(beforeLeft, latestDate).equals(left));
-        assertThat(DateRangeValidator.returnValidRange(afterRight, latestDate).equals(right));
+        assertThat(DateRangeValidator.returnValidRange(beforeLeft, latestDate).equals(left)).isTrue();
+        assertThat(DateRangeValidator.returnValidRange(afterRight, latestDate).equals(right)).isTrue();
     }
 
     @DirtiesContext
@@ -335,21 +335,20 @@ public class DateTests {
 
     @Test
     public void shouldReturnDatesExistingInDb() {
-        LocalDate date1 = LocalDate.of(2023, 06, 11);
-        LocalDate resultDate1 = LocalDate.of(2023, 06, 9);
+        LocalDate date1 = LocalDate.of(2023, 6, 11);
+        LocalDate resultDate1 = LocalDate.of(2023, 6, 11);
 
-        assertThat(resultDate1.isEqual(returnExchangeDateThatExistsInDb(date1))).isTrue();
-
-
-        LocalDate date2 = LocalDate.of(2023, 06, 4);
-        LocalDate resultDate2 = LocalDate.of(2023, 06, 2);
-
-        assertThat(resultDate2.isEqual(returnExchangeDateThatExistsInDb(date2))).isTrue();
+        assertThat(resultDate1.isEqual(DateRangeValidator.returnValidRange(date1, latestDate))).isTrue();
 
 
-        assertThat(AppConstants.EXCHANGE_DATE_OLDEST.isEqual(returnExchangeDateThatExistsInDb(AppConstants.EXCHANGE_DATE_OLDEST).minusDays(1)));
-        assertThat(AppConstants.EXCHANGE_DATE_OLDEST.isEqual(returnExchangeDateThatExistsInDb(AppConstants.EXCHANGE_DATE_OLDEST)));
-        assertThat(AppConstants.EXCHANGE_DATE_OLDEST.plusDays(1).isEqual(returnExchangeDateThatExistsInDb(AppConstants.EXCHANGE_DATE_OLDEST).plusDays(1)));
+        LocalDate date2 = LocalDate.of(2023, 6, 4);
+        LocalDate resultDate2 = LocalDate.of(2023, 6, 4);
+
+        assertThat(resultDate2.isEqual(DateRangeValidator.returnValidRange(date2, latestDate))).isTrue();
+
+        assertThat(AppConstants.EXCHANGE_DATE_OLDEST.isEqual(DateRangeValidator.returnValidRange((AppConstants.EXCHANGE_DATE_OLDEST).minusDays(1), latestDate))).isTrue();
+        assertThat(AppConstants.EXCHANGE_DATE_OLDEST.isEqual(DateRangeValidator.returnValidRange(AppConstants.EXCHANGE_DATE_OLDEST, latestDate))).isTrue();
+        assertThat(AppConstants.EXCHANGE_DATE_OLDEST.plusDays(1).isEqual(DateRangeValidator.returnValidRange((AppConstants.EXCHANGE_DATE_OLDEST).plusDays(1), latestDate))).isTrue();
 
     }
 

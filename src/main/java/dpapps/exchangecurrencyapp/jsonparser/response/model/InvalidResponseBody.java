@@ -1,6 +1,5 @@
-package dpapps.exchangecurrencyapp.exchange.error;
+package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
-import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvalidRequestBody implements JsonConvertable {
+public class InvalidResponseBody implements JsonConvertable {
     private Boolean success = false;
     private int status;
     private String message;

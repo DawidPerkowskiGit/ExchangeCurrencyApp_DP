@@ -1,7 +1,6 @@
 package dpapps.exchangecurrencyapp.exchange.service;
 
 import dpapps.exchangecurrencyapp.configuration.AppConstants;
-import dpapps.exchangecurrencyapp.exchange.error.InvalidRequestBody;
 import dpapps.exchangecurrencyapp.exchange.helpers.*;
 import dpapps.exchangecurrencyapp.exchange.model.ApiKey;
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
@@ -13,10 +12,7 @@ import dpapps.exchangecurrencyapp.exchange.repositories.ExchangeRepository;
 import dpapps.exchangecurrencyapp.exchange.repositories.UserRepository;
 import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyConversionReturnedObject;
 import dpapps.exchangecurrencyapp.jsonparser.response.CurrencyIsoFullNamesReturnedObject;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.CurrencyIsoNameFullNameMultipleLocations;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.ExchangesList;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.JsonConvertable;
-import dpapps.exchangecurrencyapp.jsonparser.response.model.SingleDayExchangeRatesJson;
+import dpapps.exchangecurrencyapp.jsonparser.response.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -362,14 +358,14 @@ public class ExchangeServiceImpl implements ExchangeService {
      * Builds invalid request object
      */
 
-    private InvalidRequestBody buildInvalidRequestBody(int httpErrorCode, String message) {
-        InvalidRequestBody invalidRequestBody = new InvalidRequestBody();
-        invalidRequestBody.setStatus(httpErrorCode);
-        invalidRequestBody.setMessage(message);
-        invalidRequestBody.setSuccess(false);
+    private InvalidResponseBody buildInvalidRequestBody(int httpErrorCode, String message) {
+        InvalidResponseBody invalidResponseBody = new InvalidResponseBody();
+        invalidResponseBody.setStatus(httpErrorCode);
+        invalidResponseBody.setMessage(message);
+        invalidResponseBody.setSuccess(false);
 
         logger.info(message);
-        return invalidRequestBody;
+        return invalidResponseBody;
     }
 
 

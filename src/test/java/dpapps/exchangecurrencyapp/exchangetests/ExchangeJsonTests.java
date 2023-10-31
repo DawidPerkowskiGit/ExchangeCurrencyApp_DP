@@ -70,6 +70,7 @@ public class ExchangeJsonTests {
                 """;
         ObjectMapper mapper = new ObjectMapper();
         SingleDayExchangeRatesJson singleDayExchangeRatesJson = mapper.readValue(expected, SingleDayExchangeRatesJson.class);
+        //TODO fix the Object comparison test
         assertThat(Objects.equals(singleDayExchangeRatesJson, jsonExchanges));
     }
 }
