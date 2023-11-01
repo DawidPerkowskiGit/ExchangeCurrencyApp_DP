@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dpapps.exchangecurrencyapp.exchange.helpers.DateStringConverter;
 import dpapps.exchangecurrencyapp.exchange.model.Currency;
 import dpapps.exchangecurrencyapp.exchange.model.Exchange;
+import dpapps.exchangecurrencyapp.jsonparser.response.ObjectComparator;
 import dpapps.exchangecurrencyapp.jsonparser.response.model.SingleDayExchangeRatesJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,10 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -70,7 +74,7 @@ public class ExchangeJsonTests {
                 """;
         ObjectMapper mapper = new ObjectMapper();
         SingleDayExchangeRatesJson singleDayExchangeRatesJson = mapper.readValue(expected, SingleDayExchangeRatesJson.class);
-        //TODO fix the Object comparison test
-        assertThat(Objects.equals(singleDayExchangeRatesJson, jsonExchanges));
+        ObjectComparator objectComparator = new ObjectComparator();
+        assertThat(objectComparator.compareSingleDayExchange(singleDayExchangeRatesJson, jsonExchanges)).isTrue();
     }
 }

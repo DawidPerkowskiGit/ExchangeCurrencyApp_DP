@@ -41,7 +41,7 @@ public class CurrencyConversionReturnedObject implements JsonConvertable {
     }
 
 
-    class ConversionBody implements JsonConvertable {
+    private class ConversionBody implements JsonConvertable {
         private String message;
         private LocalDate exchangeDate;
         private Double requestedValue;

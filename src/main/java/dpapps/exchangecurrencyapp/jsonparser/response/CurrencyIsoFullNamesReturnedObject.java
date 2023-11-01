@@ -34,7 +34,7 @@ public class CurrencyIsoFullNamesReturnedObject {
         return this.currenciesMap;
     }
 
-    class CurrenciesMap implements JsonConvertable {
+    private class CurrenciesMap implements JsonConvertable {
         Map<String, String> currencies = new HashMap<>();
 
         public Map<String, String> getCurrencies() {

@@ -352,19 +352,7 @@ public class DateTests {
 
     }
 
-    public boolean compareTwoPairsOfDates(LocalDate[] pair1, LocalDate[] pair2) {
+    private boolean compareTwoPairsOfDates(LocalDate[] pair1, LocalDate[] pair2) {
         return pair1[0].isEqual(pair2[0]) || pair1[1].isEqual(pair2[1]);
-    }
-
-    public LocalDate returnExchangeDateThatExistsInDb(LocalDate date) {
-
-        while (DateRangeValidator.isDateInValidRange(date, latestDate)) {
-            if (!exchangeRepository.existsByExchangeDate(date)) {
-                date = date.minusDays(1);
-            } else {
-                return date;
-            }
-        }
-        return AppConstants.EXCHANGE_DATE_OLDEST;
     }
 }

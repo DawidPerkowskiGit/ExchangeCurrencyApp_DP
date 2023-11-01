@@ -46,17 +46,6 @@ public class ExchangeServiceImpl implements ExchangeService {
         this.apiKeyService = apiKeyService;
     }
 
-    /**
-     * Builds and returns JSON body when currency conversion is required
-     */
-    private static CurrencyConversionReturnedObject buildCurrencyConversionBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
-        Double requestedValueAsDouble = StringIntConverter.convertStringToDouble(currencyValue);
-        SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) exchangesList.get(0);
-        Double rate = singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0));
-        String requestedCurrency = requestedCurrenciesList.get(0);
-
-        return new CurrencyConversionReturnedObject(date, requestedValueAsDouble, rate, baseCurrency, requestedCurrency);
-    }
 
     public ResponseEntity<JsonConvertable> getCurrencies(String date) {
         logger.info(AppConstants.LOGGER_CURRENCIES_ENDPOINT_CALLED);
@@ -260,6 +249,18 @@ public class ExchangeServiceImpl implements ExchangeService {
         exchangesList.setExchangeList(returnList);
 
         return ResponseEntity.ok(exchangesList);
+    }
+
+    /**
+     * Builds and returns JSON body when currency conversion is required
+     */
+    private CurrencyConversionReturnedObject buildCurrencyConversionBody(String baseCurrency, String currencyValue, LocalDate date, List<String> requestedCurrenciesList, List<JsonConvertable> exchangesList) {
+        Double requestedValueAsDouble = StringIntConverter.convertStringToDouble(currencyValue);
+        SingleDayExchangeRatesJson singleDayExchangeRatesJson = (SingleDayExchangeRatesJson) exchangesList.get(0);
+        Double rate = singleDayExchangeRatesJson.getRates().get(requestedCurrenciesList.get(0));
+        String requestedCurrency = requestedCurrenciesList.get(0);
+
+        return new CurrencyConversionReturnedObject(date, requestedValueAsDouble, rate, baseCurrency, requestedCurrency);
     }
 
     /**
