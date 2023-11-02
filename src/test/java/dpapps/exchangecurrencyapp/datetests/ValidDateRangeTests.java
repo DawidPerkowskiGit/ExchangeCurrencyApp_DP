@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class DateTests {
+public class ValidDateRangeTests {
 
     LocalDate beforeLeft;
     LocalDate left;

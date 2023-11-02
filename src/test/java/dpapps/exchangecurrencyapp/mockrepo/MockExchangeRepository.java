@@ -105,8 +105,7 @@ public class MockExchangeRepository implements ExchangeRepository {
                 dateList.add(exchange);
             }
         }
-//        dateList.sort(Comparator.comparing(a -> a.getCurrency().getIsoName()));
-        dateList.sort((a, b) -> a.getCurrency().getIsoName().compareTo(b.getCurrency().getIsoName()));
+        dateList.sort(Comparator.comparing(a -> a.getCurrency().getIsoName()));
         return dateList;
     }
 

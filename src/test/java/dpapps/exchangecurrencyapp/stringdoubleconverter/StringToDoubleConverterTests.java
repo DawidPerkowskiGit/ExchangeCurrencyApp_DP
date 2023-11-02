@@ -57,14 +57,10 @@ public class StringToDoubleConverterTests {
     }
 
     @Test
-    public void shouldReturnValidDouble() throws Exception {
+    public void shouldReturnValidDouble() {
 
-        if (validDoubleList.size() == validDoubleList.size()) {
-            for (int i = 0; i < validDoubleList.size(); i++) {
-                assertThat(StringIntConverter.convertStringToDouble(validStringList.get(i))).isEqualTo(validDoubleList.get(i));
-            }
-        } else {
-            throw new Exception("Invalid list size");
+        for (int i = 0; i < validDoubleList.size(); i++) {
+            assertThat(StringIntConverter.convertStringToDouble(validStringList.get(i))).isEqualTo(validDoubleList.get(i));
         }
     }
 }

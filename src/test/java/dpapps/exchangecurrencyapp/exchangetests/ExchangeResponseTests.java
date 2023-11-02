@@ -56,9 +56,7 @@ public class ExchangeResponseTests {
     String[] baseCurrencyArgs = new String[argsListCount];
     String[] startDateArgs = new String[argsListCount];
     String[] finishDateArgs = new String[argsListCount];
-    String emptyString = "";
     String nullField = null;
-    int finalCounter = 0;
     @Autowired
     private MockMvc mockMvc;
 
@@ -323,7 +321,7 @@ public class ExchangeResponseTests {
      * @param argList4       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
-    public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String[] argList1, String[] argList2, String[] argList3, String[] argList4) {
+    private List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String[] argList1, String[] argList2, String[] argList3, String[] argList4) {
 
         List<String> buildUrlList = new LinkedList<>();
 
@@ -355,7 +353,7 @@ public class ExchangeResponseTests {
      * @param argList3       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
-    public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1, String[] argList2, String[] argList3) {
+    private List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1, String[] argList2, String[] argList3) {
 
         List<String> buildUrlList = new LinkedList<>();
 
@@ -384,7 +382,7 @@ public class ExchangeResponseTests {
      * @param argList2       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
-    public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1, String[] argList2) {
+    private List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1, String[] argList2) {
 
         List<String> buildUrlList = new LinkedList<>();
 
@@ -409,7 +407,7 @@ public class ExchangeResponseTests {
      * @param argList1       list of possible argument states (valid, invalid, empty, null)
      * @return List of URL address permutations
      */
-    public List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1) {
+    private List<String> multipleArgsCombinationsBuilder(String baseAttribute1, String baseAttribute2, String[] argList1) {
 
         List<String> buildUrlList = new LinkedList<>();
 
@@ -424,7 +422,7 @@ public class ExchangeResponseTests {
     }
 
 
-    public String urlBuilder() {
+    private String urlBuilder() {
         StringBuilder returnedUrl = new StringBuilder(baseUrl);
 
         if (arguments.isEmpty()) {
