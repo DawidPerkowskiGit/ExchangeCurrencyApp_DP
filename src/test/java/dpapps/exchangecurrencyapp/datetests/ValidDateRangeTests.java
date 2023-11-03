@@ -44,9 +44,7 @@ public class ValidDateRangeTests {
 
 
         while (current.isBefore(max) || current.isEqual(max)) {
-            if (current.getDayOfWeek().toString().equals("SATURDAY") || current.getDayOfWeek().toString().equals("SUNDAY")) {
-                //dont add weekend days
-            } else {
+            if (!current.getDayOfWeek().toString().equals("SATURDAY") || !current.getDayOfWeek().toString().equals("SUNDAY")) {
                 Exchange exchange = new Exchange();
                 exchange.setExchangeDate(current);
                 exchangeRepository.save(exchange);
