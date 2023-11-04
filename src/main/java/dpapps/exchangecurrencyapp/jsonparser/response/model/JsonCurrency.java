@@ -29,9 +29,8 @@ public class JsonCurrency {
         this.fullName = fullName;
     }
 
-    public JsonCurrency convertCurrencyToJsonCurrency(Currency currency) {
+    private void convertCurrencyToJsonCurrency(Currency currency) {
         setIsoName(currency.getIsoName());
         setFullName(currency.getFullName());
-        return this;
     }
 }

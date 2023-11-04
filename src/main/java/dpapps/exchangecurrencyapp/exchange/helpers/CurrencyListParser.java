@@ -22,7 +22,7 @@ public class CurrencyListParser {
      * @return List of currency names
      */
     public static List<String> parseCurrencyList(String input) {
-        String[] splitResult = new String[0];
+        String[] splitResult;
         List<String> currenciesList = new LinkedList<>();
         try {
             splitResult = input.split(AppConstants.MULTIPLE_CURRENCIES_SEPARATOR);

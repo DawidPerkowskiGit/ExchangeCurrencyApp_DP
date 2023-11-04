@@ -24,13 +24,6 @@ public class SingleDayExchangeRatesJson implements JsonConvertable {
 
     private Map<String, Double> rates;
 
-    public SingleDayExchangeRatesJson(boolean success, LocalDate date, Map<String, Double> rates, String base) {
-        this.success = success;
-        this.date = date;
-        this.rates = rates;
-        this.base = base;
-    }
-
     public SingleDayExchangeRatesJson() {
     }
 

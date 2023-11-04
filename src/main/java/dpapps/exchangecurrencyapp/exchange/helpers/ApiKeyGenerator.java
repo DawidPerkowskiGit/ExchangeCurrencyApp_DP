@@ -12,8 +12,7 @@ public class ApiKeyGenerator {
      * Generates new API key
      */
     public static String generateApiKey() {
-        String apiKey = new RandomValueStringGenerator(AppConstants.API_KEY_GENERATED_LENGTH).generate();
-        return apiKey;
+        return new RandomValueStringGenerator(AppConstants.API_KEY_GENERATED_LENGTH).generate();
     }
 
 

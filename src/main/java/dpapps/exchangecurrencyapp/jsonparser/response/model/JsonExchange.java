@@ -1,6 +1,5 @@
 package dpapps.exchangecurrencyapp.jsonparser.response.model;
 
-import dpapps.exchangecurrencyapp.exchange.model.Exchange;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,17 +34,6 @@ public class JsonExchange {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public void setExchangeDate(String exchangeDate) {
-        this.exchangeDate = exchangeDate;
-    }
-
-    public JsonExchange convertBaseToJson(Exchange exchange) {
-        setCurrency(exchange.getCurrency().toString());
-        setValue(exchange.getValue());
-        setExchangeDate(exchange.getExchangeDate().toString());
-        return this;
     }
 
 }
