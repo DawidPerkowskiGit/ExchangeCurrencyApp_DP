@@ -23,6 +23,7 @@ public class DateStringConverter {
         try {
             date = LocalDate.parse(string);
         } catch (Exception e) {
+            logger.warn("Could not parse String to LocalDate. Exception" + e);
             return LocalDate.of(1, 1, 1);
         }
         return date;
